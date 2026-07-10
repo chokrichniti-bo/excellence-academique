@@ -531,6 +531,25 @@ const STRUCTURE = [
 
 const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
 
+/* Traductions de la navigation (affichage seulement — les clés internes restent en français) */
+const NAV_EN = {
+  'Classes Préparatoires': 'Preparatory Classes',
+  'PREMIÈRE ANNÉE': 'FIRST YEAR',
+  'DEUXIÈME ANNÉE': 'SECOND YEAR',
+  'Classe P': 'Class P', 'Classe T': 'Class T', 'Classe M': 'Class M',
+  'Classe SP': 'Class SP', 'Classe ST': 'Class ST', 'Classe SM': 'Class SM',
+  'ANALYSE': 'ANALYSIS', 'ALGÈBRE': 'ALGEBRA',
+  'Cours': 'Lectures', 'Séries corrigées': 'Solved exercises', 'TD': 'Tutorials', 'Devoirs corrigés': 'Graded homework',
+  'Licence (Mathématiques)': 'Licence (Mathematics)',
+  '✍️ TABLEAU BLANC': '✍️ WHITEBOARD',
+  '🎥 SÉANCE LIVE': '🎥 LIVE SESSION',
+  'Licence': 'Licence',
+  "Documents d'études": 'Study documents',
+  'Fichiers disponibles': 'Available files',
+  'Espace collaboratif en temps réel': 'Real-time collaborative space'
+};
+const trNav = s => (lang === 'en' ? (NAV_EN[s] || s) : s);
+
 /* ================= Variables Globales d'État ================= */
 let currentUser = null;
 let activeFolder = null;
@@ -856,23 +875,23 @@ function buildSidebar() {
     if(item.type === 'title') {
       const div = document.createElement('div');
       div.className = 'side-main-title' + (item.id ? ' click' : '');
-      div.innerText = item.txt;
+      div.innerText = trNav(item.txt);
       if(item.id) {
-        div.onclick = () => handleSpecialTab(item.id, item.txt);
+        div.onclick = () => handleSpecialTab(item.id, trNav(item.txt));
       }
       nav.appendChild(div);
     }
     else if(item.type === 'year') {
       const div = document.createElement('div');
       div.className = 'side-year';
-      div.innerText = item.txt;
+      div.innerText = trNav(item.txt);
       nav.appendChild(div);
     }
     else if(item.type === 'folder') {
       const fDiv = document.createElement('div');
       fDiv.className = 'side-item' + (activeFolder === item.id ? ' active' : '');
       const isOpen = openFolders[item.id];
-      fDiv.innerHTML = `📁 <b>${item.txt}</b> <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
+      fDiv.innerHTML = `📁 <b>${trNav(item.txt)}</b> <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
       fDiv.onclick = () => {
         openFolders[item.id] = !openFolders[item.id];
         buildSidebar();
@@ -883,7 +902,7 @@ function buildSidebar() {
         item.sub.forEach(subName => {
           const sDiv = document.createElement('div');
           sDiv.className = 'side-item d1' + (activeFolder === item.id && activeSub === subName ? ' active' : '');
-          sDiv.innerText = subName;
+          sDiv.innerText = trNav(subName);
           sDiv.onclick = (e) => {
             e.stopPropagation();
             activeFolder = item.id;
@@ -898,7 +917,7 @@ function buildSidebar() {
             SUB_CATEGORIES.forEach(leaf => {
               const lDiv = document.createElement('div');
               lDiv.className = 'side-item d2' + (activeLeaf === leaf ? ' active' : '');
-              lDiv.innerText = "📄 " + leaf;
+              lDiv.innerText = "📄 " + trNav(leaf);
               lDiv.onclick = (e) => {
                 e.stopPropagation();
                 activeLeaf = leaf;
@@ -943,7 +962,7 @@ function handleSpecialTab(id, title) {
   document.getElementById('visioView').style.display = currentView === 'visio' ? 'block' : 'none';
   
   document.getElementById('bannerTitle').innerText = title;
-  document.getElementById('bannerSub').innerText = "Espace collaboratif en temps réel";
+  document.getElementById('bannerSub').innerText = trNav('Espace collaboratif en temps réel');
   try {
     katex.render("f'(x_0)=\\lim_{h \\to 0}\\frac{f(x_0+h)-f(x_0)}{h}", document.getElementById('bannerFormula'), { throwOnError:false });
   } catch(e) {}
@@ -962,9 +981,9 @@ function loadFiles() {
   fContainer.innerHTML = '';
   
   const pathKey = `${activeFolder}_${activeSub}_${activeLeaf}`;
-  document.getElementById('bannerTitle').innerText = activeSub || "Licence";
-  document.getElementById('bannerSub').innerText = activeLeaf || "Documents d'études";
-  titleEl.innerText = activeLeaf || "Fichiers disponibles";
+  document.getElementById('bannerTitle').innerText = trNav(activeSub || 'Licence');
+  document.getElementById('bannerSub').innerText = trNav(activeLeaf || "Documents d'études");
+  titleEl.innerText = trNav(activeLeaf || 'Fichiers disponibles');
   
   /* Formule adaptée à la matière */
   try {
