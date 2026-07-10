@@ -427,6 +427,10 @@
       <div class="stat-card"><span data-i18n="statOnline">🟢 En ligne</span><b id="stOnline">1</b></div>
       <div class="stat-card"><span data-i18n="statFiles">📄 Fichiers</span><b id="stFiles">0</b></div>
       <div class="stat-card"><span data-i18n="statDl">⬇ Téléchargements</span><b id="stDl">0</b></div>
+      <h4>🏆 Top téléchargements</h4>
+      <div id="stTop"></div>
+      <h4>⬇ Téléchargements par matière</h4>
+      <div id="stBySub"></div>
       <h4 data-i18n="statWho">🟢 Connectés en ce moment</h4>
       <div id="stWho"></div>
       <h4 data-i18n="statByDay">📅 Connexions par jour</h4>
@@ -585,7 +589,7 @@ function loginAs(userObj) {
   localStorage.setItem('cc_user_session', JSON.stringify(userObj));
   
   document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('appScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.display = 'block';
   
   document.getElementById('userName').innerText = currentUser.name;
   document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
@@ -636,6 +640,7 @@ function doLogin() {
   /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
   if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
     if (adminHash('chokri:' + pass) === '4189603294dc5552') {
+      logConnection({ username:'chokri', name:'Chokri' });
       loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
     } else {
       showMsg(msg, "Mot de passe incorrect", true);
@@ -657,6 +662,7 @@ function doLogin() {
 
 function verifyPassword(user, pass, msgEl) {
   if(user.password === pass) {
+    logConnection(user);
     loginAs(user);
   } else {
     showMsg(msgEl, "Mot de passe incorrect", true);
@@ -715,32 +721,67 @@ function setUserPresence(username, isOnline) {
   }, { merge: true });
 }
 
+function logConnection(u) {
+  try {
+    const d = new Date();
+    db.collection('connlog').add({ u: u.username, n: u.name, date: d.toLocaleDateString('fr-FR'), ts: Date.now() });
+  } catch(e) {}
+}
+
 // Mise à jour de l'activité si l'onglet reste ouvert
 setInterval(() => {
   if (currentUser) setUserPresence(currentUser.username, true);
 }, 60000);
 
 function startRealtimeListeners() {
+  if (window._rtStarted) return;
+  window._rtStarted = true;
+
   // 1. Écoute des inscrits totaux
   db.collection('users').onSnapshot(snap => {
     document.getElementById('totalUsers').innerText = snap.size;
     document.getElementById('stReg').innerText = snap.size;
   });
 
-  // 2. Écoute de la présence en direct (votre fille s'affichera directement ici)
+  // 2. Présence en direct (seuls les signaux de moins de 3 minutes comptent)
   db.collection('presence').where('online', '==', true).onSnapshot(snap => {
-    document.getElementById('onlineNow').innerText = snap.size;
-    document.getElementById('stOnline').innerText = snap.size;
-    
-    const whoEl = document.getElementById('stWho');
-    whoEl.innerHTML = '';
+    const now = Date.now();
+    const actifs = [];
     snap.forEach(doc => {
       const p = doc.data();
+      const tms = (p.lastActive && p.lastActive.toMillis) ? p.lastActive.toMillis() : now;
+      if (now - tms < 180000) actifs.push(p);
+    });
+    document.getElementById('onlineNow').innerText = Math.max(actifs.length, 1);
+    document.getElementById('stOnline').innerText = Math.max(actifs.length, 1);
+    const whoEl = document.getElementById('stWho');
+    whoEl.innerHTML = '';
+    actifs.forEach(p => {
       const row = document.createElement('div');
       row.className = 'top-item';
       row.innerHTML = `<span>👤 ${p.name}</span><span class="tn">actif</span>`;
       whoEl.appendChild(row);
     });
+  });
+
+  // 2bis. Battement de présence toutes les 45 s + signal de départ
+  setInterval(() => { if (currentUser) setUserPresence(currentUser.username, true); }, 45000);
+  window.addEventListener('beforeunload', () => { if (currentUser) setUserPresence(currentUser.username, false); });
+
+  // 2ter. Connexions par jour
+  db.collection('connlog').orderBy('ts', 'desc').limit(400).onSnapshot(snap => {
+    const el = document.getElementById('stByDay');
+    if (!el) return;
+    const byDay = {};
+    snap.forEach(doc => {
+      const en = doc.data();
+      if (!byDay[en.date]) byDay[en.date] = { total: 0, users: {} };
+      byDay[en.date].total++; byDay[en.date].users[en.u] = 1;
+    });
+    const days = Object.entries(byDay).slice(0, 7);
+    el.innerHTML = days.length ? days.map(([d2, v]) =>
+      `<div class="top-item"><span>${d2}</span><span class="tn">${v.total} · ${Object.keys(v.users).length} 👤</span></div>`).join('')
+      : '<div class="top-item"><span>—</span></div>';
   });
 
   // 3. Écoute du lien Visio (Meet / Zoom) en direct
@@ -760,9 +801,29 @@ function startRealtimeListeners() {
     }
   });
 
-  // 4. Écoute globale des compteurs de fichiers pour le panel admin
+  // 4. Fichiers : total, téléchargements, top 5 et répartition par matière
   db.collection('files').onSnapshot(snap => {
     document.getElementById('stFiles').innerText = snap.size;
+    let total = 0;
+    const all = [];
+    snap.forEach(doc => { const f = doc.data(); total += (f.downloads || 0); all.push(f); });
+    document.getElementById('stDl').innerText = total;
+    const topEl = document.getElementById('stTop');
+    if (topEl) {
+      const top = all.filter(f => (f.downloads||0) > 0).sort((a,b) => (b.downloads||0)-(a.downloads||0)).slice(0,5);
+      topEl.innerHTML = top.length
+        ? top.map(f => `<div class="top-item"><span>${f.name}</span><span class="tn">⬇ ${f.downloads}</span></div>`).join('')
+        : '<div class="top-item"><span>—</span></div>';
+    }
+    const subEl = document.getElementById('stBySub');
+    if (subEl) {
+      const somme = fl => all.filter(fl).reduce((s, f) => s + (f.downloads || 0), 0);
+      const p = f => String(f.path || '').toUpperCase();
+      subEl.innerHTML =
+        `<div class="top-item"><span>Analyse</span><span class="tn">⬇ ${somme(f => p(f).includes('ANALYSE'))}</span></div>` +
+        `<div class="top-item"><span>Algèbre</span><span class="tn">⬇ ${somme(f => p(f).includes('ALG'))}</span></div>` +
+        `<div class="top-item"><span>Licence / autres</span><span class="tn">⬇ ${somme(f => !p(f).includes('ANALYSE') && !p(f).includes('ALG'))}</span></div>`;
+    }
   });
 }
 
@@ -876,13 +937,14 @@ function loadFiles() {
   document.getElementById('bannerSub').innerText = activeLeaf || "Documents d'études";
   titleEl.innerText = activeLeaf || "Fichiers disponibles";
   
-  db.collection('files').where('path', '==', pathKey).orderBy('name').get().then(snap => {
+  db.collection('files').where('path', '==', pathKey).get().then(snap => {
     if(snap.empty) {
       fContainer.innerHTML = `<div class="empty"><div class="big">📂</div><p>${I18N.emptyDocs[lang]}</p></div>`;
       return;
     }
     
-    snap.forEach(doc => {
+    const docsTries = snap.docs.slice().sort((a, b) => String(a.data().name||'').localeCompare(String(b.data().name||'')));
+    docsTries.forEach(doc => {
       const f = doc.data();
       const row = document.createElement('div');
       row.className = 'file-row';
