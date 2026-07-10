@@ -251,23 +251,7 @@
     <p>Cette version en ligne nécessite Firebase.<br><br>
     1. Allez sur <code>console.firebase.google.com</code> et créez un projet gratuit.<br>
     2. Ajoutez une application <b>Web</b> (icône <code>&lt;/&gt;</code>) et copiez le bloc <code>firebaseConfig</code>.<br>
-    3. Ouvrez ce fichier et collez votre configuration à l'endroit marqué <code>=== // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-// (Note : Si votre fichier index-en-ligne.html utilise des scripts standards, 
-// assurez-vous que les liens pointent bien vers les versions CDN via https comme ci-dessus)
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDMmPq0rwE3uM7W9lebui76hqt-W-s2dyY",
-  authDomain: "excellence-academique-69a1d.firebaseapp.com",
-  projectId: "excellence-academique-69a1d",
-  storageBucket: "excellence-academique-69a1d.firebasestorage.app",
-  messagingSenderId: "959794318636",
-  appId: "1:959794318636:web:c930ad1209b2dd778f64c9",
-  measurementId: "G-776N3XVW6D"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig); ===</code>.<br>
+    3. La configuration est déjà insérée dans ce fichier.<br>
     4. Dans Firebase : <b>Firestore Database → Créer une base de données → mode test</b>.<br><br>
     Ensuite, tout fonctionnera pour tous vos étudiants, sur tous leurs appareils.</p>
   </div>
@@ -318,17 +302,12 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
     </div>
     <div class="auth-body">
       <div id="loginForm">
-        <button class="btn-fb" onclick="fbLogin()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
-          <span data-i18n="fbBtn">Continuer avec Facebook</span>
-        </button>
-        <div class="sep" data-i18n="orSep">ou</div>
-        <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" data-i18n-ph="phUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
+        <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
         <div class="field"><label data-i18n="lblPass">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
         <button class="btn-main" onclick="doLogin()" data-i18n="btnLogin">Se connecter</button>
       </div>
       <div id="signupForm" style="display:none">
-        <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" data-i18n-ph="phName" placeholder="Prénom Nom" maxlength="50"></div>
+        <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
         <div class="field"><label data-i18n="lblPseudo">Identifiant unique (pseudo)</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
         <div class="field"><label data-i18n="lblEmail">Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
         <button class="btn-main" onclick="doSignup()" data-i18n="btnSignup">Créer mon compte</button>
@@ -338,7 +317,6 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
         <p style="font-size:14px; color:var(--gris)" data-i18n="confPw">Voici votre mot de passe (il commence par « cc ») :</p>
         <div class="pw-box" id="genPass"></div>
         <p style="font-size:13px; color:var(--gris); margin-bottom:14px" data-i18n="confNote">Notez-le précieusement : il ne sera plus jamais affiché.</p>
-        <a class="btn-main" id="mailPass" href="#" style="display:block; text-decoration:none; text-align:center; margin-bottom:10px" data-i18n="confMail">📧 Me l'envoyer par e-mail</a>
         <button class="btn-main" onclick="afterConfirm()" data-i18n="confOk">J'ai noté → Me connecter</button>
       </div>
       <div class="auth-msg" id="authMsg"></div>
@@ -418,10 +396,9 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
             <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()" data-i18n="btnEraser">🧽 Gomme</button>
             <button class="tool-btn danger" onclick="clearBoard()" data-i18n="btnClear">🗑 Effacer tout</button>
             <button class="tool-btn" onclick="downloadBoard()" data-i18n="btnDlImg">⬇ Télécharger l'image</button>
-            <button class="tool-btn save" id="btnSaveSeance" style="display:none" onclick="saveSeance()" data-i18n="btnSaveSess">💾 Enregistrer la séance</button>
           </div>
           <canvas id="board" width="1400" height="800"></canvas>
-          <p class="board-note" data-i18n="boardNote">✍️ Compatible souris, doigt et stylet (Apple Pencil, S Pen…) avec sensibilité à la pression et rejet de paume.</p>
+          <p class="board-note" data-i18n="boardNote">✍️ Compatible souris, doigt et stylet avec sensibilité à la pression.</p>
         </div>
 
         <div id="visioView">
@@ -436,8 +413,7 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
           </div>
           <div class="visio-card" id="visioAdmin" style="display:none">
             <h4 data-i18n="visioAdminT">⚙️ Publier une séance (admin)</h4>
-            <p id="visioAdminP"></p>
-            <input type="url" id="visioUrl" placeholder="https://meet.google.com/…  ou  https://zoom.us/j/…">
+            <input type="url" id="visioUrl" placeholder="https://meet.google.com/…">
             <button class="btn-join btn-meet" onclick="saveVisio()" data-i18n="btnPublish">✔ Publier le lien</button>
             <button class="btn-join btn-zoom" onclick="removeVisio()" data-i18n="btnEndSess">✕ Terminer la séance</button>
           </div>
@@ -451,12 +427,8 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
       <div class="stat-card"><span data-i18n="statOnline">🟢 En ligne</span><b id="stOnline">1</b></div>
       <div class="stat-card"><span data-i18n="statFiles">📄 Fichiers</span><b id="stFiles">0</b></div>
       <div class="stat-card"><span data-i18n="statDl">⬇ Téléchargements</span><b id="stDl">0</b></div>
-      <h4 data-i18n="statTop">Top téléchargements</h4>
-      <div id="stTop"></div>
       <h4 data-i18n="statWho">🟢 Connectés en ce moment</h4>
       <div id="stWho"></div>
-      <h4 data-i18n="statBySub">⬇ Téléchargements par matière</h4>
-      <div id="stBySub"></div>
       <h4 data-i18n="statByDay">📅 Connexions par jour</h4>
       <div id="stByDay"></div>
     </aside>
@@ -468,20 +440,21 @@ const app = initializeApp(firebaseConfig); ===</code>.<br>
 
 <script>
 /* ============================================================
-   CONFIGURATION FIREBASE
-   === COLLEZ VOTRE CONFIG ICI ===
-   Remplacez le bloc ci-dessous par celui copié depuis
-   console.firebase.google.com (Paramètres du projet → Vos applications → Config)
+   CONFIGURATION FIREBASE — insérée (projet : excellence-academique-69a1d)
    ============================================================ */
 const firebaseConfig = {
-  apiKey: "COLLEZ_VOTRE_API_KEY",
-  authDomain: "votre-projet.firebaseapp.com",
-  projectId: "votre-projet",
-  storageBucket: "votre-projet.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:xxxxxxxxxxxxxxxx"
+  apiKey: "AIzaSyDMmPq0rwE3uM7W9lebui76hqt-W-s2dyY",
+  authDomain: "excellence-academique-69a1d.firebaseapp.com",
+  projectId: "excellence-academique-69a1d",
+  storageBucket: "excellence-academique-69a1d.firebasestorage.app",
+  messagingSenderId: "959794318636",
+  appId: "1:959794318636:web:c930ad1209b2dd778f64c9",
+  measurementId: "G-776N3XVW6D"
 };
-/* ============================================================ */
+
+// Initialisation de Firebase en mode compatibilité
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 /* ================= Langue (FR / EN) ================= */
 let lang = localStorage.getItem('rp_lang') || 'fr';
@@ -489,21 +462,16 @@ const I18N = {
   tagline:   { fr:'Cours · Séries corrigées · TD · Devoirs corrigés', en:'Lectures · Solved exercises · Tutorials · Graded homework' },
   tabLogin:  { fr:'Connexion', en:'Sign in' },
   tabSignup: { fr:'Créer un compte', en:'Create account' },
-  fbBtn:     { fr:'Continuer avec Facebook', en:'Continue with Facebook' },
-  orSep:     { fr:'ou', en:'or' },
   lblUser:   { fr:'Identifiant ou e-mail', en:'Username or email' },
-  phUser:    { fr:'Votre identifiant ou e-mail', en:'Your username or email' },
   lblPass:   { fr:'Mot de passe', en:'Password' },
   btnLogin:  { fr:'Se connecter', en:'Sign in' },
   lblName:   { fr:'Nom complet', en:'Full name' },
-  phName:    { fr:'Prénom Nom', en:'First name Last name' },
   lblPseudo: { fr:'Identifiant unique (pseudo)', en:'Unique username' },
   lblEmail:  { fr:'Adresse e-mail (Gmail ou autre)', en:'Email address (Gmail or other)' },
   btnSignup: { fr:'Créer mon compte', en:'Create my account' },
   confTitle: { fr:'✅ Compte créé !', en:'✅ Account created!' },
   confPw:    { fr:'Voici votre mot de passe (il commence par « cc ») :', en:'Here is your password (it starts with “cc”):' },
   confNote:  { fr:'Notez-le précieusement : il ne sera plus jamais affiché.', en:'Write it down carefully: it will never be shown again.' },
-  confMail:  { fr:"📧 Me l'envoyer par e-mail", en:'📧 Email it to me' },
   confOk:    { fr:"J'ai noté → Me connecter", en:'Noted → Sign in' },
   onlineTxt: { fr:'en ligne maintenant', en:'online now' },
   regTxt:    { fr:'étudiant(s) inscrit(s)', en:'registered student(s)' },
@@ -512,735 +480,568 @@ const I18N = {
   btnDl:     { fr:'Télécharger', en:'Download' },
   added:     { fr:'ajouté le', en:'added on' },
   emptyDocs: { fr:'Aucun document pour le moment.', en:'No documents yet.' },
-  emptyAdmin:{ fr:'Cliquez sur « + Ajouter des PDF ».', en:'Click “+ Add PDFs”.' },
   lblColor:  { fr:'Couleur :', en:'Color:' },
   lblSize:   { fr:'Épaisseur :', en:'Thickness:' },
   btnEraser: { fr:'🧽 Gomme', en:'🧽 Eraser' },
   btnClear:  { fr:'🗑 Effacer tout', en:'🗑 Clear all' },
   btnDlImg:  { fr:"⬇ Télécharger l'image", en:'⬇ Download image' },
-  btnSaveSess:{ fr:'💾 Enregistrer la séance', en:'💾 Save the session' },
-  boardNote: { fr:'✍️ Compatible souris, doigt et stylet (Apple Pencil, S Pen…) avec sensibilité à la pression et rejet de paume.', en:'✍️ Works with mouse, finger and stylus (Apple Pencil, S Pen…) with pressure sensitivity and palm rejection.' },
+  boardNote: { fr:'✍️ Compatible souris, doigt et stylet avec sensibilité.', en:'✍️ Works with mouse, finger and stylus.' },
   visioLiveT:{ fr:'Séance en direct', en:'Live session' },
   visioDesc: { fr:'Une séance est en cours. Cliquez pour la rejoindre.', en:'A session is live. Click to join.' },
   btnJoin:   { fr:'🎥 Rejoindre la séance', en:'🎥 Join the session' },
   visioEmptyT:{ fr:'🎥 Aucune séance en direct', en:'🎥 No live session' },
-  visioEmptyP:{ fr:"Le professeur n'a pas encore publié de lien Google Meet ou Zoom. Revenez plus tard.", en:'The teacher has not published a Google Meet or Zoom link yet. Come back later.' },
+  visioEmptyP:{ fr:"Le professeur n'a pas encore publié de lien. Revenez plus tard.", en:'The teacher has not published a link yet.' },
   visioAdminT:{ fr:'⚙️ Publier une séance (admin)', en:'⚙️ Publish a session (admin)' },
   btnPublish:{ fr:'✔ Publier le lien', en:'✔ Publish link' },
   btnEndSess:{ fr:'✕ Terminer la séance', en:'✕ End session' },
-  liveTitle: { fr:'📡 SÉANCE LIVE', en:'📡 LIVE SESSION' },
-  seancesT:  { fr:'Séances enregistrées', en:'Recorded sessions' },
-  visioT:    { fr:'Visio — Google Meet / Zoom', en:'Video call — Google Meet / Zoom' },
-  boardT:    { fr:'Tableau blanc', en:'Whiteboard' },
-  classePrefix:{ fr:'Classe', en:'Class' },
-  year1:     { fr:'Première année', en:'First year' },
-  year2:     { fr:'Deuxième année', en:'Second year' },
-  prepaT:    { fr:'🎓 Classes Préparatoires', en:'🎓 Preparatory Classes' },
-  licT:      { fr:'🎓 Licence (Mathématiques)', en:'🎓 Licence (Mathematics)' },
-  addFolder: { fr:'+ Ajouter un dossier', en:'+ Add a folder' },
-  folderPrompt: { fr:'Nom du nouveau dossier :', en:'Name of the new folder:' },
-  confDelFolder: { fr:'Supprimer ce dossier et tous ses fichiers ?', en:'Delete this folder and all its files?' },
-  emptyLic:  { fr:'Aucun dossier pour le moment.', en:'No folders yet.' },
-  chapterPrompt: { fr:'Titre du chapitre pour :', en:'Chapter title for:' },
   statsT:    { fr:'📊 Statistiques', en:'📊 Statistics' },
   statReg:   { fr:'👥 Inscrits', en:'👥 Registered' },
   statOnline:{ fr:'🟢 En ligne', en:'🟢 Online' },
   statFiles: { fr:'📄 Fichiers', en:'📄 Files' },
   statDl:    { fr:'⬇ Téléchargements', en:'⬇ Downloads' },
-  statTop:   { fr:'Top téléchargements', en:'Top downloads' },
   statWho:   { fr:'🟢 Connectés en ce moment', en:'🟢 Online right now' },
-  statBySub: { fr:'⬇ Téléchargements par matière', en:'⬇ Downloads by subject' },
-  statByDay: { fr:'📅 Connexions par jour', en:'📅 Logins per day' },
-  fillAll:   { fr:'Veuillez remplir tous les champs.', en:'Please fill in all fields.' },
-  badPseudo: { fr:'Identifiant : 3–30 caractères (lettres, chiffres, . _ -).', en:'Username: 3–30 characters (letters, digits, . _ -).' },
-  badEmail:  { fr:'Adresse e-mail invalide.', en:'Invalid email address.' },
-  taken:     { fr:'Cet identifiant est déjà pris. Choisissez-en un autre.', en:'This username is already taken. Choose another one.' },
-  badCreds:  { fr:'Identifiant ou mot de passe incorrect.', en:'Incorrect username or password.' },
-  needCreds: { fr:'Entrez votre identifiant (ou e-mail) et votre mot de passe.', en:'Enter your username (or email) and your password.' },
-  ccHint:    { fr:'Rappel : votre mot de passe commence par « cc ».', en:'Reminder: your password starts with “cc”.' },
-  fbInfo:    { fr:'La connexion Facebook nécessite une configuration supplémentaire. Utilisez votre pseudo ou votre e-mail.', en:'Facebook login needs extra configuration. Please use your username or email.' },
-  toastDl:   { fr:'Téléchargement lancé ✓', en:'Download started ✓' },
-  toastPdf:  { fr:'PDF ajouté(s) ✓', en:'PDF(s) added ✓' },
-  toastUp:   { fr:'Envoi en cours…', en:'Uploading…' },
-  toastSess: { fr:'Séance enregistrée ✓ (voir « Séances enregistrées »)', en:'Session saved ✓ (see “Recorded sessions”)' },
-  toastPub:  { fr:'Séance publiée ✓', en:'Session published ✓' },
-  toastEnd:  { fr:'Séance terminée', en:'Session ended' },
-  toastImg:  { fr:'Image téléchargée ✓', en:'Image downloaded ✓' },
-  toastNo:   { fr:'⛔ Action non autorisée', en:'⛔ Action not allowed' },
-  toastErr:  { fr:'Erreur réseau — réessayez.', en:'Network error — try again.' },
-  tooBig:    { fr:'Fichier trop volumineux (max 10 Mo) :', en:'File too large (max 10 MB):' },
-  confDelFile:{ fr:'Supprimer ce fichier ?', en:'Delete this file?' },
-  confDelBoard:{ fr:'Effacer tout le tableau ?', en:'Clear the whole board?' },
-  notPdf:    { fr:"n'est pas un PDF — ignoré.", en:'is not a PDF — skipped.' },
-  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' }
+  statByDay: { fr:'📅 Connexions par jour', en:'📅 Connections per day' }
 };
-const t = k => (I18N[k] || {})[lang] || k;
+
+/* ================= Structure des Matières (Sidebar) ================= */
+const STRUCTURE = [
+  { type: 'title', txt: 'Classes Préparatoires' },
+  { type: 'year', txt: 'PREMIÈRE ANNÉE' },
+  { type: 'folder', id: 'p_classe_p', txt: 'Classe P', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'p_classe_t', txt: 'Classe T', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'p_classe_m', txt: 'Classe M', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'year', txt: 'DEUXIÈME ANNÉE' },
+  { type: 'folder', id: 'd_classe_sp', txt: 'Classe SP', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'd_classe_st', txt: 'Classe ST', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'd_classe_sm', txt: 'Classe SM', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence' },
+  { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab' },
+  { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab' }
+];
+
+const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
+
+/* ================= Variables Globales d'État ================= */
+let currentUser = null;
+let activeFolder = null;
+let activeSub = null;
+let activeLeaf = null;
+let currentView = 'files'; // 'files', 'board', 'visio'
+let openFolders = {};
+
+/* ================= Initialisation au Chargement ================= */
+window.addEventListener('DOMContentLoaded', () => {
+  // Rendu formules mathématiques d'accueil
+  katex.render("L = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x", document.getElementById('heroFormula'));
+  katex.render("\\int_a^b f(x)\\,dx = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x", document.getElementById('bannerFormula'));
+  
+  applyLang();
+  buildSidebar();
+  checkSession();
+  setupDrawingBoard();
+});
 
 function applyLang() {
-  document.documentElement.lang = lang;
-  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
-  document.getElementById('langBtn').textContent = lang === 'fr' ? 'EN' : 'FR';
-  document.getElementById('langBtnAuth').textContent = lang === 'fr' ? 'EN' : 'FR';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(I18N[key]) el.innerText = I18N[key][lang];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if(I18N[key]) el.placeholder = I18N[key][lang];
+  });
+  document.getElementById('langBtnAuth').innerText = lang === 'fr' ? 'EN' : 'FR';
+  document.getElementById('langBtn').innerText = lang === 'fr' ? 'EN' : 'FR';
 }
+
 function toggleLang() {
   lang = lang === 'fr' ? 'en' : 'fr';
   localStorage.setItem('rp_lang', lang);
   applyLang();
-  if (me) render();
+  if(currentUser) { buildSidebar(); loadFiles(); }
 }
 
-/* ================= Constantes ================= */
-const SUBJECTS = {
-  analyse: { label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
-  algebre: { label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' }
-};
-const CATEGORIES = {
-  cours:   { label:{fr:'Cours',en:'Lectures'},                icon:'📖' },
-  series:  { label:{fr:'Séries corrigées',en:'Solved exercises'}, icon:'✏️' },
-  td:      { label:{fr:'TD',en:'Tutorials'},                  icon:'📝' },
-  devoirs: { label:{fr:'Devoirs corrigés',en:'Graded homework'}, icon:'🎯' }
-};
-const LIVE = {
-  board:   { label:{fr:'Tableau blanc',en:'Whiteboard'},              icon:'🖊️' },
-  visio:   { label:{fr:'Visio Meet / Zoom',en:'Meet / Zoom call'},    icon:'🎥' },
-  seances: { label:{fr:'Séances enregistrées',en:'Recorded sessions'}, icon:'💾' }
-};
-const LIVE_FORMULA = 'f\'(x_0)=\\lim_{h\\to 0}\\frac{f(x_0+h)-f(x_0)}{h}';
-const LIC_FORMULA = 'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n';
-const YEARS = [ ['year1', ['P','T','M']], ['year2', ['SP','ST','SM']] ];
-const CLASSES = {
-  P:{fr:'1ère année P',en:'1st year P'}, T:{fr:'1ère année T',en:'1st year T'}, M:{fr:'1ère année M',en:'1st year M'},
-  SP:{fr:'2ème année SP',en:'2nd year SP'}, ST:{fr:'2ème année ST',en:'2nd year ST'}, SM:{fr:'2ème année SM',en:'2nd year SM'}
-};
-const CL = c => (CLASSES[c] || {})[lang] || c;
-const ADMIN_USER = 'chokri';
-const ADMIN_EMAIL = 'chokri.chniti@gmail.com';
-const ADMIN_HASH = '4189603294dc5552';
-const CHUNK = 700000;         /* taille des morceaux base64 (~525 Ko) */
-const MAX_PDF = 10 * 1024 * 1024;
-const FRESH = 70000;          /* présence : considéré en ligne si signal < 70 s */
-
-/* ================= Firebase ================= */
-let fdb = null;
-let filesCache = [], settingsCache = {}, usersCount = 0, presenceCache = [];
-
-function initFirebase() {
-  if (!window.firebase || firebaseConfig.apiKey.startsWith('COLLEZ')) {
-    document.getElementById('setupOverlay').style.display = 'flex';
-    return false;
-  }
-  firebase.initializeApp(firebaseConfig);
-  fdb = firebase.firestore();
-
-  /* Écoute en temps réel : fichiers (métadonnées), réglages, inscrits, présence */
-  fdb.collection('files').onSnapshot(snap => {
-    filesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (me) render();
-  }, () => {});
-  fdb.collection('settings').onSnapshot(snap => {
-    settingsCache = {};
-    snap.docs.forEach(d => settingsCache[d.id] = d.data().value);
-    if (me) render();
-  }, () => {});
-  fdb.collection('users').onSnapshot(snap => {
-    usersCount = snap.size;
-    updateCounters();
-  }, () => {});
-  fdb.collection('presence').onSnapshot(snap => {
-    const now = Date.now();
-    presenceCache = snap.docs
-      .map(d => ({ u: d.id, ...d.data() }))
-      .filter(p => p.t && now - p.t < FRESH);
-    updateCounters();
-  }, () => {});
-  return true;
-}
-
-function updateCounters() {
-  const online = Math.max(presenceCache.length, me ? 1 : 0);
-  document.getElementById('onlineNow').textContent = online;
-  document.getElementById('totalUsers').textContent = usersCount;
-  const so = document.getElementById('stOnline'), sr = document.getElementById('stReg');
-  if (so) so.textContent = online;
-  if (sr) sr.textContent = usersCount;
-  const who = document.getElementById('stWho');
-  if (who && me && me.role === 'admin') {
-    who.innerHTML = presenceCache.length
-      ? presenceCache.map(p => `<div class="top-item"><span>● ${esc(p.name || p.u)}</span><span style="color:#94a3b8">${esc(p.u)}</span></div>`).join('')
-      : `<div class="top-item"><span>—</span></div>`;
-  }
-}
-
-/* Présence : signal toutes les 25 s, pour tous les appareils */
-function heartbeat() {
-  if (!me || !fdb) return;
-  fdb.collection('presence').doc(me.username).set({ name: me.name, t: Date.now() }).catch(() => {});
-}
-setInterval(heartbeat, 25000);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) heartbeat(); });
-window.addEventListener('beforeunload', () => {
-  if (me && fdb) fdb.collection('presence').doc(me.username).delete().catch(() => {});
-});
-
-/* ================= LaTeX (KaTeX) ================= */
-function tex(el, src, display=false) {
-  if (!el) return;
-  if (window.katex) { try { katex.render(src, el, { throwOnError:false, displayMode:display }); return; } catch(e){} }
-  el.textContent = src;
-}
-
-/* ================= État ================= */
-let me = null;
-let cur = { view:'files', classe:'P', subject:'analyse', category:'cours', licFolder:null };
-let openClass = {}, openSubj = {};
-let openLic = false, openLive = false;
-
-function toggleClass(c) { openClass[c] = !openClass[c]; render(); }
-function toggleSubj(k) { openSubj[k] = !openSubj[k]; render(); }
-function toggleLic() { openLic = !openLic; render(); }
-function toggleLive() { openLive = !openLive; render(); }
-
-window.addEventListener('load', () => {
-  applyLang();
-  tex(document.getElementById('heroFormula'), SUBJECTS.analyse.formula);
-  if (!initFirebase()) return;
-  const s = localStorage.getItem('rp_session');
-  if (s) { me = JSON.parse(s); enterApp(); }
-});
-
-/* ================= Sécurité / protection du code ================= */
-document.addEventListener('contextmenu', e => { e.preventDefault(); });
-document.addEventListener('keydown', e => {
-  const k = (e.key || '').toLowerCase();
-  if (e.key === 'F12' ||
-      (e.ctrlKey && !e.shiftKey && ['u','s'].includes(k)) ||
-      (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k))) {
-    e.preventDefault(); e.stopPropagation();
-    toast(t('toastNo'));
-  }
-});
-console.log('%c⛔ STOP', 'color:red;font-size:28px;font-weight:bold');
-console.log('%cCe code est protégé. Toute copie non autorisée est interdite. © Chokri Chniti', 'font-size:14px');
-
-/* ================= Hachage ================= */
-function hash(s) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
-  let h2 = 5381;
-  for (let i = s.length - 1; i >= 0; i--) { h2 = (Math.imul(h2, 33) ^ s.charCodeAt(i)) >>> 0; }
-  return h.toString(16) + h2.toString(16);
-}
-
-/* ================= Authentification ================= */
-function switchTab(tb) {
-  document.getElementById('tabLogin').classList.toggle('active', tb==='login');
-  document.getElementById('tabSignup').classList.toggle('active', tb==='signup');
-  document.getElementById('loginForm').style.display = tb==='login' ? 'block' : 'none';
-  document.getElementById('signupForm').style.display = tb==='signup' ? 'block' : 'none';
+function switchTab(t) {
+  document.getElementById('tabLogin').classList.toggle('active', t==='login');
+  document.getElementById('tabSignup').classList.toggle('active', t==='signup');
+  document.getElementById('loginForm').style.display = t==='login'?'block':'none';
+  document.getElementById('signupForm').style.display = t==='signup'?'block':'none';
   document.getElementById('confirmPanel').style.display = 'none';
-  msg('');
-}
-function msg(txt, ok=false) {
-  const m = document.getElementById('authMsg');
-  m.textContent = txt; m.className = 'auth-msg ' + (ok ? 'ok' : 'err');
-}
-function fbLogin() { msg(t('fbInfo')); }
-
-async function doSignup() {
-  const name = document.getElementById('suName').value.trim();
-  const username = document.getElementById('suUser').value.trim().toLowerCase();
-  const email = document.getElementById('suEmail').value.trim();
-  if (!name || !username || !email) return msg(t('fillAll'));
-  if (!/^[a-z0-9._-]{3,30}$/.test(username)) return msg(t('badPseudo'));
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg(t('badEmail'));
-  if (username === ADMIN_USER) return msg(t('taken'));
-  try {
-    const exists = await fdb.collection('users').doc(username).get();
-    if (exists.exists) return msg(t('taken'));
-    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-    let code = '';
-    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-    const pw = 'cc' + code;
-    await fdb.collection('users').doc(username).set({ name, email: email.toLowerCase(), passHash: hash(username + ':' + pw), created: Date.now() });
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('confirmPanel').style.display = 'block';
-    document.getElementById('genPass').textContent = pw;
-    document.getElementById('mailPass').href = 'mailto:' + encodeURIComponent(email)
-      + '?subject=' + encodeURIComponent("Votre mot de passe — L'excellence académique")
-      + '&body=' + encodeURIComponent(`Bonjour ${name},\n\nVotre compte a été créé.\nIdentifiant : ${username}\nMot de passe : ${pw}\n\nConservez ce message précieusement.`);
-    document.getElementById('loginUser').value = username;
-    msg('');
-  } catch(e) { msg(t('toastErr')); }
-}
-function afterConfirm() {
-  document.getElementById('confirmPanel').style.display = 'none';
-  switchTab('login');
-  document.getElementById('loginPass').focus();
 }
 
-async function doLogin() {
-  const id = document.getElementById('loginUser').value.trim().toLowerCase();
-  const pass = document.getElementById('loginPass').value;
-  if (!id || !pass) return msg(t('needCreds'));
-  let username = id, udata = null;
-  try {
-    if (id.includes('@')) {
-      if (id === ADMIN_EMAIL) { username = ADMIN_USER; }
-      else {
-        const q = await fdb.collection('users').where('email', '==', id).limit(1).get();
-        if (q.empty) return msg(t('badCreds'));
-        username = q.docs[0].id; udata = q.docs[0].data();
-      }
-    }
-    if (username !== ADMIN_USER && !pass.startsWith('cc')) return msg(t('ccHint'));
-    const h = hash(username + ':' + pass);
-    if (username === ADMIN_USER) {
-      if (h !== ADMIN_HASH) return msg(t('badCreds'));
-      me = { username, name:'Chokri', role:'admin' };
-    } else {
-      if (!udata) {
-        const d = await fdb.collection('users').doc(username).get();
-        if (!d.exists) return msg(t('badCreds'));
-        udata = d.data();
-      }
-      if (udata.passHash !== h) return msg(t('badCreds'));
-      me = { username, name: udata.name, role:'etudiant' };
-    }
-    localStorage.setItem('rp_session', JSON.stringify(me));
-    const d = new Date();
-    fdb.collection('connlog').add({ u: me.username, n: me.name, date: d.toLocaleDateString('fr-FR'), ts: Date.now() }).catch(() => {});
-    enterApp();
-  } catch(e) { msg(t('toastErr')); }
+/* ================= Authentification Unique Modifiée ================= */
+function checkSession() {
+  const saved = localStorage.getItem('cc_user_session');
+  if(saved) {
+    loginAs(JSON.parse(saved));
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+  }
+}
+
+function loginAs(userObj) {
+  currentUser = userObj;
+  localStorage.setItem('cc_user_session', JSON.stringify(userObj));
+  
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'flex';
+  
+  document.getElementById('userName').innerText = currentUser.name;
+  document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
+  
+  if(currentUser.role === 'admin') {
+    document.getElementById('adminBadge').style.display = 'inline-block';
+    document.getElementById('btnAdd').style.display = 'inline-block';
+    document.getElementById('statsPanel').classList.add('show');
+    document.getElementById('visioAdmin').style.display = 'block';
+  } else {
+    document.getElementById('adminBadge').style.display = 'none';
+    document.getElementById('btnAdd').style.display = 'none';
+    document.getElementById('statsPanel').classList.remove('show');
+    document.getElementById('visioAdmin').style.display = 'none';
+  }
+  
+  // Enclenchement de la présence temps réel et écoutes Firebase
+  setUserPresence(currentUser.username, true);
+  startRealtimeListeners();
+  
+  // Sélection par défaut
+  selectCategory('p_classe_p', 'ANALYSE', 'Cours');
 }
 
 function logout() {
-  if (me && fdb) fdb.collection('presence').doc(me.username).delete().catch(() => {});
-  localStorage.removeItem('rp_session');
-  setTimeout(() => location.reload(), 150);
+  if(currentUser) setUserPresence(currentUser.username, false);
+  localStorage.removeItem('cc_user_session');
+  currentUser = null;
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
 }
 
-/* ================= Application ================= */
-function enterApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('appScreen').style.display = 'block';
-  document.getElementById('userName').textContent = me.name;
-  document.getElementById('avatar').textContent = me.name.charAt(0).toUpperCase();
-  const isAdmin = me.role === 'admin';
-  document.getElementById('adminBadge').style.display = isAdmin ? 'inline-block' : 'none';
-  document.getElementById('btnSaveSeance').style.display = isAdmin ? 'inline-block' : 'none';
-  document.getElementById('statsPanel').classList.toggle('show', isAdmin);
-  openClass['P'] = true; openSubj['P_analyse'] = true;
-  heartbeat();
-  initBoard();
-  render();
+function doLogin() {
+  const userOrEmail = document.getElementById('loginUser').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPass').value.trim();
+  const msg = document.getElementById('authMsg');
+  
+  if(!userOrEmail || !pass) { showMsg(msg, "Champs requis", true); return; }
+  
+  db.collection('users').where('searchKey', '==', userOrEmail).get().then(snap => {
+    if(snap.empty) {
+      db.collection('users').where('email', '==', userOrEmail).get().then(snap2 => {
+        if(snap2.empty) { showMsg(msg, "Utilisateur introuvable", true); }
+        else { verifyPassword(snap2.docs[0].data(), pass, msg); }
+      });
+    } else {
+      verifyPassword(snap.docs[0].data(), pass, msg);
+    }
+  }).catch(() => showMsg(msg, "Erreur de connexion", true));
 }
 
-function select(cl, sk, ck) {
-  cur.view = 'files'; cur.classe = cl; cur.subject = sk; cur.category = ck;
-  openClass[cl] = true; openSubj[cl + '_' + sk] = true;
-  document.getElementById('sidebar').classList.remove('open');
-  render();
-}
-function selectLive(v) {
-  cur.view = v; openLive = true;
-  document.getElementById('sidebar').classList.remove('open');
-  render();
-}
-function selectLic(id) {
-  cur.view = 'lic'; cur.licFolder = id; openLic = true;
-  document.getElementById('sidebar').classList.remove('open');
-  render();
+function verifyPassword(user, pass, msgEl) {
+  if(user.password === pass) {
+    loginAs(user);
+  } else {
+    showMsg(msgEl, "Mot de passe incorrect", true);
+  }
 }
 
-/* ---- Dossiers Licence ---- */
-function getLicFolders() { return settingsCache['lic_folders'] || []; }
-async function addLicFolder() {
-  if (me.role !== 'admin') return;
-  const name = prompt(t('folderPrompt'));
-  if (!name || !name.trim()) return;
-  const folders = [...getLicFolders(), { id: uid(), name: name.trim().slice(0, 60) }];
-  await fdb.collection('settings').doc('lic_folders').set({ value: folders });
-  openLic = true;
+function doSignup() {
+  const name = document.getElementById('suName').value.trim();
+  const user = document.getElementById('suUser').value.trim().toLowerCase().replace(/[^a-z0-9._-]/g, '');
+  const email = document.getElementById('suEmail').value.trim().toLowerCase();
+  const msg = document.getElementById('authMsg');
+  
+  if(!name || !user || !email) { showMsg(msg, "Veuillez remplir tous les champs", true); return; }
+  
+  db.collection('users').doc(user).get().then(doc => {
+    if(doc.exists) { showMsg(msg, "Cet identifiant est déjà pris", true); return; }
+    
+    // Génération automatique du mot de passe démarrant par "cc"
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    const generatedPassword = "cc" + rand;
+    
+    const newUser = {
+      name: name,
+      username: user,
+      searchKey: user,
+      email: email,
+      password: generatedPassword,
+      role: 'student',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    db.collection('users').doc(user).set(newUser).then(() => {
+      document.getElementById('genPass').innerText = generatedPassword;
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('confirmPanel').style.display = 'block';
+    });
+  }).catch(() => showMsg(msg, "Erreur lors de la création", true));
 }
-async function delLicFolder(id) {
-  if (me.role !== 'admin') return;
-  if (!confirm(t('confDelFolder'))) return;
-  const folders = getLicFolders().filter(f => f.id !== id);
-  await fdb.collection('settings').doc('lic_folders').set({ value: folders });
-  for (const f of filesCache.filter(f => f.subject === 'lic' && f.folderId === id)) await deleteFileDocs(f);
-  if (cur.view === 'lic' && cur.licFolder === id) cur.view = 'files';
+
+function afterConfirm() {
+  switchTab('login');
 }
 
-const pretty = s => s.charAt(0) + s.slice(1).toLowerCase();
+function showMsg(el, txt, isErr) {
+  el.innerText = txt;
+  el.className = "auth-msg " + (isErr ? "err" : "ok");
+}
 
-function render() {
-  if (!me) return;
-  const files = filesCache;
-  const licFolders = getLicFolders();
-  const isAdmin = me.role === 'admin';
+/* ================= Présence en ligne et Synchronisation Temps Réel ================= */
+function setUserPresence(username, isOnline) {
+  db.collection('presence').doc(username).set({
+    username: username,
+    name: currentUser.name,
+    online: isOnline,
+    lastActive: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+}
 
-  /* ---- Sidebar ---- */
-  let side = `<div class="side-main-title">${t('prepaT')}</div>`;
-  for (const [yr, arr] of YEARS) {
-    side += `<div class="side-year">${t(yr)}</div>`;
-    for (const cl of arr) {
-      const nc = files.filter(f => f.classe === cl && SUBJECTS[f.subject]).length;
-      side += `<div class="side-item" onclick="toggleClass('${cl}')">
-        <span>📁</span> ${t('classePrefix')} ${cl} ${nc ? `<span class="n">${nc}</span>` : ''} <span class="chev">${openClass[cl] ? '▼' : '►'}</span></div>`;
-      if (openClass[cl]) {
-        for (const [sk, s] of Object.entries(SUBJECTS)) {
-          const key = cl + '_' + sk;
-          side += `<div class="side-item d1" onclick="toggleSubj('${key}')">
-            <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSubj[key] ? '▼' : '►'}</span></div>`;
-          if (openSubj[key]) {
-            for (const [ck, c] of Object.entries(CATEGORIES)) {
-              const n = files.filter(f => f.classe===cl && f.subject===sk && f.category===ck).length;
-              const act = (cur.view==='files' && cur.classe===cl && cur.subject===sk && cur.category===ck) ? 'active' : '';
-              side += `<div class="side-item d2 ${act}" onclick="select('${cl}','${sk}','${ck}')">
-                <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
-            }
+// Mise à jour de l'activité si l'onglet reste ouvert
+setInterval(() => {
+  if (currentUser) setUserPresence(currentUser.username, true);
+}, 60000);
+
+function startRealtimeListeners() {
+  // 1. Écoute des inscrits totaux
+  db.collection('users').onSnapshot(snap => {
+    document.getElementById('totalUsers').innerText = snap.size;
+    document.getElementById('stReg').innerText = snap.size;
+  });
+
+  // 2. Écoute de la présence en direct (votre fille s'affichera directement ici)
+  db.collection('presence').where('online', '==', true).onSnapshot(snap => {
+    document.getElementById('onlineNow').innerText = snap.size;
+    document.getElementById('stOnline').innerText = snap.size;
+    
+    const whoEl = document.getElementById('stWho');
+    whoEl.innerHTML = '';
+    snap.forEach(doc => {
+      const p = doc.data();
+      const row = document.createElement('div');
+      row.className = 'top-item';
+      row.innerHTML = `<span>👤 ${p.name}</span><span class="tn">actif</span>`;
+      whoEl.appendChild(row);
+    });
+  });
+
+  // 3. Écoute du lien Visio (Meet / Zoom) en direct
+  db.collection('visio').doc('current').onSnapshot(doc => {
+    const liveCard = document.getElementById('visioLive');
+    const emptyCard = document.getElementById('visioEmpty');
+    
+    if(doc.exists && doc.data().url) {
+      const data = doc.data();
+      document.getElementById('visioDesc').innerText = "Une séance interactive vient d'être lancée par le professeur.";
+      document.getElementById('visioJoin').href = data.url;
+      liveCard.style.display = 'block';
+      emptyCard.style.display = 'none';
+    } else {
+      liveCard.style.display = 'none';
+      emptyCard.style.display = 'block';
+    }
+  });
+
+  // 4. Écoute globale des compteurs de fichiers pour le panel admin
+  db.collection('files').onSnapshot(snap => {
+    document.getElementById('stFiles').innerText = snap.size;
+  });
+}
+
+/* ================= Gestion de la Sidebar Dynamique ================= */
+function buildSidebar() {
+  const nav = document.getElementById('sidebar');
+  nav.innerHTML = '';
+  
+  STRUCTURE.forEach(item => {
+    if(item.type === 'title') {
+      const div = document.createElement('div');
+      div.className = 'side-main-title' + (item.id ? ' click' : '');
+      div.innerText = item.txt;
+      if(item.id) {
+        div.onclick = () => handleSpecialTab(item.id, item.txt);
+      }
+      nav.appendChild(div);
+    }
+    else if(item.type === 'year') {
+      const div = document.createElement('div');
+      div.className = 'side-year';
+      div.innerText = item.txt;
+      nav.appendChild(div);
+    }
+    else if(item.type === 'folder') {
+      const fDiv = document.createElement('div');
+      fDiv.className = 'side-item' + (activeFolder === item.id ? ' active' : '');
+      const isOpen = openFolders[item.id];
+      fDiv.innerHTML = `📁 <b>${item.txt}</b> <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
+      fDiv.onclick = () => {
+        openFolders[item.id] = !openFolders[item.id];
+        buildSidebar();
+      };
+      nav.appendChild(fDiv);
+      
+      if(isOpen) {
+        item.sub.forEach(subName => {
+          const sDiv = document.createElement('div');
+          sDiv.className = 'side-item d1' + (activeFolder === item.id && activeSub === subName ? ' active' : '');
+          sDiv.innerText = subName;
+          sDiv.onclick = (e) => {
+            e.stopPropagation();
+            activeFolder = item.id;
+            activeSub = subName;
+            activeLeaf = SUB_CATEGORIES[0];
+            buildSidebar();
+            loadFiles();
+          };
+          nav.appendChild(sDiv);
+          
+          if(activeFolder === item.id && activeSub === subName) {
+            SUB_CATEGORIES.forEach(leaf => {
+              const lDiv = document.createElement('div');
+              lDiv.className = 'side-item d2' + (activeLeaf === leaf ? ' active' : '');
+              lDiv.innerText = "📄 " + leaf;
+              lDiv.onclick = (e) => {
+                e.stopPropagation();
+                activeLeaf = leaf;
+                buildSidebar();
+                loadFiles();
+              };
+              nav.appendChild(lDiv);
+            });
           }
-        }
+        });
       }
     }
-  }
-  side += `<div class="side-main-title click" onclick="toggleLic()">${t('licT')} <span class="chev">${openLic ? '▼' : '►'}</span></div>`;
-  if (openLic) {
-    for (const fo of licFolders) {
-      const n = files.filter(f => f.subject==='lic' && f.folderId===fo.id).length;
-      const act = (cur.view==='lic' && cur.licFolder===fo.id) ? 'active' : '';
-      side += `<div class="side-item ${act}" onclick="selectLic('${fo.id}')">
-        <span>📁</span> ${esc(fo.name)} ${n ? `<span class="n">${n}</span>` : ''}
-        ${isAdmin ? `<span class="fdel" onclick="event.stopPropagation();delLicFolder('${fo.id}')" title="✕">✕</span>` : ''}</div>`;
-    }
-    if (isAdmin) side += `<div class="side-item" onclick="addLicFolder()"><span>➕</span> ${t('addFolder')}</div>`;
-    else if (!licFolders.length) side += `<div class="side-item" style="cursor:default;opacity:.6">${t('emptyLic')}</div>`;
-  }
-  side += `<div class="side-main-title click" onclick="toggleLive()">${t('liveTitle')} <span class="chev">${openLive ? '▼' : '►'}</span></div>`;
-  if (openLive) {
-    for (const [vk, v] of Object.entries(LIVE)) {
-      const n = vk==='seances' ? files.filter(f => f.subject==='live').length : 0;
-      const act = cur.view===vk ? 'active' : '';
-      side += `<div class="side-item ${act}" onclick="selectLive('${vk}')">
-        <span>${v.icon}</span> ${v.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
-    }
-  }
-  side += `<svg class="side-riemann" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
-    <g fill="#60a5fa"><rect x="5" y="45" width="16" height="25"/><rect x="23" y="35" width="16" height="35"/>
-    <rect x="41" y="24" width="16" height="46"/><rect x="59" y="16" width="16" height="54"/>
-    <rect x="77" y="13" width="16" height="57"/><rect x="95" y="16" width="16" height="54"/>
-    <rect x="113" y="24" width="16" height="46"/><rect x="131" y="33" width="16" height="37"/>
-    <rect x="149" y="38" width="16" height="32"/><rect x="167" y="35" width="16" height="35"/>
-    <rect x="185" y="27" width="16" height="43"/><rect x="203" y="18" width="16" height="52"/></g>
-    <path d="M2,52 C30,40 55,10 85,12 C115,14 130,42 158,40 C180,38 200,22 219,15" fill="none" stroke="#fde68a" stroke-width="2.5"/>
-  </svg>`;
-  document.getElementById('sidebar').innerHTML = side;
-
-  /* ---- Vues ---- */
-  document.getElementById('filesView').style.display = (cur.view==='files' || cur.view==='seances' || cur.view==='lic') ? 'block' : 'none';
-  document.getElementById('boardView').style.display = cur.view==='board' ? 'block' : 'none';
-  document.getElementById('visioView').style.display = cur.view==='visio' ? 'block' : 'none';
-
-  const bT = document.getElementById('bannerTitle'), bS = document.getElementById('bannerSub'), bF = document.getElementById('bannerFormula');
-
-  if (cur.view === 'files') {
-    const S = SUBJECTS[cur.subject], C = CATEGORIES[cur.category];
-    bT.textContent = `${pretty(S.label[lang])} — ${C.label[lang]}`;
-    bS.textContent = `${t('classePrefix')} ${CL(cur.classe)}`;
-    tex(bF, S.formula);
-    renderFiles(files, f => f.classe===cur.classe && f.subject===cur.subject && f.category===cur.category,
-                `${C.icon} ${C.label[lang]}`, isAdmin, true);
-  } else if (cur.view === 'lic') {
-    const fo = licFolders.find(x => x.id === cur.licFolder);
-    bT.textContent = fo ? fo.name : '';
-    bS.textContent = t('licT').replace('🎓 ', '');
-    tex(bF, LIC_FORMULA);
-    renderFiles(files, f => f.subject==='lic' && f.folderId===cur.licFolder,
-                `📁 ${fo ? fo.name : ''}`, isAdmin, true);
-  } else if (cur.view === 'seances') {
-    bT.textContent = t('seancesT'); bS.textContent = '';
-    tex(bF, LIVE_FORMULA);
-    renderFiles(files, f => f.subject==='live', `💾 ${t('seancesT')}`, isAdmin, false);
-  } else if (cur.view === 'board') {
-    bT.textContent = t('boardT'); bS.textContent = '';
-    tex(bF, LIVE_FORMULA);
-  } else if (cur.view === 'visio') {
-    bT.textContent = t('visioT'); bS.textContent = '';
-    tex(bF, LIVE_FORMULA);
-    renderVisio(isAdmin);
-  }
-
-  renderStats(files);
-  updateCounters();
+  });
 }
 
-function renderFiles(files, filter, title, isAdmin, allowAdd) {
-  const list = files.filter(filter).sort((a,b) => (a.ts||0) - (b.ts||0));
-  document.getElementById('filesTitle').textContent = `${title} (${list.length})`;
-  document.getElementById('btnAdd').style.display = (isAdmin && allowAdd) ? 'inline-block' : 'none';
-  const box = document.getElementById('fileList');
-  if (!list.length) {
-    box.innerHTML = `<div class="empty"><div class="big">📄</div>${t('emptyDocs')}${isAdmin && allowAdd ? '<br>' + t('emptyAdmin') : ''}</div>`;
-    return;
-  }
-  box.innerHTML = list.map(f => `
-    <div class="file-row">
-      <div class="file-ico">${f.subject==='live' ? '🖼️' : '📄'}</div>
-      <div class="file-info">
-        <h4>${esc(f.chapter || f.name)}</h4>
-        <small>${f.chapter ? esc(f.name) + ' · ' : ''}${(f.size/1024).toFixed(0)} Ko · ${t('added')} ${f.date}</small>
-      </div>
-      <span class="dl-count" id="cnt-${f.id}">⬇ ${f.downloads || 0}</span>
-      <button class="btn-dl" id="dl-${f.id}" onclick="downloadFile('${f.id}')">${t('btnDl')}</button>
-      ${isAdmin ? `<button class="btn-x" onclick="deleteFile('${f.id}')" title="✕">✕</button>` : ''}
-    </div>`).join('');
+function selectCategory(fId, sub, leaf) {
+  activeFolder = fId;
+  activeSub = sub;
+  activeLeaf = leaf;
+  openFolders[fId] = true;
+  currentView = 'files';
+  
+  document.getElementById('filesView').style.display = 'block';
+  document.getElementById('boardView').style.display = 'none';
+  document.getElementById('visioView').style.display = 'none';
+  
+  buildSidebar();
+  loadFiles();
 }
 
-/* ================= Statistiques (admin) ================= */
-async function renderStats(files) {
-  if (!me || me.role !== 'admin') return;
-  const totalDl = files.reduce((sum, f) => sum + (f.downloads || 0), 0);
-  document.getElementById('stFiles').textContent = files.length;
-  document.getElementById('stDl').textContent = totalDl;
-  const top = [...files].sort((a,b) => (b.downloads||0) - (a.downloads||0)).slice(0,5).filter(f => (f.downloads||0) > 0);
-  document.getElementById('stTop').innerHTML = top.length
-    ? top.map(f => `<div class="top-item"><span title="${esc(f.name)}">${esc(f.chapter || f.name)}</span><span class="tn">⬇ ${f.downloads}</span></div>`).join('')
-    : `<div class="top-item"><span>—</span></div>`;
+function handleSpecialTab(id, title) {
+  currentView = id === 'board_tab' ? 'board' : id === 'visio_tab' ? 'visio' : 'files';
+  
+  document.getElementById('filesView').style.display = currentView === 'files' ? 'block' : 'none';
+  document.getElementById('boardView').style.display = currentView === 'board' ? 'block' : 'none';
+  document.getElementById('visioView').style.display = currentView === 'visio' ? 'block' : 'none';
+  
+  document.getElementById('bannerTitle').innerText = title;
+  document.getElementById('bannerSub').innerText = "Espace collaboratif en temps réel";
+  
+  if(id === 'licence') {
+    selectCategory('licence', '', '');
+  }
+}
 
-  const groups = [
-    [SUBJECTS.analyse.label[lang], f => f.subject === 'analyse'],
-    [SUBJECTS.algebre.label[lang], f => f.subject === 'algebre'],
-    ['Licence', f => f.subject === 'lic'],
-    [t('seancesT'), f => f.subject === 'live']
-  ];
-  document.getElementById('stBySub').innerHTML = groups.map(([nm, fl]) => {
-    const dl = files.filter(fl).reduce((s2, f) => s2 + (f.downloads || 0), 0);
-    return `<div class="top-item"><span>${nm}</span><span class="tn">⬇ ${dl}</span></div>`;
-  }).join('');
-
-  try {
-    const q = await fdb.collection('connlog').orderBy('ts', 'desc').limit(500).get();
-    const byDay = {};
-    q.docs.forEach(d => {
-      const en = d.data();
-      if (!byDay[en.date]) byDay[en.date] = { total: 0, users: new Set() };
-      byDay[en.date].total++; byDay[en.date].users.add(en.u);
+/* ================= Stockage et Téléchargement via Firestore Base64 ================= */
+function loadFiles() {
+  if(currentView !== 'files') return;
+  
+  const titleEl = document.getElementById('filesTitle');
+  const fContainer = document.getElementById('fileList');
+  fContainer.innerHTML = '';
+  
+  const pathKey = `${activeFolder}_${activeSub}_${activeLeaf}`;
+  document.getElementById('bannerTitle').innerText = activeSub || "Licence";
+  document.getElementById('bannerSub').innerText = activeLeaf || "Documents d'études";
+  titleEl.innerText = activeLeaf || "Fichiers disponibles";
+  
+  db.collection('files').where('path', '==', pathKey).orderBy('name').get().then(snap => {
+    if(snap.empty) {
+      fContainer.innerHTML = `<div class="empty"><div class="big">📂</div><p>${I18N.emptyDocs[lang]}</p></div>`;
+      return;
+    }
+    
+    snap.forEach(doc => {
+      const f = doc.data();
+      const row = document.createElement('div');
+      row.className = 'file-row';
+      row.innerHTML = `
+        <div class="file-ico">📕</div>
+        <div class="file-info">
+          <h4>${f.name}</h4>
+          <small>${I18N.added[lang]} ${f.date || ''} (${f.size})</small>
+        </div>
+        <div class="dl-count">⬇ ${f.downloads || 0}</div>
+        <button class="btn-dl" onclick="downloadPdf('${doc.id}', '${f.name}')">${I18N.btnDl[lang]}</button>
+        ${currentUser.role === 'admin' ? `<button class="btn-x" onclick="deletePdf('${doc.id}')">✕</button>` : ''}
+      `;
+      fContainer.appendChild(row);
     });
-    const days = Object.entries(byDay).slice(0, 7);
-    document.getElementById('stByDay').innerHTML = days.length
-      ? days.map(([d2, v]) => `<div class="top-item"><span>${d2}</span><span class="tn">${v.total} · ${v.users.size} 👤</span></div>`).join('')
-      : `<div class="top-item"><span>—</span></div>`;
-  } catch(e) {}
+  }).catch(() => {
+    fContainer.innerHTML = `<p style="padding:20px;text-align:center;color:red;">Erreur lors du chargement des documents.</p>`;
+  });
 }
 
-/* ================= Visio ================= */
-function renderVisio(isAdmin) {
-  const link = settingsCache['visio_link'];
-  document.getElementById('visioLive').style.display = link ? 'block' : 'none';
-  document.getElementById('visioEmpty').style.display = link ? 'none' : 'block';
-  document.getElementById('visioAdmin').style.display = isAdmin ? 'block' : 'none';
-  if (link) {
-    document.getElementById('visioDesc').textContent = t('visioDesc');
-    document.getElementById('visioJoin').href = link;
-  }
-  if (isAdmin) {
-    document.getElementById('visioAdminP').textContent = lang === 'fr'
-      ? "Collez le lien Google Meet ou Zoom de la séance. Pour enregistrer la vidéo, utilisez l'enregistrement intégré de Meet/Zoom ; le tableau blanc, lui, s'enregistre ici."
-      : 'Paste the Google Meet or Zoom link of the session. To record the video, use Meet/Zoom built-in recording; the whiteboard is saved here.';
-    document.getElementById('visioUrl').value = link || '';
-  }
-}
-async function saveVisio() {
-  if (me.role !== 'admin') return;
-  const url = document.getElementById('visioUrl').value.trim();
-  if (!/^https:\/\/(meet\.google\.com|([a-z0-9-]+\.)?zoom\.us)\//i.test(url))
-    return alert(t('badLink'));
-  await fdb.collection('settings').doc('visio_link').set({ value: url });
-  toast(t('toastPub'));
-}
-async function removeVisio() {
-  if (me.role !== 'admin') return;
-  await fdb.collection('settings').doc('visio_link').delete();
-  toast(t('toastEnd'));
+function addPdfs(filesList) {
+  if(!filesList || filesList.length === 0) return;
+  const pathKey = `${activeFolder}_${activeSub}_${activeLeaf}`;
+  
+  Array.from(filesList).forEach(file => {
+    if(file.size > 10 * 1024 * 1024) { 
+      alert(`Le fichier ${file.name} dépasse la limite autorisée de 10 Mo.`); 
+      return; 
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const base64Data = e.target.result;
+      const today = new Date().toLocaleDateString('fr-FR');
+      
+      db.collection('files').add({
+        name: file.name,
+        path: pathKey,
+        size: (file.size / (1024 * 1024)).toFixed(2) + " Mo",
+        date: today,
+        downloads: 0,
+        content: base64Data
+      }).then(() => {
+        showToast("Fichier ajouté !");
+        loadFiles();
+      });
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
-/* ================= Tableau blanc ================= */
-let ctx, penColor='#0f172a', eraser=false, boardInit=false;
-let activePointer = null, lastPenTime = 0;
-function initBoard() {
-  if (boardInit) return; boardInit = true;
-  const cv = document.getElementById('board');
-  ctx = cv.getContext('2d');
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,cv.width,cv.height);
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  const pos = e => {
-    const r = cv.getBoundingClientRect();
-    return { x:(e.clientX-r.left)*cv.width/r.width, y:(e.clientY-r.top)*cv.height/r.height };
-  };
-  const width = e => {
-    const base = +document.getElementById('penSize').value;
-    let w = base;
-    if (e.pointerType === 'pen' && e.pressure > 0) w = base * (0.4 + e.pressure * 1.6);
-    return w * (eraser ? 4 : 1);
-  };
-  cv.addEventListener('pointerdown', e => {
-    if (e.pointerType === 'pen') lastPenTime = Date.now();
-    if (e.pointerType === 'touch' && Date.now() - lastPenTime < 3000) return;
-    if (activePointer !== null) return;
-    activePointer = e.pointerId;
-    try { cv.setPointerCapture(e.pointerId); } catch(_) {}
-    const p = pos(e);
-    ctx.beginPath(); ctx.moveTo(p.x, p.y);
-    ctx.strokeStyle = eraser ? '#ffffff' : penColor;
-    ctx.lineWidth = width(e);
-    ctx.lineTo(p.x + 0.1, p.y + 0.1); ctx.stroke();
-    e.preventDefault();
+function downloadPdf(id, name) {
+  db.collection('files').doc(id).get().then(doc => {
+    if(!doc.exists) return;
+    const data = doc.data();
+    
+    const link = document.createElement('a');
+    link.href = data.content;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Incrémentation du compteur de téléchargements de façon atomique
+    db.collection('files').doc(id).update({
+      downloads: firebase.firestore.FieldValue.increment(1)
+    }).then(() => loadFiles());
   });
-  cv.addEventListener('pointermove', e => {
-    if (e.pointerId !== activePointer) return;
-    if (e.pointerType === 'pen') lastPenTime = Date.now();
-    const p = pos(e);
-    ctx.strokeStyle = eraser ? '#ffffff' : penColor;
-    ctx.lineWidth = width(e);
-    ctx.lineTo(p.x, p.y); ctx.stroke();
-    e.preventDefault();
-  });
-  ['pointerup','pointercancel','pointerleave'].forEach(ev =>
-    cv.addEventListener(ev, e => { if (e.pointerId === activePointer) activePointer = null; }));
 }
-function setColor(c, btn) {
-  penColor = c; eraser = false;
+
+function deletePdf(id) {
+  if(confirm("Supprimer définitivement ce fichier ?")) {
+    db.collection('files').doc(id).delete().then(() => {
+      showToast("Fichier supprimé");
+      loadFiles();
+    });
+  }
+}
+
+/* ================= Tableau Blanc Interactif (HTML5 Canvas) ================= */
+let canvas, ctx, drawing = false, currentPenColor = '#0f172a', isEraser = false;
+
+function setupDrawingBoard() {
+  canvas = document.getElementById('board');
+  ctx = canvas.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  
+  // Événements Souris
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  
+  // Événements Tactiles (Téléphones & Stylets)
+  canvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); });
+  canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+  canvas.addEventListener('touchend', () => { endDraw(); });
+}
+
+function startDraw(e) {
+  drawing = true;
+  ctx.beginPath();
+  const rect = canvas.getBoundingClientRect();
+  // Calcul précis des coordonnées d'échelle du Canvas
+  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  ctx.moveTo(x, y);
+}
+
+function draw(e) {
+  if(!drawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  
+  ctx.lineWidth = document.getElementById('penSize').value;
+  ctx.strokeStyle = isEraser ? '#ffffff' : currentPenColor;
+  
+  ctx.lineTo(x, y);
+  ctx.stroke();
+}
+
+function endDraw() { drawing = false; }
+
+function setColor(color, btn) {
+  isEraser = false;
+  currentPenColor = color;
+  document.getElementById('eraserBtn').classList.remove('sel');
   document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('sel'));
   btn.classList.add('sel');
-  document.getElementById('eraserBtn').classList.remove('sel');
-}
-function toggleEraser() {
-  eraser = !eraser;
-  document.getElementById('eraserBtn').classList.toggle('sel', eraser);
-}
-function clearBoard() {
-  if (!confirm(t('confDelBoard'))) return;
-  const cv = document.getElementById('board');
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,cv.width,cv.height);
-}
-function downloadBoard() {
-  const a = document.createElement('a');
-  a.download = `tableau-${new Date().toISOString().slice(0,10)}.png`;
-  a.href = document.getElementById('board').toDataURL('image/png');
-  a.click();
-  toast(t('toastImg'));
-}
-function saveSeance() {
-  if (me.role !== 'admin') return;
-  document.getElementById('board').toBlob(async blob => {
-    const d = new Date();
-    const name = `Séance du ${d.toLocaleDateString('fr-FR')} ${d.getHours()}h${String(d.getMinutes()).padStart(2,'0')}.png`;
-    toast(t('toastUp'));
-    await storeBlob(blob, {
-      classe:'LIVE', subject:'live', category:'seances',
-      name, chapter:'', mime:'image/png', size: blob.size,
-      date: d.toLocaleDateString('fr-FR')
-    });
-    toast(t('toastSess'));
-  }, 'image/png');
 }
 
-/* ================= Stockage des fichiers (Firestore, en morceaux) ================= */
-function blobToBase64(blob) {
-  return new Promise((res, rej) => {
-    const fr = new FileReader();
-    fr.onload = () => res(String(fr.result).split(',')[1]);
-    fr.onerror = rej;
-    fr.readAsDataURL(blob);
+function toggleEraser() {
+  isEraser = !isEraser;
+  document.getElementById('eraserBtn').classList.toggle('sel', isEraser);
+}
+
+function clearBoard() {
+  if(confirm("Vider l'intégralité du tableau ?")) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function downloadBoard() {
+  const link = document.createElement('a');
+  link.download = 'tableau-excellence.png';
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+/* ================= Gestion de la Vidéoconférence (Visio) ================= */
+function saveVisio() {
+  const url = document.getElementById('visioUrl').value.trim();
+  if(!url) return;
+  db.collection('visio').doc('current').set({
+    url: url,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    showToast("Lien de cours en direct publié !");
+    document.getElementById('visioUrl').value = '';
   });
 }
-async function storeBlob(blob, meta) {
-  const b64 = await blobToBase64(blob);
-  const nChunks = Math.ceil(b64.length / CHUNK);
-  const fileId = uid();
-  for (let i = 0; i < nChunks; i++) {
-    await fdb.collection('chunks').doc(fileId + '_' + i).set({ data: b64.slice(i * CHUNK, (i + 1) * CHUNK) });
-  }
-  await fdb.collection('files').doc(fileId).set({ ...meta, chunks: nChunks, downloads: 0, ts: Date.now() });
-  return fileId;
-}
-async function loadBlob(f) {
-  let b64 = '';
-  for (let i = 0; i < f.chunks; i++) {
-    const d = await fdb.collection('chunks').doc(f.id + '_' + i).get();
-    if (!d.exists) throw new Error('chunk manquant');
-    b64 += d.data().data;
-  }
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-  return new Blob([arr], { type: f.mime || 'application/pdf' });
-}
-async function deleteFileDocs(f) {
-  for (let i = 0; i < (f.chunks || 0); i++) {
-    await fdb.collection('chunks').doc(f.id + '_' + i).delete().catch(() => {});
-  }
-  await fdb.collection('files').doc(f.id).delete();
+
+function removeVisio() {
+  db.collection('visio').doc('current').delete().then(() => {
+    showToast("Séance en direct terminée.");
+  });
 }
 
-/* ================= Fichiers PDF ================= */
-async function addPdfs(fileList) {
-  if (me.role !== 'admin') return;
-  for (const file of fileList) {
-    if (!file.name.toLowerCase().endsWith('.pdf')) { alert(`« ${file.name} » ${t('notPdf')}`); continue; }
-    if (file.size > MAX_PDF) { alert(`${t('tooBig')} ${file.name}`); continue; }
-    const chapter = (prompt(`${t('chapterPrompt')} ${file.name}`) || '').trim().slice(0, 80);
-    toast(t('toastUp'));
-    try {
-      const meta = {
-        classe: cur.classe, subject: cur.subject, category: cur.category,
-        name: file.name, chapter, mime:'application/pdf', size: file.size,
-        date: new Date().toLocaleDateString('fr-FR')
-      };
-      if (cur.view === 'lic') { meta.subject = 'lic'; meta.category = 'docs'; meta.classe = 'LIC'; meta.folderId = cur.licFolder; }
-      await storeBlob(file, meta);
-    } catch(e) { alert(t('toastErr')); }
-  }
-  document.getElementById('pdfInput').value = '';
-  toast(t('toastPdf'));
+/* ================= Notifications Toasts ================= */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
-
-async function deleteFile(id) {
-  if (me.role !== 'admin') return;
-  if (!confirm(t('confDelFile'))) return;
-  const f = filesCache.find(x => x.id === id);
-  if (f) await deleteFileDocs(f);
-}
-
-async function downloadFile(id) {
-  const f = filesCache.find(x => x.id === id);
-  if (!f) return;
-  const btn = document.getElementById('dl-' + id);
-  if (btn) btn.disabled = true;
-  try {
-    const blob = await loadBlob(f);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = f.name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
-    fdb.collection('files').doc(id).update({ downloads: firebase.firestore.FieldValue.increment(1) }).catch(() => {});
-    toast(t('toastDl'));
-  } catch(e) { alert(t('toastErr')); }
-  if (btn) btn.disabled = false;
-}
-
-/* ================= Utilitaires ================= */
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(m) {
-  const el = document.getElementById('toast');
-  el.textContent = m; el.style.display = 'block';
-  clearTimeout(el._h); el._h = setTimeout(() => el.style.display = 'none', 2200);
-}
-document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
-document.getElementById('suEmail').addEventListener('keydown', e => { if (e.key==='Enter') doSignup(); });
 </script>
 </body>
 </html>
