@@ -88,10 +88,16 @@
   /* ---- Sidebar gauche ---- */
   aside { width:250px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px; }
   .side-section { margin-bottom:8px; }
+  .side-main-title {
+    padding:4px 20px 12px; font-size:15px; font-weight:800; color:#fff; letter-spacing:1px;
+    border-bottom:1px solid rgba(255,255,255,.15); margin-bottom:8px;
+  }
   .side-title {
     padding:12px 20px 8px; font-size:13px; letter-spacing:2px; font-weight:800; color:var(--or);
-    display:flex; align-items:center; gap:8px;
+    display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
   }
+  .side-title:hover { color:#fbbf24; }
+  .side-title .chev { margin-left:auto; font-size:11px; }
   .side-item {
     display:flex; align-items:center; gap:10px; padding:11px 20px 11px 28px; cursor:pointer;
     font-size:14.5px; border-left:4px solid transparent; transition:.15s;
@@ -208,7 +214,7 @@
   <div class="auth-card">
     <div class="auth-hero">
       <h1>L'excellence académique</h1>
-      <div class="sub-brand">Ressir Prepa</div>
+      <div class="sub-brand">C.C</div>
       <p>Cours · Séries corrigées · TD · Devoirs corrigés</p>
       <div class="formula" id="heroFormula"></div>
       <svg viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
@@ -265,7 +271,7 @@
     <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
     <div class="brand">
       <div class="sigma">Σ</div>
-      <h1>L'excellence académique<small id="brandSub">Ressir Prepa</small></h1>
+      <h1>L'excellence académique<small id="brandSub">C.C</small></h1>
     </div>
     <div class="classe-select">
       <label for="classeSel">Classe :</label>
@@ -426,6 +432,9 @@ const del = (s,k) => new Promise(r => { tx(s,'readwrite').delete(k).onsuccess = 
 /* ================= État ================= */
 let me = null;
 let cur = { classe:'P', view:'files', subject:'analyse', category:'cours' };
+let openSub = { analyse:true, algebre:false };
+
+function toggleSubject(sk) { openSub[sk] = !openSub[sk]; render(); }
 
 function init() {
   tex(document.getElementById('heroFormula'), SUBJECTS.analyse.formula);
@@ -548,6 +557,7 @@ function enterApp() {
 function changeClasse(c) { cur.classe = c; render(); }
 function select(subject, category) {
   cur.view = 'files'; cur.subject = subject; cur.category = category;
+  openSub[subject] = true;
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
@@ -562,14 +572,17 @@ async function render() {
   const isAdmin = me.role === 'admin';
 
   /* ---- Sidebar ---- */
-  let side = '';
+  let side = `<div class="side-main-title">🎓 Classes Préparatoires</div>`;
   for (const [sk, s] of Object.entries(SUBJECTS)) {
-    side += `<div class="side-section"><div class="side-title"><span>${s.icon}</span> ${s.label}</div>`;
-    for (const [ck, c] of Object.entries(CATEGORIES)) {
-      const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
-      const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
-      side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
-        <span>${c.icon}</span> ${c.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+    side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
+      <span>${s.icon}</span> ${s.label} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
+    if (openSub[sk]) {
+      for (const [ck, c] of Object.entries(CATEGORIES)) {
+        const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
+        const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
+        side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
+          <span>${c.icon}</span> ${c.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+      }
     }
     side += `</div>`;
   }
