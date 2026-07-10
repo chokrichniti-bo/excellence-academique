@@ -618,12 +618,30 @@ function logout() {
   document.getElementById('authScreen').style.display = 'flex';
 }
 
+function adminHash(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  let h2 = 5381;
+  for (let i = s.length - 1; i >= 0; i--) { h2 = (Math.imul(h2, 33) ^ s.charCodeAt(i)) >>> 0; }
+  return h.toString(16) + h2.toString(16);
+}
+
 function doLogin() {
   const userOrEmail = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value.trim();
   const msg = document.getElementById('authMsg');
   
   if(!userOrEmail || !pass) { showMsg(msg, "Champs requis", true); return; }
+  
+  /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
+  if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
+    if (adminHash('chokri:' + pass) === '4189603294dc5552') {
+      loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
+    } else {
+      showMsg(msg, "Mot de passe incorrect", true);
+    }
+    return;
+  }
   
   db.collection('users').where('searchKey', '==', userOrEmail).get().then(snap => {
     if(snap.empty) {
