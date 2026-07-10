@@ -30,12 +30,12 @@
   #authScreen {
     min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
     background:linear-gradient(140deg,#0f2a5c 0%,#1d4ed8 60%,#0ea5e9 100%);
-    position:relative; overflow:hidden;
+    position:relative; overflow-x:hidden;
   }
   #authScreen .riemann-bg { position:absolute; inset:auto 0 0 0; width:100%; height:45vh; opacity:.25; pointer-events:none; }
   .auth-card {
     background:var(--carte); border-radius:22px; width:100%; max-width:460px;
-    box-shadow:0 30px 70px rgba(0,0,0,.4); overflow:hidden; position:relative; z-index:2;
+    box-shadow:0 30px 70px rgba(0,0,0,.4); overflow:hidden; position:relative; z-index:2; margin:20px 0;
   }
   .auth-hero { background:linear-gradient(135deg,#0f2a5c,#1d4ed8); padding:26px 30px 0; text-align:center; color:#fff; position:relative; }
   .auth-hero h1 { font-size:26px; letter-spacing:.5px; }
@@ -55,10 +55,10 @@
   .auth-body { padding:26px 30px 30px; }
   .field { margin-bottom:14px; }
   .field label { display:block; font-size:13px; font-weight:600; color:var(--gris); margin-bottom:5px; }
-  .field input, .field select {
+  .field input {
     width:100%; padding:12px 14px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;
   }
-  .field input:focus, .field select:focus { outline:none; border-color:var(--bleu2); }
+  .field input:focus { outline:none; border-color:var(--bleu2); }
   .btn-main {
     width:100%; padding:13px; border:none; border-radius:11px; margin-top:6px;
     background:linear-gradient(135deg,#0f2a5c,#1d4ed8); color:#fff; font-size:16px; font-weight:700; cursor:pointer;
@@ -91,11 +91,8 @@
   .brand .sigma { font-family:Georgia,serif; font-size:26px; background:var(--or); color:#0f2a5c; width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-weight:700; }
   .brand h1 { font-size:17px; }
   .brand small { display:block; font-size:11px; color:#bfdbfe; font-weight:400; }
-  .classe-select { margin-left:auto; display:flex; align-items:center; gap:8px; }
-  .classe-select label { font-size:13px; color:#bfdbfe; }
-  .classe-select select { padding:8px 10px; border-radius:9px; border:none; font-weight:700; color:var(--bleu); cursor:pointer; }
   .presence {
-    display:flex; flex-direction:column; align-items:flex-end; gap:2px;
+    margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:2px;
     background:rgba(255,255,255,.12); padding:6px 14px; border-radius:11px; font-size:12.5px; font-weight:700;
   }
   .presence .dot { color:#4ade80; }
@@ -111,28 +108,29 @@
   .layout { display:flex; min-height:calc(100vh - 66px); }
 
   /* ---- Sidebar gauche ---- */
-  aside {
-    width:260px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px;
+  aside.nav {
+    width:270px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:14px 0 30px;
     position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto;
   }
   .side-main-title {
-    padding:12px 20px 10px; font-size:14.5px; font-weight:800; color:#fff; letter-spacing:.5px;
+    padding:12px 20px 10px; font-size:14px; font-weight:800; color:#fff; letter-spacing:.4px;
     border-bottom:1px solid rgba(255,255,255,.15); margin-bottom:6px;
+    display:flex; align-items:center; gap:8px;
   }
-  .side-section { margin-bottom:4px; }
-  .side-title {
-    padding:11px 20px 8px; font-size:13px; letter-spacing:2px; font-weight:800; color:var(--or);
-    display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
-  }
-  .side-title:hover { color:#fbbf24; }
-  .side-title .chev { margin-left:auto; font-size:11px; }
+  .side-main-title.click { cursor:pointer; user-select:none; }
+  .side-main-title.click:hover { color:#fde68a; }
+  .side-main-title .chev { margin-left:auto; font-size:11px; color:var(--or); }
+  .side-year { padding:9px 20px 4px; font-size:11px; letter-spacing:1.5px; color:#93c5fd; font-weight:800; text-transform:uppercase; }
   .side-item {
-    display:flex; align-items:center; gap:10px; padding:10px 20px 10px 30px; cursor:pointer;
-    font-size:14px; border-left:4px solid transparent; transition:.15s;
+    display:flex; align-items:center; gap:9px; padding:9px 16px 9px 26px; cursor:pointer;
+    font-size:14px; border-left:4px solid transparent; transition:.15s; user-select:none;
   }
   .side-item:hover { background:rgba(255,255,255,.08); }
   .side-item.active { background:rgba(29,78,216,.5); border-left-color:var(--or); color:#fff; font-weight:700; }
-  .side-item .n { margin-left:auto; background:rgba(255,255,255,.15); font-size:11.5px; padding:2px 8px; border-radius:10px; }
+  .side-item .chev { margin-left:auto; font-size:10px; color:var(--or); }
+  .side-item .n { margin-left:auto; background:rgba(255,255,255,.15); font-size:11px; padding:2px 7px; border-radius:10px; }
+  .side-item.d1 { padding-left:42px; font-size:13.5px; font-weight:700; color:#fbd38d; letter-spacing:1px; }
+  .side-item.d2 { padding-left:58px; font-size:13px; }
   .side-item .fdel { margin-left:8px; color:#fca5a5; font-weight:800; padding:0 5px; }
   .side-item .fdel:hover { color:#ef4444; }
   .side-riemann { margin:18px 14px 0; opacity:.5; }
@@ -169,6 +167,24 @@
   .btn-x:hover { background:#fee2e2; color:#dc2626; }
   .empty { text-align:center; color:var(--gris); padding:50px 20px; }
   .empty .big { font-size:48px; margin-bottom:10px; }
+
+  /* ---- Statistiques (droite) ---- */
+  aside.stats {
+    width:250px; flex-shrink:0; background:#fff; border-left:1px solid #e2e8f0;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto;
+    padding:20px 16px; display:none;
+  }
+  aside.stats.show { display:block; }
+  .stats h3 { color:var(--bleu); font-size:16px; margin-bottom:14px; }
+  .stat-card {
+    background:var(--fond); border-radius:12px; padding:12px 14px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:space-between; font-size:13.5px; font-weight:600; color:var(--texte);
+  }
+  .stat-card b { font-size:19px; color:var(--bleu2); }
+  .stats h4 { color:var(--gris); font-size:12.5px; letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px; }
+  .top-item { font-size:12.5px; padding:7px 4px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; gap:8px; }
+  .top-item span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .top-item .tn { color:var(--bleu2); font-weight:800; white-space:nowrap; }
 
   /* ---- Tableau blanc ---- */
   #boardView { display:none; }
@@ -210,11 +226,11 @@
   }
 
   .menu-btn { display:none; background:rgba(255,255,255,.15); border:none; color:#fff; font-size:20px; border-radius:9px; width:40px; height:40px; cursor:pointer; }
+  @media (max-width:1150px) { aside.stats { display:none !important; } }
   @media (max-width:860px) {
     .menu-btn { display:block; }
-    aside { position:fixed; left:-270px; top:0; bottom:0; z-index:40; transition:.25s; overflow-y:auto; padding-top:70px; }
-    aside.open { left:0; box-shadow:8px 0 30px rgba(0,0,0,.4); }
-    .classe-select label { display:none; }
+    aside.nav { position:fixed; left:-280px; top:0; bottom:0; z-index:40; transition:.25s; height:100vh; padding-top:70px; }
+    aside.nav.open { left:0; box-shadow:8px 0 30px rgba(0,0,0,.4); }
     .presence { font-size:11px; padding:5px 10px; }
     .brand h1 { font-size:14.5px; }
   }
@@ -303,17 +319,6 @@
       <div class="sigma">Σ</div>
       <h1>L'excellence académique<small id="brandSub">C.C</small></h1>
     </div>
-    <div class="classe-select">
-      <label for="classeSel" data-i18n="lblClasseSel">Classe :</label>
-      <select id="classeSel" onchange="changeClasse(this.value)">
-        <optgroup label="1ère année" data-y="1">
-          <option value="P">P</option><option value="T">T</option><option value="M">M</option>
-        </optgroup>
-        <optgroup label="2ème année" data-y="2">
-          <option value="SP">SP</option><option value="ST">ST</option><option value="SM">SM</option>
-        </optgroup>
-      </select>
-    </div>
     <div class="presence">
       <span><span class="dot">●</span> <span id="onlineNow">1</span> <span data-i18n="onlineTxt">en ligne maintenant</span></span>
       <small>👥 <span id="totalUsers">0</span> <span data-i18n="regTxt">étudiant(s) inscrit(s)</span></small>
@@ -328,7 +333,7 @@
   </header>
 
   <div class="layout">
-    <aside id="sidebar"></aside>
+    <aside class="nav" id="sidebar"></aside>
 
     <div class="content">
       <div class="banner">
@@ -386,13 +391,13 @@
 
         <div id="visioView">
           <div class="visio-card visio-live" id="visioLive" style="display:none">
-            <h4>🔴 <span data-i18n="visioLiveT">Séance en direct</span> — <span id="visioClasse"></span></h4>
+            <h4>🔴 <span data-i18n="visioLiveT">Séance en direct</span></h4>
             <p id="visioDesc"></p>
             <a class="btn-join btn-meet" id="visioJoin" href="#" target="_blank" rel="noopener" data-i18n="btnJoin">🎥 Rejoindre la séance</a>
           </div>
           <div class="visio-card" id="visioEmpty" style="display:none">
             <h4 data-i18n="visioEmptyT">🎥 Aucune séance en direct</h4>
-            <p data-i18n="visioEmptyP">Le professeur n'a pas encore publié de lien Google Meet ou Zoom pour cette classe. Revenez plus tard.</p>
+            <p data-i18n="visioEmptyP">Le professeur n'a pas encore publié de lien Google Meet ou Zoom. Revenez plus tard.</p>
           </div>
           <div class="visio-card" id="visioAdmin" style="display:none">
             <h4 data-i18n="visioAdminT">⚙️ Publier une séance (admin)</h4>
@@ -404,6 +409,16 @@
         </div>
       </div>
     </div>
+
+    <aside class="stats" id="statsPanel">
+      <h3 data-i18n="statsT">📊 Statistiques</h3>
+      <div class="stat-card"><span data-i18n="statReg">👥 Inscrits</span><b id="stReg">0</b></div>
+      <div class="stat-card"><span data-i18n="statOnline">🟢 En ligne</span><b id="stOnline">1</b></div>
+      <div class="stat-card"><span data-i18n="statFiles">📄 Fichiers</span><b id="stFiles">0</b></div>
+      <div class="stat-card"><span data-i18n="statDl">⬇ Téléchargements</span><b id="stDl">0</b></div>
+      <h4 data-i18n="statTop">Top téléchargements</h4>
+      <div id="stTop"></div>
+    </aside>
   </div>
 </div>
 
@@ -427,14 +442,12 @@ const I18N = {
   phName:    { fr:'Prénom Nom', en:'First name Last name' },
   lblPseudo: { fr:'Identifiant unique (pseudo)', en:'Unique username' },
   lblEmail:  { fr:'Adresse e-mail (Gmail ou autre)', en:'Email address (Gmail or other)' },
-  lblClasse: { fr:'Classe', en:'Class' },
   btnSignup: { fr:'Créer mon compte', en:'Create my account' },
   confTitle: { fr:'✅ Compte créé !', en:'✅ Account created!' },
   confPw:    { fr:'Voici votre mot de passe (il commence par « cc ») :', en:'Here is your password (it starts with “cc”):' },
   confNote:  { fr:'Notez-le précieusement : il ne sera plus jamais affiché.', en:'Write it down carefully: it will never be shown again.' },
   confMail:  { fr:"📧 Me l'envoyer par e-mail", en:'📧 Email it to me' },
   confOk:    { fr:"J'ai noté → Me connecter", en:'Noted → Sign in' },
-  lblClasseSel: { fr:'Classe :', en:'Class:' },
   onlineTxt: { fr:'en ligne maintenant', en:'online now' },
   regTxt:    { fr:'étudiant(s) inscrit(s)', en:'registered student(s)' },
   btnLogout: { fr:'Déconnexion', en:'Log out' },
@@ -451,19 +464,33 @@ const I18N = {
   btnSaveSess:{ fr:'💾 Enregistrer la séance', en:'💾 Save the session' },
   boardNote: { fr:'✍️ Compatible souris, doigt et stylet (Apple Pencil, S Pen…) avec sensibilité à la pression et rejet de paume.', en:'✍️ Works with mouse, finger and stylus (Apple Pencil, S Pen…) with pressure sensitivity and palm rejection.' },
   visioLiveT:{ fr:'Séance en direct', en:'Live session' },
+  visioDesc: { fr:'Une séance est en cours. Cliquez pour la rejoindre.', en:'A session is live. Click to join.' },
   btnJoin:   { fr:'🎥 Rejoindre la séance', en:'🎥 Join the session' },
   visioEmptyT:{ fr:'🎥 Aucune séance en direct', en:'🎥 No live session' },
-  visioEmptyP:{ fr:"Le professeur n'a pas encore publié de lien Google Meet ou Zoom pour cette classe. Revenez plus tard.", en:'The teacher has not published a Google Meet or Zoom link for this class yet. Come back later.' },
+  visioEmptyP:{ fr:"Le professeur n'a pas encore publié de lien Google Meet ou Zoom. Revenez plus tard.", en:'The teacher has not published a Google Meet or Zoom link yet. Come back later.' },
   visioAdminT:{ fr:'⚙️ Publier une séance (admin)', en:'⚙️ Publish a session (admin)' },
   btnPublish:{ fr:'✔ Publier le lien', en:'✔ Publish link' },
   btnEndSess:{ fr:'✕ Terminer la séance', en:'✕ End session' },
-  liveTitle: { fr:'SÉANCE LIVE', en:'LIVE SESSION' },
+  liveTitle: { fr:'📡 SÉANCE LIVE', en:'📡 LIVE SESSION' },
   seancesT:  { fr:'Séances enregistrées', en:'Recorded sessions' },
   visioT:    { fr:'Visio — Google Meet / Zoom', en:'Video call — Google Meet / Zoom' },
   boardT:    { fr:'Tableau blanc', en:'Whiteboard' },
   classePrefix:{ fr:'Classe', en:'Class' },
   year1:     { fr:'Première année', en:'First year' },
   year2:     { fr:'Deuxième année', en:'Second year' },
+  prepaT:    { fr:'🎓 Classes Préparatoires', en:'🎓 Preparatory Classes' },
+  licT:      { fr:'🎓 Licence (Mathématiques)', en:'🎓 Licence (Mathematics)' },
+  addFolder: { fr:'+ Ajouter un dossier', en:'+ Add a folder' },
+  folderPrompt: { fr:'Nom du nouveau dossier :', en:'Name of the new folder:' },
+  confDelFolder: { fr:'Supprimer ce dossier et tous ses fichiers ?', en:'Delete this folder and all its files?' },
+  emptyLic:  { fr:'Aucun dossier pour le moment.', en:'No folders yet.' },
+  chapterPrompt: { fr:'Titre du chapitre pour :', en:'Chapter title for:' },
+  statsT:    { fr:'📊 Statistiques', en:'📊 Statistics' },
+  statReg:   { fr:'👥 Inscrits', en:'👥 Registered' },
+  statOnline:{ fr:'🟢 En ligne', en:'🟢 Online' },
+  statFiles: { fr:'📄 Fichiers', en:'📄 Files' },
+  statDl:    { fr:'⬇ Téléchargements', en:'⬇ Downloads' },
+  statTop:   { fr:'Top téléchargements', en:'Top downloads' },
   fillAll:   { fr:'Veuillez remplir tous les champs.', en:'Please fill in all fields.' },
   badPseudo: { fr:'Identifiant : 3–30 caractères (lettres, chiffres, . _ -).', en:'Username: 3–30 characters (letters, digits, . _ -).' },
   badEmail:  { fr:'Adresse e-mail invalide.', en:'Invalid email address.' },
@@ -481,13 +508,8 @@ const I18N = {
   toastNo:   { fr:'⛔ Action non autorisée', en:'⛔ Action not allowed' },
   confDelFile:{ fr:'Supprimer ce fichier ?', en:'Delete this file?' },
   confDelBoard:{ fr:'Effacer tout le tableau ?', en:'Clear the whole board?' },
-  confDelSess:{ fr:'Une séance est en cours. Cliquez pour la rejoindre.', en:'A session is live. Click to join.' },
   notPdf:    { fr:"n'est pas un PDF — ignoré.", en:'is not a PDF — skipped.' },
-  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' },
-  addFolder: { fr:'+ Ajouter un dossier', en:'+ Add a folder' },
-  folderPrompt: { fr:'Nom du nouveau dossier :', en:'Name of the new folder:' },
-  confDelFolder: { fr:'Supprimer ce dossier et tous ses fichiers ?', en:'Delete this folder and all its files?' },
-  emptyLic:  { fr:"Aucun dossier pour le moment.", en:'No folders yet.' }
+  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' }
 };
 const t = k => (I18N[k] || {})[lang] || k;
 
@@ -495,8 +517,6 @@ function applyLang() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
-  document.querySelectorAll('optgroup[data-y="1"]').forEach(o => o.label = t('year1'));
-  document.querySelectorAll('optgroup[data-y="2"]').forEach(o => o.label = t('year2'));
   document.getElementById('langBtn').textContent = lang === 'fr' ? 'EN' : 'FR';
   document.getElementById('langBtnAuth').textContent = lang === 'fr' ? 'EN' : 'FR';
 }
@@ -508,15 +528,10 @@ function toggleLang() {
 }
 
 /* ================= Constantes ================= */
-const SECTIONS = {
-  prepa:   { fr:'🎓 Classes Préparatoires', en:'🎓 Preparatory Classes' },
-  licence: { fr:'🎓 Licence (Mathématiques)', en:'🎓 Licence (Mathematics)' }
-};
 const SUBJECTS = {
-  analyse:     { section:'prepa',   label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
-  algebre:     { section:'prepa',   label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' }
+  analyse: { label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
+  algebre: { label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' }
 };
-const LIC_FORMULA = 'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n';
 const CATEGORIES = {
   cours:   { label:{fr:'Cours',en:'Lectures'},                icon:'📖' },
   series:  { label:{fr:'Séries corrigées',en:'Solved exercises'}, icon:'✏️' },
@@ -529,6 +544,8 @@ const LIVE = {
   seances: { label:{fr:'Séances enregistrées',en:'Recorded sessions'}, icon:'💾' }
 };
 const LIVE_FORMULA = 'f\'(x_0)=\\lim_{h\\to 0}\\frac{f(x_0+h)-f(x_0)}{h}';
+const LIC_FORMULA = 'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n';
+const YEARS = [ ['year1', ['P','T','M']], ['year2', ['SP','ST','SM']] ];
 const CLASSES = {
   P:{fr:'1ère année P',en:'1st year P'}, T:{fr:'1ère année T',en:'1st year T'}, M:{fr:'1ère année M',en:'1st year M'},
   SP:{fr:'2ème année SP',en:'2nd year SP'}, ST:{fr:'2ème année ST',en:'2nd year ST'}, SM:{fr:'2ème année SM',en:'2nd year SM'}
@@ -565,10 +582,15 @@ const del = (s,k) => new Promise(r => { tx(s,'readwrite').delete(k).onsuccess = 
 
 /* ================= État ================= */
 let me = null;
-let cur = { classe:'P', view:'files', subject:'analyse', category:'cours' };
-let openSub = { analyse:true, algebre:false, live:false };
+let cur = { view:'files', classe:'P', subject:'analyse', category:'cours', licFolder:null };
+let openClass = {};       /* P, T, M, SP, ST, SM */
+let openSubj = {};        /* clé : classe_matière, ex. P_analyse */
+let openLic = false, openLive = false;
 
-function toggleSubject(sk) { openSub[sk] = !openSub[sk]; render(); }
+function toggleClass(c) { openClass[c] = !openClass[c]; render(); }
+function toggleSubj(k) { openSubj[k] = !openSubj[k]; render(); }
+function toggleLic() { openLic = !openLic; render(); }
+function toggleLive() { openLive = !openLive; render(); }
 
 function init() {
   applyLang();
@@ -624,7 +646,6 @@ async function doSignup() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg(t('badEmail'));
   if (username === ADMIN_USER) return msg(t('taken'));
   if (await getOne('users', username)) return msg(t('taken'));
-  /* Mot de passe généré automatiquement, commence obligatoirement par « cc » */
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let code = '';
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
@@ -651,7 +672,6 @@ async function doLogin() {
   if (!id || !pass) return msg(t('needCreds'));
   let username = id, u = null;
   if (id.includes('@')) {
-    /* Connexion par e-mail */
     if (id === ADMIN_EMAIL) { username = ADMIN_USER; }
     else {
       const users = await getAll('users');
@@ -664,11 +684,11 @@ async function doLogin() {
   const h = hash(username + ':' + pass);
   if (username === ADMIN_USER) {
     if (h !== ADMIN_HASH) return msg(t('badCreds'));
-    me = { username, name:'Chokri', classe:'P', role:'admin' };
+    me = { username, name:'Chokri', role:'admin' };
   } else {
     if (!u) u = await getOne('users', username);
     if (!u || u.passHash !== h) return msg(t('badCreds'));
-    me = { username, name:u.name, classe:u.classe || 'P', role:'etudiant' };
+    me = { username, name:u.name, role:'etudiant' };
   }
   localStorage.setItem('rp_session', JSON.stringify(me));
   enterApp();
@@ -693,10 +713,13 @@ function heartbeat() {
 }
 async function updatePresence() {
   const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
-  const online = Object.values(o).filter(ts => Date.now() - ts < 45000).length;
-  document.getElementById('onlineNow').textContent = Math.max(online, 1);
+  const online = Math.max(Object.values(o).filter(ts => Date.now() - ts < 45000).length, 1);
+  document.getElementById('onlineNow').textContent = online;
   const users = await getAll('users');
   document.getElementById('totalUsers').textContent = users.length;
+  const so = document.getElementById('stOnline'), sr = document.getElementById('stReg');
+  if (so) so.textContent = online;
+  if (sr) sr.textContent = users.length;
 }
 setInterval(heartbeat, 15000);
 window.addEventListener('storage', ev => { if (ev.key === 'rp_online') updatePresence(); });
@@ -710,31 +733,33 @@ function enterApp() {
   const isAdmin = me.role === 'admin';
   document.getElementById('adminBadge').style.display = isAdmin ? 'inline-block' : 'none';
   document.getElementById('btnSaveSeance').style.display = isAdmin ? 'inline-block' : 'none';
-  cur.classe = me.classe in CLASSES ? me.classe : 'P';
-  document.getElementById('classeSel').value = cur.classe;
+  document.getElementById('statsPanel').classList.toggle('show', isAdmin);
+  openClass['P'] = true; openSubj['P_analyse'] = true;
   heartbeat();
   initBoard();
   render();
 }
 
-function changeClasse(c) { cur.classe = c; render(); }
-function select(subject, category) {
-  cur.view = 'files'; cur.subject = subject; cur.category = category;
-  openSub[subject] = true;
+function select(cl, sk, ck) {
+  cur.view = 'files'; cur.classe = cl; cur.subject = sk; cur.category = ck;
+  openClass[cl] = true; openSubj[cl + '_' + sk] = true;
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
 function selectLive(v) {
   cur.view = v;
-  openSub.live = true;
+  openLive = true;
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
 function selectLic(id) {
   cur.view = 'lic'; cur.licFolder = id;
+  openLic = true;
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
+
+/* ---- Dossiers Licence ---- */
 async function getLicFolders() {
   const s = await getOne('settings', 'lic_folders');
   return (s && s.value) || [];
@@ -746,6 +771,7 @@ async function addLicFolder() {
   const folders = await getLicFolders();
   folders.push({ id: uid(), name: name.trim().slice(0, 60) });
   await put('settings', { key:'lic_folders', value: folders });
+  openLic = true;
   render();
 }
 async function delLicFolder(id) {
@@ -755,7 +781,7 @@ async function delLicFolder(id) {
   await put('settings', { key:'lic_folders', value: folders });
   const files = await getAll('files');
   for (const f of files) if (f.subject === 'lic' && f.folderId === id) await del('files', f.id);
-  if (cur.view === 'lic' && cur.licFolder === id) { cur.view = 'files'; cur.subject = 'analyse'; cur.category = 'cours'; }
+  if (cur.view === 'lic' && cur.licFolder === id) { cur.view = 'files'; }
   render();
 }
 
@@ -763,46 +789,59 @@ const pretty = s => s.charAt(0) + s.slice(1).toLowerCase();
 
 async function render() {
   const files = await getAll('files');
+  const licFolders = await getLicFolders();
   const isAdmin = me.role === 'admin';
 
-  /* ---- Sidebar ---- */
-  const licFolders = await getLicFolders();
-  let side = `<div class="side-main-title">${SECTIONS.prepa[lang]}</div>`;
-  for (const [sk, s] of Object.entries(SUBJECTS)) {
-    side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
-      <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
-    if (openSub[sk]) {
-      for (const [ck, c] of Object.entries(CATEGORIES)) {
-        const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
-        const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
-        side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
-          <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+  /* ---- Sidebar : Classes Préparatoires (arborescence) ---- */
+  let side = `<div class="side-main-title">${t('prepaT')}</div>`;
+  for (const [yr, arr] of YEARS) {
+    side += `<div class="side-year">${t(yr)}</div>`;
+    for (const cl of arr) {
+      const nc = files.filter(f => f.classe === cl && SUBJECTS[f.subject]).length;
+      side += `<div class="side-item" onclick="toggleClass('${cl}')">
+        <span>📁</span> ${t('classePrefix')} ${cl} ${nc ? `<span class="n">${nc}</span>` : ''} <span class="chev">${openClass[cl] ? '▼' : '►'}</span></div>`;
+      if (openClass[cl]) {
+        for (const [sk, s] of Object.entries(SUBJECTS)) {
+          const key = cl + '_' + sk;
+          side += `<div class="side-item d1" onclick="toggleSubj('${key}')">
+            <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSubj[key] ? '▼' : '►'}</span></div>`;
+          if (openSubj[key]) {
+            for (const [ck, c] of Object.entries(CATEGORIES)) {
+              const n = files.filter(f => f.classe===cl && f.subject===sk && f.category===ck).length;
+              const act = (cur.view==='files' && cur.classe===cl && cur.subject===sk && cur.category===ck) ? 'active' : '';
+              side += `<div class="side-item d2 ${act}" onclick="select('${cl}','${sk}','${ck}')">
+                <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+            }
+          }
+        }
       }
     }
-    side += `</div>`;
   }
-  side += `<div class="side-main-title">${SECTIONS.licence[lang]}</div>`;
-  for (const fo of licFolders) {
-    const n = files.filter(f => f.subject==='lic' && f.folderId===fo.id).length;
-    const act = (cur.view==='lic' && cur.licFolder===fo.id) ? 'active' : '';
-    side += `<div class="side-item ${act}" onclick="selectLic('${fo.id}')">
-      <span>📁</span> ${esc(fo.name)} ${n ? `<span class="n">${n}</span>` : ''}
-      ${isAdmin ? `<span class="fdel" onclick="event.stopPropagation();delLicFolder('${fo.id}')" title="✕">✕</span>` : ''}</div>`;
+
+  /* ---- Licence (repliée par défaut, dossiers personnalisés) ---- */
+  side += `<div class="side-main-title click" onclick="toggleLic()">${t('licT')} <span class="chev">${openLic ? '▼' : '►'}</span></div>`;
+  if (openLic) {
+    for (const fo of licFolders) {
+      const n = files.filter(f => f.subject==='lic' && f.folderId===fo.id).length;
+      const act = (cur.view==='lic' && cur.licFolder===fo.id) ? 'active' : '';
+      side += `<div class="side-item ${act}" onclick="selectLic('${fo.id}')">
+        <span>📁</span> ${esc(fo.name)} ${n ? `<span class="n">${n}</span>` : ''}
+        ${isAdmin ? `<span class="fdel" onclick="event.stopPropagation();delLicFolder('${fo.id}')" title="✕">✕</span>` : ''}</div>`;
+    }
+    if (isAdmin) side += `<div class="side-item" onclick="addLicFolder()"><span>➕</span> ${t('addFolder')}</div>`;
+    else if (!licFolders.length) side += `<div class="side-item" style="cursor:default;opacity:.6">${t('emptyLic')}</div>`;
   }
-  if (isAdmin) side += `<div class="side-item" onclick="addLicFolder()"><span>➕</span> ${t('addFolder')}</div>`;
-  else if (!licFolders.length) side += `<div class="side-item" style="cursor:default;opacity:.6">${t('emptyLic')}</div>`;
-  side += `<div class="side-main-title">📡 ${t('liveTitle')}</div>`;
-  side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('live')">
-    <span>📡</span> ${t('liveTitle')} <span class="chev">${openSub.live ? '▼' : '►'}</span></div>`;
-  if (openSub.live) {
+
+  /* ---- Séance live (titre unique, repliable) ---- */
+  side += `<div class="side-main-title click" onclick="toggleLive()">${t('liveTitle')} <span class="chev">${openLive ? '▼' : '►'}</span></div>`;
+  if (openLive) {
     for (const [vk, v] of Object.entries(LIVE)) {
-      const n = vk==='seances' ? files.filter(f => f.classe===cur.classe && f.subject==='live').length : 0;
+      const n = vk==='seances' ? files.filter(f => f.subject==='live').length : 0;
       const act = cur.view===vk ? 'active' : '';
       side += `<div class="side-item ${act}" onclick="selectLive('${vk}')">
         <span>${v.icon}</span> ${v.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
     }
   }
-  side += `</div>`;
   side += `<svg class="side-riemann" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
     <g fill="#60a5fa"><rect x="5" y="45" width="16" height="25"/><rect x="23" y="35" width="16" height="35"/>
     <rect x="41" y="24" width="16" height="46"/><rect x="59" y="16" width="16" height="54"/>
@@ -820,36 +859,38 @@ async function render() {
   document.getElementById('visioView').style.display = cur.view==='visio' ? 'block' : 'none';
 
   const bT = document.getElementById('bannerTitle'), bS = document.getElementById('bannerSub'), bF = document.getElementById('bannerFormula');
-  bS.textContent = `${t('classePrefix')} ${CL(cur.classe)}`;
 
   if (cur.view === 'files') {
     const S = SUBJECTS[cur.subject], C = CATEGORIES[cur.category];
-    const secName = SECTIONS[S.section][lang].replace('🎓 ','');
     bT.textContent = `${pretty(S.label[lang])} — ${C.label[lang]}`;
-    bS.textContent = `${secName} · ${t('classePrefix')} ${CL(cur.classe)}`;
+    bS.textContent = `${t('classePrefix')} ${CL(cur.classe)}`;
     tex(bF, S.formula);
     renderFiles(files, f => f.classe===cur.classe && f.subject===cur.subject && f.category===cur.category,
                 `${C.icon} ${C.label[lang]}`, isAdmin, true);
   } else if (cur.view === 'lic') {
     const fo = licFolders.find(x => x.id === cur.licFolder);
     bT.textContent = fo ? fo.name : '';
-    bS.textContent = SECTIONS.licence[lang].replace('🎓 ', '');
+    bS.textContent = t('licT').replace('🎓 ', '');
     tex(bF, LIC_FORMULA);
     renderFiles(files, f => f.subject==='lic' && f.folderId===cur.licFolder,
                 `📁 ${fo ? fo.name : ''}`, isAdmin, true);
   } else if (cur.view === 'seances') {
     bT.textContent = t('seancesT');
+    bS.textContent = '';
     tex(bF, LIVE_FORMULA);
-    renderFiles(files, f => f.classe===cur.classe && f.subject==='live',
-                `💾 ${t('seancesT')}`, isAdmin, false);
+    renderFiles(files, f => f.subject==='live', `💾 ${t('seancesT')}`, isAdmin, false);
   } else if (cur.view === 'board') {
     bT.textContent = t('boardT');
+    bS.textContent = '';
     tex(bF, LIVE_FORMULA);
   } else if (cur.view === 'visio') {
     bT.textContent = t('visioT');
+    bS.textContent = '';
     tex(bF, LIVE_FORMULA);
     renderVisio(isAdmin);
   }
+
+  renderStats(files);
 }
 
 function renderFiles(files, filter, title, isAdmin, allowAdd) {
@@ -865,8 +906,8 @@ function renderFiles(files, filter, title, isAdmin, allowAdd) {
     <div class="file-row">
       <div class="file-ico">${f.subject==='live' ? '🖼️' : '📄'}</div>
       <div class="file-info">
-        <h4>${esc(f.name)}</h4>
-        <small>${(f.size/1024).toFixed(0)} Ko · ${t('added')} ${f.date}</small>
+        <h4>${esc(f.chapter || f.name)}</h4>
+        <small>${f.chapter ? esc(f.name) + ' · ' : ''}${(f.size/1024).toFixed(0)} Ko · ${t('added')} ${f.date}</small>
       </div>
       <span class="dl-count" id="cnt-${f.id}">⬇ ${f.downloads}</span>
       <button class="btn-dl" onclick="downloadFile('${f.id}')">${t('btnDl')}</button>
@@ -874,22 +915,35 @@ function renderFiles(files, filter, title, isAdmin, allowAdd) {
     </div>`).join('');
 }
 
+/* ================= Statistiques (admin) ================= */
+async function renderStats(files) {
+  if (!me || me.role !== 'admin') return;
+  const totalDl = files.reduce((sum, f) => sum + (f.downloads || 0), 0);
+  document.getElementById('stFiles').textContent = files.length;
+  document.getElementById('stDl').textContent = totalDl;
+  const users = await getAll('users');
+  document.getElementById('stReg').textContent = users.length;
+  const top = [...files].sort((a,b) => (b.downloads||0) - (a.downloads||0)).slice(0,5).filter(f => f.downloads > 0);
+  document.getElementById('stTop').innerHTML = top.length
+    ? top.map(f => `<div class="top-item"><span title="${esc(f.name)}">${esc(f.chapter || f.name)}</span><span class="tn">⬇ ${f.downloads}</span></div>`).join('')
+    : `<div class="top-item"><span>—</span></div>`;
+}
+
 /* ================= Visio ================= */
 async function renderVisio(isAdmin) {
-  const s = await getOne('settings', 'visio_' + cur.classe);
+  const s = await getOne('settings', 'visio_link');
   const live = s && s.value;
   document.getElementById('visioLive').style.display = live ? 'block' : 'none';
   document.getElementById('visioEmpty').style.display = live ? 'none' : 'block';
   document.getElementById('visioAdmin').style.display = isAdmin ? 'block' : 'none';
   if (live) {
-    document.getElementById('visioClasse').textContent = CL(cur.classe);
-    document.getElementById('visioDesc').textContent = t('confDelSess');
+    document.getElementById('visioDesc').textContent = t('visioDesc');
     document.getElementById('visioJoin').href = s.value;
   }
   if (isAdmin) {
     document.getElementById('visioAdminP').textContent = lang === 'fr'
-      ? `Collez le lien Google Meet ou Zoom de la séance pour la classe ${CL(cur.classe)}. Pour enregistrer la vidéo, utilisez l'enregistrement intégré de Meet/Zoom ; le tableau blanc, lui, s'enregistre ici.`
-      : `Paste the Google Meet or Zoom link of the session for class ${CL(cur.classe)}. To record the video, use Meet/Zoom built-in recording; the whiteboard is saved here.`;
+      ? "Collez le lien Google Meet ou Zoom de la séance. Pour enregistrer la vidéo, utilisez l'enregistrement intégré de Meet/Zoom ; le tableau blanc, lui, s'enregistre ici."
+      : 'Paste the Google Meet or Zoom link of the session. To record the video, use Meet/Zoom built-in recording; the whiteboard is saved here.';
     document.getElementById('visioUrl').value = live ? s.value : '';
   }
 }
@@ -898,13 +952,13 @@ async function saveVisio() {
   const url = document.getElementById('visioUrl').value.trim();
   if (!/^https:\/\/(meet\.google\.com|([a-z0-9-]+\.)?zoom\.us)\//i.test(url))
     return alert(t('badLink'));
-  await put('settings', { key:'visio_' + cur.classe, value:url });
+  await put('settings', { key:'visio_link', value:url });
   toast(t('toastPub'));
   render();
 }
 async function removeVisio() {
   if (me.role !== 'admin') return;
-  await del('settings', 'visio_' + cur.classe);
+  await del('settings', 'visio_link');
   toast(t('toastEnd'));
   render();
 }
@@ -979,9 +1033,9 @@ function saveSeance() {
   if (me.role !== 'admin') return;
   document.getElementById('board').toBlob(async blob => {
     const d = new Date();
-    const name = `Séance du ${d.toLocaleDateString('fr-FR')} ${d.getHours()}h${String(d.getMinutes()).padStart(2,'0')} — ${cur.classe}.png`;
+    const name = `Séance du ${d.toLocaleDateString('fr-FR')} ${d.getHours()}h${String(d.getMinutes()).padStart(2,'0')}.png`;
     await put('files', {
-      id: uid(), classe: cur.classe, subject:'live', category:'seances',
+      id: uid(), classe:'LIVE', subject:'live', category:'seances',
       name, size: blob.size, blob, downloads: 0,
       date: d.toLocaleDateString('fr-FR')
     });
@@ -995,9 +1049,11 @@ async function addPdfs(fileList) {
   if (me.role !== 'admin') return;
   for (const file of fileList) {
     if (!file.name.toLowerCase().endsWith('.pdf')) { alert(`« ${file.name} » ${t('notPdf')}`); continue; }
+    /* Titre du chapitre saisi par l'admin */
+    const chapter = (prompt(`${t('chapterPrompt')} ${file.name}`) || '').trim().slice(0, 80);
     const rec = {
       id: uid(), classe: cur.classe, subject: cur.subject, category: cur.category,
-      name: file.name, size: file.size, blob: file, downloads: 0,
+      name: file.name, chapter, size: file.size, blob: file, downloads: 0,
       date: new Date().toLocaleDateString('fr-FR')
     };
     if (cur.view === 'lic') { rec.subject = 'lic'; rec.category = 'docs'; rec.classe = 'LIC'; rec.folderId = cur.licFolder; }
@@ -1027,12 +1083,14 @@ async function downloadFile(id) {
   await put('files', f);
   const badge = document.getElementById('cnt-' + id);
   if (badge) badge.textContent = `⬇ ${f.downloads}`;
+  const files = await getAll('files');
+  renderStats(files);
   toast(t('toastDl'));
 }
 
 /* ================= Utilitaires ================= */
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(m) {
   const el = document.getElementById('toast');
   el.textContent = m; el.style.display = 'block';
