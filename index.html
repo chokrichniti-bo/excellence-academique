@@ -18,7 +18,13 @@
     --fond:#f1f5f9; --carte:#ffffff; --texte:#1e293b; --gris:#64748b;
   }
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, sans-serif; }
+  html { overflow-y:scroll; scroll-behavior:smooth; }
   body { min-height:100vh; background:var(--fond); color:var(--texte); }
+  ::-webkit-scrollbar { width:13px; height:13px; }
+  ::-webkit-scrollbar-track { background:#e2e8f0; }
+  ::-webkit-scrollbar-thumb { background:#1d4ed8; border-radius:7px; border:2px solid #e2e8f0; }
+  ::-webkit-scrollbar-thumb:hover { background:#0f2a5c; }
+  * { scrollbar-width:auto; scrollbar-color:#1d4ed8 #e2e8f0; }
 
   /* ============ ÉCRAN CONNEXION ============ */
   #authScreen {
@@ -105,7 +111,10 @@
   .layout { display:flex; min-height:calc(100vh - 66px); }
 
   /* ---- Sidebar gauche ---- */
-  aside { width:260px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px; }
+  aside {
+    width:260px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto;
+  }
   .side-main-title {
     padding:12px 20px 10px; font-size:14.5px; font-weight:800; color:#fff; letter-spacing:.5px;
     border-bottom:1px solid rgba(255,255,255,.15); margin-bottom:6px;
@@ -124,6 +133,8 @@
   .side-item:hover { background:rgba(255,255,255,.08); }
   .side-item.active { background:rgba(29,78,216,.5); border-left-color:var(--or); color:#fff; font-weight:700; }
   .side-item .n { margin-left:auto; background:rgba(255,255,255,.15); font-size:11.5px; padding:2px 8px; border-radius:10px; }
+  .side-item .fdel { margin-left:8px; color:#fca5a5; font-weight:800; padding:0 5px; }
+  .side-item .fdel:hover { color:#ef4444; }
   .side-riemann { margin:18px 14px 0; opacity:.5; }
 
   /* ---- Contenu ---- */
@@ -269,20 +280,6 @@
         <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" data-i18n-ph="phName" placeholder="Prénom Nom" maxlength="50"></div>
         <div class="field"><label data-i18n="lblPseudo">Identifiant unique (pseudo)</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
         <div class="field"><label data-i18n="lblEmail">Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
-        <div class="field"><label data-i18n="lblClasse">Classe</label>
-          <select id="suClasse">
-            <optgroup label="Première année" data-y="1">
-              <option value="P">P</option>
-              <option value="T">T</option>
-              <option value="M">M</option>
-            </optgroup>
-            <optgroup label="Deuxième année" data-y="2">
-              <option value="SP">SP</option>
-              <option value="ST">ST</option>
-              <option value="SM">SM</option>
-            </optgroup>
-          </select>
-        </div>
         <button class="btn-main" onclick="doSignup()" data-i18n="btnSignup">Créer mon compte</button>
       </div>
       <div id="confirmPanel" style="display:none; text-align:center">
@@ -486,7 +483,11 @@ const I18N = {
   confDelBoard:{ fr:'Effacer tout le tableau ?', en:'Clear the whole board?' },
   confDelSess:{ fr:'Une séance est en cours. Cliquez pour la rejoindre.', en:'A session is live. Click to join.' },
   notPdf:    { fr:"n'est pas un PDF — ignoré.", en:'is not a PDF — skipped.' },
-  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' }
+  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' },
+  addFolder: { fr:'+ Ajouter un dossier', en:'+ Add a folder' },
+  folderPrompt: { fr:'Nom du nouveau dossier :', en:'Name of the new folder:' },
+  confDelFolder: { fr:'Supprimer ce dossier et tous ses fichiers ?', en:'Delete this folder and all its files?' },
+  emptyLic:  { fr:"Aucun dossier pour le moment.", en:'No folders yet.' }
 };
 const t = k => (I18N[k] || {})[lang] || k;
 
@@ -513,10 +514,9 @@ const SECTIONS = {
 };
 const SUBJECTS = {
   analyse:     { section:'prepa',   label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
-  algebre:     { section:'prepa',   label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' },
-  lic_analyse: { section:'licence', label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n' },
-  lic_algebre: { section:'licence', label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'A\\,v=\\lambda v,\\quad \\chi_A(\\lambda)=\\det(A-\\lambda I_n)' }
+  algebre:     { section:'prepa',   label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' }
 };
+const LIC_FORMULA = 'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n';
 const CATEGORIES = {
   cours:   { label:{fr:'Cours',en:'Lectures'},                icon:'📖' },
   series:  { label:{fr:'Séries corrigées',en:'Solved exercises'}, icon:'✏️' },
@@ -566,7 +566,7 @@ const del = (s,k) => new Promise(r => { tx(s,'readwrite').delete(k).onsuccess = 
 /* ================= État ================= */
 let me = null;
 let cur = { classe:'P', view:'files', subject:'analyse', category:'cours' };
-let openSub = { analyse:true, algebre:false, lic_analyse:false, lic_algebre:false, live:false };
+let openSub = { analyse:true, algebre:false, live:false };
 
 function toggleSubject(sk) { openSub[sk] = !openSub[sk]; render(); }
 
@@ -619,7 +619,6 @@ async function doSignup() {
   const name = document.getElementById('suName').value.trim();
   const username = document.getElementById('suUser').value.trim().toLowerCase();
   const email = document.getElementById('suEmail').value.trim();
-  const classe = document.getElementById('suClasse').value;
   if (!name || !username || !email) return msg(t('fillAll'));
   if (!/^[a-z0-9._-]{3,30}$/.test(username)) return msg(t('badPseudo'));
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg(t('badEmail'));
@@ -630,7 +629,7 @@ async function doSignup() {
   let code = '';
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
   const pw = 'cc' + code;
-  await put('users', { username, name, email, classe, passHash: hash(username + ':' + pw) });
+  await put('users', { username, name, email, passHash: hash(username + ':' + pw) });
   document.getElementById('signupForm').style.display = 'none';
   document.getElementById('confirmPanel').style.display = 'block';
   document.getElementById('genPass').textContent = pw;
@@ -669,7 +668,7 @@ async function doLogin() {
   } else {
     if (!u) u = await getOne('users', username);
     if (!u || u.passHash !== h) return msg(t('badCreds'));
-    me = { username, name:u.name, classe:u.classe, role:'etudiant' };
+    me = { username, name:u.name, classe:u.classe || 'P', role:'etudiant' };
   }
   localStorage.setItem('rp_session', JSON.stringify(me));
   enterApp();
@@ -731,6 +730,34 @@ function selectLive(v) {
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
+function selectLic(id) {
+  cur.view = 'lic'; cur.licFolder = id;
+  document.getElementById('sidebar').classList.remove('open');
+  render();
+}
+async function getLicFolders() {
+  const s = await getOne('settings', 'lic_folders');
+  return (s && s.value) || [];
+}
+async function addLicFolder() {
+  if (me.role !== 'admin') return;
+  const name = prompt(t('folderPrompt'));
+  if (!name || !name.trim()) return;
+  const folders = await getLicFolders();
+  folders.push({ id: uid(), name: name.trim().slice(0, 60) });
+  await put('settings', { key:'lic_folders', value: folders });
+  render();
+}
+async function delLicFolder(id) {
+  if (me.role !== 'admin') return;
+  if (!confirm(t('confDelFolder'))) return;
+  const folders = (await getLicFolders()).filter(f => f.id !== id);
+  await put('settings', { key:'lic_folders', value: folders });
+  const files = await getAll('files');
+  for (const f of files) if (f.subject === 'lic' && f.folderId === id) await del('files', f.id);
+  if (cur.view === 'lic' && cur.licFolder === id) { cur.view = 'files'; cur.subject = 'analyse'; cur.category = 'cours'; }
+  render();
+}
 
 const pretty = s => s.charAt(0) + s.slice(1).toLowerCase();
 
@@ -739,24 +766,31 @@ async function render() {
   const isAdmin = me.role === 'admin';
 
   /* ---- Sidebar ---- */
-  let side = '';
-  for (const [sec, secLbl] of Object.entries(SECTIONS)) {
-    side += `<div class="side-main-title">${secLbl[lang]}</div>`;
-    for (const [sk, s] of Object.entries(SUBJECTS)) {
-      if (s.section !== sec) continue;
-      side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
-        <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
-      if (openSub[sk]) {
-        for (const [ck, c] of Object.entries(CATEGORIES)) {
-          const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
-          const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
-          side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
-            <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
-        }
+  const licFolders = await getLicFolders();
+  let side = `<div class="side-main-title">${SECTIONS.prepa[lang]}</div>`;
+  for (const [sk, s] of Object.entries(SUBJECTS)) {
+    side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
+      <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
+    if (openSub[sk]) {
+      for (const [ck, c] of Object.entries(CATEGORIES)) {
+        const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
+        const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
+        side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
+          <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
       }
-      side += `</div>`;
     }
+    side += `</div>`;
   }
+  side += `<div class="side-main-title">${SECTIONS.licence[lang]}</div>`;
+  for (const fo of licFolders) {
+    const n = files.filter(f => f.subject==='lic' && f.folderId===fo.id).length;
+    const act = (cur.view==='lic' && cur.licFolder===fo.id) ? 'active' : '';
+    side += `<div class="side-item ${act}" onclick="selectLic('${fo.id}')">
+      <span>📁</span> ${esc(fo.name)} ${n ? `<span class="n">${n}</span>` : ''}
+      ${isAdmin ? `<span class="fdel" onclick="event.stopPropagation();delLicFolder('${fo.id}')" title="✕">✕</span>` : ''}</div>`;
+  }
+  if (isAdmin) side += `<div class="side-item" onclick="addLicFolder()"><span>➕</span> ${t('addFolder')}</div>`;
+  else if (!licFolders.length) side += `<div class="side-item" style="cursor:default;opacity:.6">${t('emptyLic')}</div>`;
   side += `<div class="side-main-title">📡 ${t('liveTitle')}</div>`;
   side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('live')">
     <span>📡</span> ${t('liveTitle')} <span class="chev">${openSub.live ? '▼' : '►'}</span></div>`;
@@ -781,7 +815,7 @@ async function render() {
   document.getElementById('sidebar').innerHTML = side;
 
   /* ---- Bascule des vues ---- */
-  document.getElementById('filesView').style.display = (cur.view==='files' || cur.view==='seances') ? 'block' : 'none';
+  document.getElementById('filesView').style.display = (cur.view==='files' || cur.view==='seances' || cur.view==='lic') ? 'block' : 'none';
   document.getElementById('boardView').style.display = cur.view==='board' ? 'block' : 'none';
   document.getElementById('visioView').style.display = cur.view==='visio' ? 'block' : 'none';
 
@@ -796,6 +830,13 @@ async function render() {
     tex(bF, S.formula);
     renderFiles(files, f => f.classe===cur.classe && f.subject===cur.subject && f.category===cur.category,
                 `${C.icon} ${C.label[lang]}`, isAdmin, true);
+  } else if (cur.view === 'lic') {
+    const fo = licFolders.find(x => x.id === cur.licFolder);
+    bT.textContent = fo ? fo.name : '';
+    bS.textContent = SECTIONS.licence[lang].replace('🎓 ', '');
+    tex(bF, LIC_FORMULA);
+    renderFiles(files, f => f.subject==='lic' && f.folderId===cur.licFolder,
+                `📁 ${fo ? fo.name : ''}`, isAdmin, true);
   } else if (cur.view === 'seances') {
     bT.textContent = t('seancesT');
     tex(bF, LIVE_FORMULA);
@@ -954,11 +995,13 @@ async function addPdfs(fileList) {
   if (me.role !== 'admin') return;
   for (const file of fileList) {
     if (!file.name.toLowerCase().endsWith('.pdf')) { alert(`« ${file.name} » ${t('notPdf')}`); continue; }
-    await put('files', {
+    const rec = {
       id: uid(), classe: cur.classe, subject: cur.subject, category: cur.category,
       name: file.name, size: file.size, blob: file, downloads: 0,
       date: new Date().toLocaleDateString('fr-FR')
-    });
+    };
+    if (cur.view === 'lic') { rec.subject = 'lic'; rec.category = 'docs'; rec.classe = 'LIC'; rec.folderId = cur.licFolder; }
+    await put('files', rec);
   }
   document.getElementById('pdfInput').value = '';
   toast(t('toastPdf'));
