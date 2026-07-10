@@ -418,6 +418,12 @@
       <div class="stat-card"><span data-i18n="statDl">⬇ Téléchargements</span><b id="stDl">0</b></div>
       <h4 data-i18n="statTop">Top téléchargements</h4>
       <div id="stTop"></div>
+      <h4 data-i18n="statWho">🟢 Connectés en ce moment</h4>
+      <div id="stWho"></div>
+      <h4 data-i18n="statBySub">⬇ Téléchargements par matière</h4>
+      <div id="stBySub"></div>
+      <h4 data-i18n="statByDay">📅 Connexions par jour</h4>
+      <div id="stByDay"></div>
     </aside>
   </div>
 </div>
@@ -491,6 +497,9 @@ const I18N = {
   statFiles: { fr:'📄 Fichiers', en:'📄 Files' },
   statDl:    { fr:'⬇ Téléchargements', en:'⬇ Downloads' },
   statTop:   { fr:'Top téléchargements', en:'Top downloads' },
+  statWho:   { fr:'🟢 Connectés en ce moment', en:'🟢 Online right now' },
+  statBySub: { fr:'⬇ Téléchargements par matière', en:'⬇ Downloads by subject' },
+  statByDay: { fr:'📅 Connexions par jour', en:'📅 Logins per day' },
   fillAll:   { fr:'Veuillez remplir tous les champs.', en:'Please fill in all fields.' },
   badPseudo: { fr:'Identifiant : 3–30 caractères (lettres, chiffres, . _ -).', en:'Username: 3–30 characters (letters, digits, . _ -).' },
   badEmail:  { fr:'Adresse e-mail invalide.', en:'Invalid email address.' },
@@ -691,7 +700,17 @@ async function doLogin() {
     me = { username, name:u.name, role:'etudiant' };
   }
   localStorage.setItem('rp_session', JSON.stringify(me));
+  await logConnection();
   enterApp();
+}
+
+async function logConnection() {
+  const s = await getOne('settings', 'conn_log');
+  const log = (s && s.value) || [];
+  const d = new Date();
+  log.push({ u: me.username, n: me.name, date: d.toLocaleDateString('fr-FR'), ts: Date.now() });
+  while (log.length > 1000) log.shift();
+  await put('settings', { key:'conn_log', value: log });
 }
 
 function logout() {
@@ -703,26 +722,49 @@ function logout() {
 }
 
 /* ================= Présence ================= */
+const FRESH = 35000;
+const entryTime = v => (v && typeof v === 'object') ? v.t : v;
+function onlineList() {
+  const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
+  const now = Date.now();
+  return Object.entries(o)
+    .filter(([u, v]) => now - entryTime(v) < FRESH)
+    .map(([u, v]) => ({ u, name: (v && typeof v === 'object' && v.name) ? v.name : u }));
+}
 function heartbeat() {
   if (!me) return;
   const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
-  o[me.username] = Date.now();
-  for (const k in o) if (Date.now() - o[k] > 45000) delete o[k];
+  o[me.username] = { t: Date.now(), name: me.name };
+  for (const k in o) if (Date.now() - entryTime(o[k]) > FRESH) delete o[k];
   localStorage.setItem('rp_online', JSON.stringify(o));
   updatePresence();
 }
 async function updatePresence() {
-  const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
-  const online = Math.max(Object.values(o).filter(ts => Date.now() - ts < 45000).length, 1);
+  const list = onlineList();
+  const online = Math.max(list.length, me ? 1 : 0);
   document.getElementById('onlineNow').textContent = online;
   const users = await getAll('users');
   document.getElementById('totalUsers').textContent = users.length;
   const so = document.getElementById('stOnline'), sr = document.getElementById('stReg');
   if (so) so.textContent = online;
   if (sr) sr.textContent = users.length;
+  /* Noms des connectés — visibles uniquement par l'admin */
+  const who = document.getElementById('stWho');
+  if (who && me && me.role === 'admin') {
+    who.innerHTML = list.length
+      ? list.map(p => `<div class="top-item"><span>● ${esc(p.name)}</span><span style="color:#94a3b8">${esc(p.u)}</span></div>`).join('')
+      : `<div class="top-item"><span>—</span></div>`;
+  }
 }
-setInterval(heartbeat, 15000);
+setInterval(heartbeat, 10000);
 window.addEventListener('storage', ev => { if (ev.key === 'rp_online') updatePresence(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) heartbeat(); });
+window.addEventListener('beforeunload', () => {
+  if (!me) return;
+  const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
+  delete o[me.username];
+  localStorage.setItem('rp_online', JSON.stringify(o));
+});
 
 /* ================= Application ================= */
 function enterApp() {
@@ -926,6 +968,31 @@ async function renderStats(files) {
   const top = [...files].sort((a,b) => (b.downloads||0) - (a.downloads||0)).slice(0,5).filter(f => f.downloads > 0);
   document.getElementById('stTop').innerHTML = top.length
     ? top.map(f => `<div class="top-item"><span title="${esc(f.name)}">${esc(f.chapter || f.name)}</span><span class="tn">⬇ ${f.downloads}</span></div>`).join('')
+    : `<div class="top-item"><span>—</span></div>`;
+
+  /* Téléchargements par matière */
+  const groups = [
+    [SUBJECTS.analyse.label[lang], f => f.subject === 'analyse'],
+    [SUBJECTS.algebre.label[lang], f => f.subject === 'algebre'],
+    ['Licence', f => f.subject === 'lic'],
+    [t('seancesT'), f => f.subject === 'live']
+  ];
+  document.getElementById('stBySub').innerHTML = groups.map(([nm, fl]) => {
+    const dl = files.filter(fl).reduce((s2, f) => s2 + (f.downloads || 0), 0);
+    return `<div class="top-item"><span>${nm}</span><span class="tn">⬇ ${dl}</span></div>`;
+  }).join('');
+
+  /* Connexions par jour (nombre total + étudiants distincts) */
+  const cl = await getOne('settings', 'conn_log');
+  const log = (cl && cl.value) || [];
+  const byDay = {};
+  for (const en of log) {
+    if (!byDay[en.date]) byDay[en.date] = { total: 0, users: new Set() };
+    byDay[en.date].total++; byDay[en.date].users.add(en.u);
+  }
+  const days = Object.entries(byDay).slice(-7).reverse();
+  document.getElementById('stByDay').innerHTML = days.length
+    ? days.map(([d2, v]) => `<div class="top-item"><span>${d2}</span><span class="tn">${v.total} · ${v.users.size} 👤</span></div>`).join('')
     : `<div class="top-item"><span>—</span></div>`;
 }
 
