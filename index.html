@@ -55,6 +55,11 @@
   .btn-main:hover { filter:brightness(1.15); }
   .auth-msg { margin-top:12px; font-size:13.5px; text-align:center; min-height:18px; }
   .auth-msg.err { color:#dc2626; } .auth-msg.ok { color:#16a34a; }
+  .pw-box {
+    font-family:Consolas,monospace; font-size:26px; font-weight:800; letter-spacing:3px;
+    background:#eff6ff; color:var(--bleu2); border:2px dashed var(--bleu2); border-radius:12px;
+    padding:14px; margin:10px 0 12px; user-select:text; -webkit-user-select:text;
+  }
 
   /* ============ APPLICATION ============ */
   #appScreen { display:none; min-height:100vh; }
@@ -243,7 +248,7 @@
       <div id="signupForm" style="display:none">
         <div class="field"><label>Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
         <div class="field"><label>Identifiant unique</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
-        <div class="field"><label>Mot de passe (6 caractères min.)</label><input type="password" id="suPass" placeholder="••••••••" autocomplete="new-password"></div>
+        <div class="field"><label>Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
         <div class="field"><label>Classe</label>
           <select id="suClasse">
             <optgroup label="Première année">
@@ -259,6 +264,14 @@
           </select>
         </div>
         <button class="btn-main" onclick="doSignup()">Créer mon compte</button>
+      </div>
+      <div id="confirmPanel" style="display:none; text-align:center">
+        <h3 style="color:#16a34a; margin-bottom:10px">✅ Compte créé !</h3>
+        <p style="font-size:14px; color:var(--gris)">Voici votre mot de passe (il commence par « cc ») :</p>
+        <div class="pw-box" id="genPass"></div>
+        <p style="font-size:13px; color:var(--gris); margin-bottom:14px">Notez-le précieusement : il ne sera plus jamais affiché.</p>
+        <a class="btn-main" id="mailPass" href="#" style="display:block; text-decoration:none; text-align:center; margin-bottom:10px">📧 Me l'envoyer par e-mail</a>
+        <button class="btn-main" onclick="afterConfirm()">J'ai noté → Me connecter</button>
       </div>
       <div class="auth-msg" id="authMsg"></div>
     </div>
@@ -432,7 +445,7 @@ const del = (s,k) => new Promise(r => { tx(s,'readwrite').delete(k).onsuccess = 
 /* ================= État ================= */
 let me = null;
 let cur = { classe:'P', view:'files', subject:'analyse', category:'cours' };
-let openSub = { analyse:true, algebre:false };
+let openSub = { analyse:true, algebre:false, live:false };
 
 function toggleSubject(sk) { openSub[sk] = !openSub[sk]; render(); }
 
@@ -481,23 +494,39 @@ function msg(t, ok=false) {
 async function doSignup() {
   const name = document.getElementById('suName').value.trim();
   const username = document.getElementById('suUser').value.trim().toLowerCase();
-  const pass = document.getElementById('suPass').value;
+  const email = document.getElementById('suEmail').value.trim();
   const classe = document.getElementById('suClasse').value;
-  if (!name || !username || !pass) return msg('Veuillez remplir tous les champs.');
+  if (!name || !username || !email) return msg('Veuillez remplir tous les champs.');
   if (!/^[a-z0-9._-]{3,30}$/.test(username)) return msg('Identifiant : 3–30 caractères (lettres, chiffres, . _ -).');
-  if (pass.length < 6) return msg('Le mot de passe doit contenir au moins 6 caractères.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg('Adresse e-mail invalide.');
   if (username === ADMIN_USER) return msg('Cet identifiant est déjà pris.');
   if (await getOne('users', username)) return msg('Cet identifiant est déjà pris. Choisissez-en un autre.');
-  await put('users', { username, name, classe, passHash: hash(username + ':' + pass) });
-  msg('Compte créé ! Vous pouvez vous connecter.', true);
+  /* Mot de passe généré automatiquement, commence obligatoirement par « cc » */
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  const pw = 'cc' + code;
+  await put('users', { username, name, email, classe, passHash: hash(username + ':' + pw) });
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('confirmPanel').style.display = 'block';
+  document.getElementById('genPass').textContent = pw;
+  document.getElementById('mailPass').href = 'mailto:' + encodeURIComponent(email)
+    + '?subject=' + encodeURIComponent("Votre mot de passe — L'excellence académique")
+    + '&body=' + encodeURIComponent(`Bonjour ${name},\n\nVotre compte a été créé.\nIdentifiant : ${username}\nMot de passe : ${pw}\n\nConservez ce message précieusement.`);
   document.getElementById('loginUser').value = username;
-  setTimeout(() => switchTab('login'), 900);
+  msg('');
+}
+function afterConfirm() {
+  document.getElementById('confirmPanel').style.display = 'none';
+  switchTab('login');
+  document.getElementById('loginPass').focus();
 }
 
 async function doLogin() {
   const username = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value;
   if (!username || !pass) return msg('Entrez votre identifiant et votre mot de passe.');
+  if (username !== ADMIN_USER && !pass.startsWith('cc')) return msg('Rappel : votre mot de passe commence par « cc ».');
   const h = hash(username + ':' + pass);
   if (username === ADMIN_USER) {
     if (h !== ADMIN_HASH) return msg('Identifiant ou mot de passe incorrect.');
@@ -563,6 +592,7 @@ function select(subject, category) {
 }
 function selectLive(v) {
   cur.view = v;
+  openSub.live = true;
   document.getElementById('sidebar').classList.remove('open');
   render();
 }
@@ -586,12 +616,15 @@ async function render() {
     }
     side += `</div>`;
   }
-  side += `<div class="side-section"><div class="side-title"><span>📡</span> SÉANCE LIVE</div>`;
-  for (const [vk, v] of Object.entries(LIVE)) {
-    const n = vk==='seances' ? files.filter(f => f.classe===cur.classe && f.subject==='live').length : 0;
-    const act = cur.view===vk ? 'active' : '';
-    side += `<div class="side-item ${act}" onclick="selectLive('${vk}')">
-      <span>${v.icon}</span> ${v.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+  side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('live')">
+    <span>📡</span> SÉANCE LIVE <span class="chev">${openSub.live ? '▼' : '►'}</span></div>`;
+  if (openSub.live) {
+    for (const [vk, v] of Object.entries(LIVE)) {
+      const n = vk==='seances' ? files.filter(f => f.classe===cur.classe && f.subject==='live').length : 0;
+      const act = cur.view===vk ? 'active' : '';
+      side += `<div class="side-item ${act}" onclick="selectLive('${vk}')">
+        <span>${v.icon}</span> ${v.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+    }
   }
   side += `</div>`;
   side += `<svg class="side-riemann" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
@@ -820,7 +853,7 @@ function toast(m) {
   clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', 2200);
 }
 document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
-document.getElementById('suPass').addEventListener('keydown', e => { if (e.key==='Enter') doSignup(); });
+document.getElementById('suEmail').addEventListener('keydown', e => { if (e.key==='Enter') doSignup(); });
 </script>
 </body>
 </html>
