@@ -31,13 +31,18 @@
     background:var(--carte); border-radius:22px; width:100%; max-width:460px;
     box-shadow:0 30px 70px rgba(0,0,0,.4); overflow:hidden; position:relative; z-index:2;
   }
-  .auth-hero { background:linear-gradient(135deg,#0f2a5c,#1d4ed8); padding:26px 30px 0; text-align:center; color:#fff; }
+  .auth-hero { background:linear-gradient(135deg,#0f2a5c,#1d4ed8); padding:26px 30px 0; text-align:center; color:#fff; position:relative; }
   .auth-hero h1 { font-size:26px; letter-spacing:.5px; }
   .auth-hero .sub-brand { color:var(--or); font-size:13px; font-weight:700; letter-spacing:2px; margin-top:2px; text-transform:uppercase; }
   .auth-hero p { color:#bfdbfe; font-size:13.5px; margin-top:6px; }
   .auth-hero .formula { color:#fde68a; font-size:15px; margin-top:10px; min-height:24px; }
   .auth-hero .formula .katex { color:#fde68a; }
   .auth-hero svg { display:block; width:100%; margin-top:10px; }
+  .lang-btn {
+    position:absolute; top:12px; right:12px; background:rgba(255,255,255,.2); color:#fff;
+    border:none; border-radius:8px; padding:6px 12px; font-weight:800; cursor:pointer; font-size:12px;
+  }
+  .lang-btn:hover { background:rgba(255,255,255,.35); }
   .tabs { display:flex; border-bottom:1px solid #e2e8f0; }
   .tab { flex:1; padding:14px; text-align:center; font-weight:700; color:var(--gris); cursor:pointer; border-bottom:3px solid transparent; }
   .tab.active { color:var(--bleu2); border-bottom-color:var(--bleu2); }
@@ -53,6 +58,14 @@
     background:linear-gradient(135deg,#0f2a5c,#1d4ed8); color:#fff; font-size:16px; font-weight:700; cursor:pointer;
   }
   .btn-main:hover { filter:brightness(1.15); }
+  .btn-fb {
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px; border:none; border-radius:11px; background:#1877f2; color:#fff;
+    font-size:15px; font-weight:700; cursor:pointer; margin-bottom:6px;
+  }
+  .btn-fb:hover { filter:brightness(1.1); }
+  .sep { display:flex; align-items:center; gap:12px; color:#94a3b8; font-size:12.5px; margin:12px 0; }
+  .sep::before, .sep::after { content:''; flex:1; height:1px; background:#e2e8f0; }
   .auth-msg { margin-top:12px; font-size:13.5px; text-align:center; min-height:18px; }
   .auth-msg.err { color:#dc2626; } .auth-msg.ok { color:#16a34a; }
   .pw-box {
@@ -85,27 +98,28 @@
   .avatar { width:36px; height:36px; border-radius:50%; background:var(--or); color:#0f2a5c; display:flex; align-items:center; justify-content:center; font-weight:800; }
   .user-chip span { font-size:13.5px; font-weight:600; }
   .badge-admin { background:#fde68a; color:#92400e; font-size:11px; padding:2px 8px; border-radius:10px; font-weight:800; }
-  .btn-logout { padding:8px 14px; border:none; border-radius:9px; background:rgba(255,255,255,.15); color:#fff; font-weight:600; cursor:pointer; }
-  .btn-logout:hover { background:rgba(255,255,255,.3); }
+  .btn-logout, .btn-lang2 { padding:8px 14px; border:none; border-radius:9px; background:rgba(255,255,255,.15); color:#fff; font-weight:600; cursor:pointer; }
+  .btn-logout:hover, .btn-lang2:hover { background:rgba(255,255,255,.3); }
+  .btn-lang2 { font-weight:800; }
 
   .layout { display:flex; min-height:calc(100vh - 66px); }
 
   /* ---- Sidebar gauche ---- */
-  aside { width:250px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px; }
-  .side-section { margin-bottom:8px; }
+  aside { width:260px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:18px 0 30px; }
   .side-main-title {
-    padding:4px 20px 12px; font-size:15px; font-weight:800; color:#fff; letter-spacing:1px;
-    border-bottom:1px solid rgba(255,255,255,.15); margin-bottom:8px;
+    padding:12px 20px 10px; font-size:14.5px; font-weight:800; color:#fff; letter-spacing:.5px;
+    border-bottom:1px solid rgba(255,255,255,.15); margin-bottom:6px;
   }
+  .side-section { margin-bottom:4px; }
   .side-title {
-    padding:12px 20px 8px; font-size:13px; letter-spacing:2px; font-weight:800; color:var(--or);
+    padding:11px 20px 8px; font-size:13px; letter-spacing:2px; font-weight:800; color:var(--or);
     display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
   }
   .side-title:hover { color:#fbbf24; }
   .side-title .chev { margin-left:auto; font-size:11px; }
   .side-item {
-    display:flex; align-items:center; gap:10px; padding:11px 20px 11px 28px; cursor:pointer;
-    font-size:14.5px; border-left:4px solid transparent; transition:.15s;
+    display:flex; align-items:center; gap:10px; padding:10px 20px 10px 30px; cursor:pointer;
+    font-size:14px; border-left:4px solid transparent; transition:.15s;
   }
   .side-item:hover { background:rgba(255,255,255,.08); }
   .side-item.active { background:rgba(29,78,216,.5); border-left-color:var(--or); color:#fff; font-weight:700; }
@@ -187,7 +201,7 @@
   .menu-btn { display:none; background:rgba(255,255,255,.15); border:none; color:#fff; font-size:20px; border-radius:9px; width:40px; height:40px; cursor:pointer; }
   @media (max-width:860px) {
     .menu-btn { display:block; }
-    aside { position:fixed; left:-260px; top:0; bottom:0; z-index:40; transition:.25s; overflow-y:auto; padding-top:70px; }
+    aside { position:fixed; left:-270px; top:0; bottom:0; z-index:40; transition:.25s; overflow-y:auto; padding-top:70px; }
     aside.open { left:0; box-shadow:8px 0 30px rgba(0,0,0,.4); }
     .classe-select label { display:none; }
     .presence { font-size:11px; padding:5px 10px; }
@@ -218,9 +232,10 @@
 
   <div class="auth-card">
     <div class="auth-hero">
+      <button class="lang-btn" id="langBtnAuth" onclick="toggleLang()">EN</button>
       <h1>L'excellence académique</h1>
       <div class="sub-brand">C.C</div>
-      <p>Cours · Séries corrigées · TD · Devoirs corrigés</p>
+      <p data-i18n="tagline">Cours · Séries corrigées · TD · Devoirs corrigés</p>
       <div class="formula" id="heroFormula"></div>
       <svg viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
         <g fill="#60a5fa" opacity=".8" stroke="#0f2a5c" stroke-width=".5">
@@ -236,42 +251,47 @@
       </svg>
     </div>
     <div class="tabs">
-      <div class="tab active" id="tabLogin" onclick="switchTab('login')">Connexion</div>
-      <div class="tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</div>
+      <div class="tab active" id="tabLogin" onclick="switchTab('login')" data-i18n="tabLogin">Connexion</div>
+      <div class="tab" id="tabSignup" onclick="switchTab('signup')" data-i18n="tabSignup">Créer un compte</div>
     </div>
     <div class="auth-body">
       <div id="loginForm">
-        <div class="field"><label>Identifiant</label><input type="text" id="loginUser" placeholder="Votre identifiant" autocomplete="username"></div>
-        <div class="field"><label>Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
-        <button class="btn-main" onclick="doLogin()">Se connecter</button>
+        <button class="btn-fb" onclick="fbLogin()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>
+          <span data-i18n="fbBtn">Continuer avec Facebook</span>
+        </button>
+        <div class="sep" data-i18n="orSep">ou</div>
+        <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" data-i18n-ph="phUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
+        <div class="field"><label data-i18n="lblPass">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
+        <button class="btn-main" onclick="doLogin()" data-i18n="btnLogin">Se connecter</button>
       </div>
       <div id="signupForm" style="display:none">
-        <div class="field"><label>Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
-        <div class="field"><label>Identifiant unique</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
-        <div class="field"><label>Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
-        <div class="field"><label>Classe</label>
+        <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" data-i18n-ph="phName" placeholder="Prénom Nom" maxlength="50"></div>
+        <div class="field"><label data-i18n="lblPseudo">Identifiant unique (pseudo)</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
+        <div class="field"><label data-i18n="lblEmail">Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
+        <div class="field"><label data-i18n="lblClasse">Classe</label>
           <select id="suClasse">
-            <optgroup label="Première année">
-              <option value="P">P — Physique</option>
-              <option value="T">T — Technologie</option>
-              <option value="M">M — Mathématiques</option>
+            <optgroup label="Première année" data-y="1">
+              <option value="P">P</option>
+              <option value="T">T</option>
+              <option value="M">M</option>
             </optgroup>
-            <optgroup label="Deuxième année">
+            <optgroup label="Deuxième année" data-y="2">
               <option value="SP">SP</option>
               <option value="ST">ST</option>
               <option value="SM">SM</option>
             </optgroup>
           </select>
         </div>
-        <button class="btn-main" onclick="doSignup()">Créer mon compte</button>
+        <button class="btn-main" onclick="doSignup()" data-i18n="btnSignup">Créer mon compte</button>
       </div>
       <div id="confirmPanel" style="display:none; text-align:center">
-        <h3 style="color:#16a34a; margin-bottom:10px">✅ Compte créé !</h3>
-        <p style="font-size:14px; color:var(--gris)">Voici votre mot de passe (il commence par « cc ») :</p>
+        <h3 style="color:#16a34a; margin-bottom:10px" data-i18n="confTitle">✅ Compte créé !</h3>
+        <p style="font-size:14px; color:var(--gris)" data-i18n="confPw">Voici votre mot de passe (il commence par « cc ») :</p>
         <div class="pw-box" id="genPass"></div>
-        <p style="font-size:13px; color:var(--gris); margin-bottom:14px">Notez-le précieusement : il ne sera plus jamais affiché.</p>
-        <a class="btn-main" id="mailPass" href="#" style="display:block; text-decoration:none; text-align:center; margin-bottom:10px">📧 Me l'envoyer par e-mail</a>
-        <button class="btn-main" onclick="afterConfirm()">J'ai noté → Me connecter</button>
+        <p style="font-size:13px; color:var(--gris); margin-bottom:14px" data-i18n="confNote">Notez-le précieusement : il ne sera plus jamais affiché.</p>
+        <a class="btn-main" id="mailPass" href="#" style="display:block; text-decoration:none; text-align:center; margin-bottom:10px" data-i18n="confMail">📧 Me l'envoyer par e-mail</a>
+        <button class="btn-main" onclick="afterConfirm()" data-i18n="confOk">J'ai noté → Me connecter</button>
       </div>
       <div class="auth-msg" id="authMsg"></div>
     </div>
@@ -287,26 +307,27 @@
       <h1>L'excellence académique<small id="brandSub">C.C</small></h1>
     </div>
     <div class="classe-select">
-      <label for="classeSel">Classe :</label>
+      <label for="classeSel" data-i18n="lblClasseSel">Classe :</label>
       <select id="classeSel" onchange="changeClasse(this.value)">
-        <optgroup label="1ère année">
+        <optgroup label="1ère année" data-y="1">
           <option value="P">P</option><option value="T">T</option><option value="M">M</option>
         </optgroup>
-        <optgroup label="2ème année">
+        <optgroup label="2ème année" data-y="2">
           <option value="SP">SP</option><option value="ST">ST</option><option value="SM">SM</option>
         </optgroup>
       </select>
     </div>
-    <div class="presence" title="Présence sur ce poste">
-      <span><span class="dot">●</span> <span id="onlineNow">1</span> en ligne maintenant</span>
-      <small>👥 <span id="totalUsers">0</span> étudiant(s) inscrit(s)</small>
+    <div class="presence">
+      <span><span class="dot">●</span> <span id="onlineNow">1</span> <span data-i18n="onlineTxt">en ligne maintenant</span></span>
+      <small>👥 <span id="totalUsers">0</span> <span data-i18n="regTxt">étudiant(s) inscrit(s)</span></small>
     </div>
+    <button class="btn-lang2" id="langBtn" onclick="toggleLang()">EN</button>
     <div class="user-chip">
       <div class="avatar" id="avatar"></div>
       <span id="userName"></span>
       <span class="badge-admin" id="adminBadge" style="display:none">ADMIN</span>
     </div>
-    <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    <button class="btn-logout" onclick="logout()" data-i18n="btnLogout">Déconnexion</button>
   </header>
 
   <div class="layout">
@@ -340,51 +361,48 @@
       </div>
 
       <div class="files-wrap">
-        <!-- Vue fichiers / séances enregistrées -->
         <div id="filesView">
           <div class="files-head">
             <h3 id="filesTitle"></h3>
-            <button class="btn-add" id="btnAdd" style="display:none" onclick="document.getElementById('pdfInput').click()">+ Ajouter des PDF</button>
+            <button class="btn-add" id="btnAdd" style="display:none" onclick="document.getElementById('pdfInput').click()" data-i18n="btnAdd">+ Ajouter des PDF</button>
           </div>
           <div id="fileList"></div>
         </div>
 
-        <!-- Vue tableau blanc -->
         <div id="boardView">
           <div class="board-tools">
-            <label>Couleur :</label>
+            <label data-i18n="lblColor">Couleur :</label>
             <button class="color-btn sel" style="background:#0f172a" onclick="setColor('#0f172a',this)"></button>
             <button class="color-btn" style="background:#1d4ed8" onclick="setColor('#1d4ed8',this)"></button>
             <button class="color-btn" style="background:#dc2626" onclick="setColor('#dc2626',this)"></button>
             <button class="color-btn" style="background:#16a34a" onclick="setColor('#16a34a',this)"></button>
-            <label>Épaisseur :</label>
+            <label data-i18n="lblSize">Épaisseur :</label>
             <input type="range" id="penSize" min="1" max="20" value="3">
-            <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()">🧽 Gomme</button>
-            <button class="tool-btn danger" onclick="clearBoard()">🗑 Effacer tout</button>
-            <button class="tool-btn" onclick="downloadBoard()">⬇ Télécharger l'image</button>
-            <button class="tool-btn save" id="btnSaveSeance" style="display:none" onclick="saveSeance()">💾 Enregistrer la séance</button>
+            <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()" data-i18n="btnEraser">🧽 Gomme</button>
+            <button class="tool-btn danger" onclick="clearBoard()" data-i18n="btnClear">🗑 Effacer tout</button>
+            <button class="tool-btn" onclick="downloadBoard()" data-i18n="btnDlImg">⬇ Télécharger l'image</button>
+            <button class="tool-btn save" id="btnSaveSeance" style="display:none" onclick="saveSeance()" data-i18n="btnSaveSess">💾 Enregistrer la séance</button>
           </div>
           <canvas id="board" width="1400" height="800"></canvas>
-          <p class="board-note">✍️ Compatible souris, doigt et <b>stylet (Apple Pencil, S Pen…)</b> avec sensibilité à la pression. Pendant l'écriture au stylet, la paume posée sur l'écran est ignorée. « Enregistrer la séance » (admin) la publie dans <b>Séances enregistrées</b>.</p>
+          <p class="board-note" data-i18n="boardNote">✍️ Compatible souris, doigt et stylet (Apple Pencil, S Pen…) avec sensibilité à la pression et rejet de paume.</p>
         </div>
 
-        <!-- Vue visio -->
         <div id="visioView">
           <div class="visio-card visio-live" id="visioLive" style="display:none">
-            <h4>🔴 Séance en direct — <span id="visioClasse"></span></h4>
+            <h4>🔴 <span data-i18n="visioLiveT">Séance en direct</span> — <span id="visioClasse"></span></h4>
             <p id="visioDesc"></p>
-            <a class="btn-join btn-meet" id="visioJoin" href="#" target="_blank" rel="noopener">🎥 Rejoindre la séance</a>
+            <a class="btn-join btn-meet" id="visioJoin" href="#" target="_blank" rel="noopener" data-i18n="btnJoin">🎥 Rejoindre la séance</a>
           </div>
           <div class="visio-card" id="visioEmpty" style="display:none">
-            <h4>🎥 Aucune séance en direct</h4>
-            <p>Le professeur n'a pas encore publié de lien Google Meet ou Zoom pour cette classe. Revenez plus tard.</p>
+            <h4 data-i18n="visioEmptyT">🎥 Aucune séance en direct</h4>
+            <p data-i18n="visioEmptyP">Le professeur n'a pas encore publié de lien Google Meet ou Zoom pour cette classe. Revenez plus tard.</p>
           </div>
           <div class="visio-card" id="visioAdmin" style="display:none">
-            <h4>⚙️ Publier une séance (admin)</h4>
-            <p>Collez le lien Google Meet ou Zoom de la séance pour la classe <b id="visioAdminClasse"></b>. Pour enregistrer la vidéo de la séance, utilisez l'enregistrement intégré de Meet/Zoom ; le tableau blanc, lui, s'enregistre ici.</p>
+            <h4 data-i18n="visioAdminT">⚙️ Publier une séance (admin)</h4>
+            <p id="visioAdminP"></p>
             <input type="url" id="visioUrl" placeholder="https://meet.google.com/…  ou  https://zoom.us/j/…">
-            <button class="btn-join btn-meet" onclick="saveVisio()">✔ Publier le lien</button>
-            <button class="btn-join btn-zoom" onclick="removeVisio()">✕ Terminer la séance</button>
+            <button class="btn-join btn-meet" onclick="saveVisio()" data-i18n="btnPublish">✔ Publier le lien</button>
+            <button class="btn-join btn-zoom" onclick="removeVisio()" data-i18n="btnEndSess">✕ Terminer la séance</button>
           </div>
         </div>
       </div>
@@ -396,25 +414,128 @@
 <div class="toast" id="toast"></div>
 
 <script>
+/* ================= Langue (FR / EN) ================= */
+let lang = localStorage.getItem('rp_lang') || 'fr';
+const I18N = {
+  tagline:   { fr:'Cours · Séries corrigées · TD · Devoirs corrigés', en:'Lectures · Solved exercises · Tutorials · Graded homework' },
+  tabLogin:  { fr:'Connexion', en:'Sign in' },
+  tabSignup: { fr:'Créer un compte', en:'Create account' },
+  fbBtn:     { fr:'Continuer avec Facebook', en:'Continue with Facebook' },
+  orSep:     { fr:'ou', en:'or' },
+  lblUser:   { fr:'Identifiant ou e-mail', en:'Username or email' },
+  phUser:    { fr:'Votre identifiant ou e-mail', en:'Your username or email' },
+  lblPass:   { fr:'Mot de passe', en:'Password' },
+  btnLogin:  { fr:'Se connecter', en:'Sign in' },
+  lblName:   { fr:'Nom complet', en:'Full name' },
+  phName:    { fr:'Prénom Nom', en:'First name Last name' },
+  lblPseudo: { fr:'Identifiant unique (pseudo)', en:'Unique username' },
+  lblEmail:  { fr:'Adresse e-mail (Gmail ou autre)', en:'Email address (Gmail or other)' },
+  lblClasse: { fr:'Classe', en:'Class' },
+  btnSignup: { fr:'Créer mon compte', en:'Create my account' },
+  confTitle: { fr:'✅ Compte créé !', en:'✅ Account created!' },
+  confPw:    { fr:'Voici votre mot de passe (il commence par « cc ») :', en:'Here is your password (it starts with “cc”):' },
+  confNote:  { fr:'Notez-le précieusement : il ne sera plus jamais affiché.', en:'Write it down carefully: it will never be shown again.' },
+  confMail:  { fr:"📧 Me l'envoyer par e-mail", en:'📧 Email it to me' },
+  confOk:    { fr:"J'ai noté → Me connecter", en:'Noted → Sign in' },
+  lblClasseSel: { fr:'Classe :', en:'Class:' },
+  onlineTxt: { fr:'en ligne maintenant', en:'online now' },
+  regTxt:    { fr:'étudiant(s) inscrit(s)', en:'registered student(s)' },
+  btnLogout: { fr:'Déconnexion', en:'Log out' },
+  btnAdd:    { fr:'+ Ajouter des PDF', en:'+ Add PDFs' },
+  btnDl:     { fr:'Télécharger', en:'Download' },
+  added:     { fr:'ajouté le', en:'added on' },
+  emptyDocs: { fr:'Aucun document pour le moment.', en:'No documents yet.' },
+  emptyAdmin:{ fr:'Cliquez sur « + Ajouter des PDF ».', en:'Click “+ Add PDFs”.' },
+  lblColor:  { fr:'Couleur :', en:'Color:' },
+  lblSize:   { fr:'Épaisseur :', en:'Thickness:' },
+  btnEraser: { fr:'🧽 Gomme', en:'🧽 Eraser' },
+  btnClear:  { fr:'🗑 Effacer tout', en:'🗑 Clear all' },
+  btnDlImg:  { fr:"⬇ Télécharger l'image", en:'⬇ Download image' },
+  btnSaveSess:{ fr:'💾 Enregistrer la séance', en:'💾 Save the session' },
+  boardNote: { fr:'✍️ Compatible souris, doigt et stylet (Apple Pencil, S Pen…) avec sensibilité à la pression et rejet de paume.', en:'✍️ Works with mouse, finger and stylus (Apple Pencil, S Pen…) with pressure sensitivity and palm rejection.' },
+  visioLiveT:{ fr:'Séance en direct', en:'Live session' },
+  btnJoin:   { fr:'🎥 Rejoindre la séance', en:'🎥 Join the session' },
+  visioEmptyT:{ fr:'🎥 Aucune séance en direct', en:'🎥 No live session' },
+  visioEmptyP:{ fr:"Le professeur n'a pas encore publié de lien Google Meet ou Zoom pour cette classe. Revenez plus tard.", en:'The teacher has not published a Google Meet or Zoom link for this class yet. Come back later.' },
+  visioAdminT:{ fr:'⚙️ Publier une séance (admin)', en:'⚙️ Publish a session (admin)' },
+  btnPublish:{ fr:'✔ Publier le lien', en:'✔ Publish link' },
+  btnEndSess:{ fr:'✕ Terminer la séance', en:'✕ End session' },
+  liveTitle: { fr:'SÉANCE LIVE', en:'LIVE SESSION' },
+  seancesT:  { fr:'Séances enregistrées', en:'Recorded sessions' },
+  visioT:    { fr:'Visio — Google Meet / Zoom', en:'Video call — Google Meet / Zoom' },
+  boardT:    { fr:'Tableau blanc', en:'Whiteboard' },
+  classePrefix:{ fr:'Classe', en:'Class' },
+  year1:     { fr:'Première année', en:'First year' },
+  year2:     { fr:'Deuxième année', en:'Second year' },
+  fillAll:   { fr:'Veuillez remplir tous les champs.', en:'Please fill in all fields.' },
+  badPseudo: { fr:'Identifiant : 3–30 caractères (lettres, chiffres, . _ -).', en:'Username: 3–30 characters (letters, digits, . _ -).' },
+  badEmail:  { fr:'Adresse e-mail invalide.', en:'Invalid email address.' },
+  taken:     { fr:'Cet identifiant est déjà pris. Choisissez-en un autre.', en:'This username is already taken. Choose another one.' },
+  badCreds:  { fr:'Identifiant ou mot de passe incorrect.', en:'Incorrect username or password.' },
+  needCreds: { fr:'Entrez votre identifiant (ou e-mail) et votre mot de passe.', en:'Enter your username (or email) and your password.' },
+  ccHint:    { fr:'Rappel : votre mot de passe commence par « cc ».', en:'Reminder: your password starts with “cc”.' },
+  fbInfo:    { fr:'La connexion Facebook sera disponible avec la version en ligne (serveur). Utilisez votre pseudo ou votre e-mail.', en:'Facebook login will be available in the online (server) version. Please use your username or email.' },
+  toastDl:   { fr:'Téléchargement lancé ✓', en:'Download started ✓' },
+  toastPdf:  { fr:'PDF ajouté(s) ✓', en:'PDF(s) added ✓' },
+  toastSess: { fr:'Séance enregistrée ✓ (voir « Séances enregistrées »)', en:'Session saved ✓ (see “Recorded sessions”)' },
+  toastPub:  { fr:'Séance publiée ✓', en:'Session published ✓' },
+  toastEnd:  { fr:'Séance terminée', en:'Session ended' },
+  toastImg:  { fr:'Image téléchargée ✓', en:'Image downloaded ✓' },
+  toastNo:   { fr:'⛔ Action non autorisée', en:'⛔ Action not allowed' },
+  confDelFile:{ fr:'Supprimer ce fichier ?', en:'Delete this file?' },
+  confDelBoard:{ fr:'Effacer tout le tableau ?', en:'Clear the whole board?' },
+  confDelSess:{ fr:'Une séance est en cours. Cliquez pour la rejoindre.', en:'A session is live. Click to join.' },
+  notPdf:    { fr:"n'est pas un PDF — ignoré.", en:'is not a PDF — skipped.' },
+  badLink:   { fr:'Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).', en:'Invalid link: paste a Google Meet (meet.google.com) or Zoom (zoom.us) link.' }
+};
+const t = k => (I18N[k] || {})[lang] || k;
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('optgroup[data-y="1"]').forEach(o => o.label = t('year1'));
+  document.querySelectorAll('optgroup[data-y="2"]').forEach(o => o.label = t('year2'));
+  document.getElementById('langBtn').textContent = lang === 'fr' ? 'EN' : 'FR';
+  document.getElementById('langBtnAuth').textContent = lang === 'fr' ? 'EN' : 'FR';
+}
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  localStorage.setItem('rp_lang', lang);
+  applyLang();
+  if (me) render();
+}
+
 /* ================= Constantes ================= */
+const SECTIONS = {
+  prepa:   { fr:'🎓 Classes Préparatoires', en:'🎓 Preparatory Classes' },
+  licence: { fr:'🎓 Licence (Mathématiques)', en:'🎓 Licence (Mathematics)' }
+};
 const SUBJECTS = {
-  analyse: { label:'ANALYSE', icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
-  algebre: { label:'ALGÈBRE', icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' }
+  analyse:     { section:'prepa',   label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'\\int_a^b f(x)\\,dx \\;=\\; \\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x' },
+  algebre:     { section:'prepa',   label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})' },
+  lic_analyse: { section:'licence', label:{fr:'ANALYSE',en:'ANALYSIS'}, icon:'∫', formula:'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n' },
+  lic_algebre: { section:'licence', label:{fr:'ALGÈBRE',en:'ALGEBRA'}, icon:'𝑨', formula:'A\\,v=\\lambda v,\\quad \\chi_A(\\lambda)=\\det(A-\\lambda I_n)' }
 };
 const CATEGORIES = {
-  cours:   { label:'Cours',             icon:'📖' },
-  series:  { label:'Séries corrigées',  icon:'✏️' },
-  td:      { label:'TD',                icon:'📝' },
-  devoirs: { label:'Devoirs corrigés',  icon:'🎯' }
+  cours:   { label:{fr:'Cours',en:'Lectures'},                icon:'📖' },
+  series:  { label:{fr:'Séries corrigées',en:'Solved exercises'}, icon:'✏️' },
+  td:      { label:{fr:'TD',en:'Tutorials'},                  icon:'📝' },
+  devoirs: { label:{fr:'Devoirs corrigés',en:'Graded homework'}, icon:'🎯' }
 };
 const LIVE = {
-  board:   { label:'Tableau blanc',        icon:'🖊️' },
-  visio:   { label:'Visio Meet / Zoom',    icon:'🎥' },
-  seances: { label:'Séances enregistrées', icon:'💾' }
+  board:   { label:{fr:'Tableau blanc',en:'Whiteboard'},              icon:'🖊️' },
+  visio:   { label:{fr:'Visio Meet / Zoom',en:'Meet / Zoom call'},    icon:'🎥' },
+  seances: { label:{fr:'Séances enregistrées',en:'Recorded sessions'}, icon:'💾' }
 };
 const LIVE_FORMULA = 'f\'(x_0)=\\lim_{h\\to 0}\\frac{f(x_0+h)-f(x_0)}{h}';
-const CLASSES = { P:'1ère année P', T:'1ère année T', M:'1ère année M', SP:'2ème année SP', ST:'2ème année ST', SM:'2ème année SM' };
+const CLASSES = {
+  P:{fr:'1ère année P',en:'1st year P'}, T:{fr:'1ère année T',en:'1st year T'}, M:{fr:'1ère année M',en:'1st year M'},
+  SP:{fr:'2ème année SP',en:'2nd year SP'}, ST:{fr:'2ème année ST',en:'2nd year ST'}, SM:{fr:'2ème année SM',en:'2nd year SM'}
+};
+const CL = c => (CLASSES[c] || {})[lang] || c;
 const ADMIN_USER = 'chokri';
+const ADMIN_EMAIL = 'chokri.chniti@gmail.com';
 const ADMIN_HASH = '4189603294dc5552';
 
 /* ================= LaTeX (KaTeX) ================= */
@@ -445,11 +566,12 @@ const del = (s,k) => new Promise(r => { tx(s,'readwrite').delete(k).onsuccess = 
 /* ================= État ================= */
 let me = null;
 let cur = { classe:'P', view:'files', subject:'analyse', category:'cours' };
-let openSub = { analyse:true, algebre:false, live:false };
+let openSub = { analyse:true, algebre:false, lic_analyse:false, lic_algebre:false, live:false };
 
 function toggleSubject(sk) { openSub[sk] = !openSub[sk]; render(); }
 
 function init() {
+  applyLang();
   tex(document.getElementById('heroFormula'), SUBJECTS.analyse.formula);
   const s = localStorage.getItem('rp_session');
   if (s) { me = JSON.parse(s); enterApp(); }
@@ -463,10 +585,10 @@ document.addEventListener('keydown', e => {
       (e.ctrlKey && !e.shiftKey && ['u','s'].includes(k)) ||
       (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k))) {
     e.preventDefault(); e.stopPropagation();
-    toast('⛔ Action non autorisée');
+    toast(t('toastNo'));
   }
 });
-console.log('%c⛔ STOP — L\'excellence académique', 'color:red;font-size:28px;font-weight:bold');
+console.log('%c⛔ STOP', 'color:red;font-size:28px;font-weight:bold');
 console.log('%cCe code est protégé. Toute copie non autorisée est interdite. © Chokri Chniti', 'font-size:14px');
 
 /* ================= Hachage ================= */
@@ -479,28 +601,30 @@ function hash(s) {
 }
 
 /* ================= Authentification ================= */
-function switchTab(t) {
-  document.getElementById('tabLogin').classList.toggle('active', t==='login');
-  document.getElementById('tabSignup').classList.toggle('active', t==='signup');
-  document.getElementById('loginForm').style.display = t==='login' ? 'block' : 'none';
-  document.getElementById('signupForm').style.display = t==='signup' ? 'block' : 'none';
+function switchTab(tb) {
+  document.getElementById('tabLogin').classList.toggle('active', tb==='login');
+  document.getElementById('tabSignup').classList.toggle('active', tb==='signup');
+  document.getElementById('loginForm').style.display = tb==='login' ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tb==='signup' ? 'block' : 'none';
+  document.getElementById('confirmPanel').style.display = 'none';
   msg('');
 }
-function msg(t, ok=false) {
+function msg(txt, ok=false) {
   const m = document.getElementById('authMsg');
-  m.textContent = t; m.className = 'auth-msg ' + (ok ? 'ok' : 'err');
+  m.textContent = txt; m.className = 'auth-msg ' + (ok ? 'ok' : 'err');
 }
+function fbLogin() { msg(t('fbInfo')); }
 
 async function doSignup() {
   const name = document.getElementById('suName').value.trim();
   const username = document.getElementById('suUser').value.trim().toLowerCase();
   const email = document.getElementById('suEmail').value.trim();
   const classe = document.getElementById('suClasse').value;
-  if (!name || !username || !email) return msg('Veuillez remplir tous les champs.');
-  if (!/^[a-z0-9._-]{3,30}$/.test(username)) return msg('Identifiant : 3–30 caractères (lettres, chiffres, . _ -).');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg('Adresse e-mail invalide.');
-  if (username === ADMIN_USER) return msg('Cet identifiant est déjà pris.');
-  if (await getOne('users', username)) return msg('Cet identifiant est déjà pris. Choisissez-en un autre.');
+  if (!name || !username || !email) return msg(t('fillAll'));
+  if (!/^[a-z0-9._-]{3,30}$/.test(username)) return msg(t('badPseudo'));
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msg(t('badEmail'));
+  if (username === ADMIN_USER) return msg(t('taken'));
+  if (await getOne('users', username)) return msg(t('taken'));
   /* Mot de passe généré automatiquement, commence obligatoirement par « cc » */
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -523,17 +647,28 @@ function afterConfirm() {
 }
 
 async function doLogin() {
-  const username = document.getElementById('loginUser').value.trim().toLowerCase();
+  const id = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value;
-  if (!username || !pass) return msg('Entrez votre identifiant et votre mot de passe.');
-  if (username !== ADMIN_USER && !pass.startsWith('cc')) return msg('Rappel : votre mot de passe commence par « cc ».');
+  if (!id || !pass) return msg(t('needCreds'));
+  let username = id, u = null;
+  if (id.includes('@')) {
+    /* Connexion par e-mail */
+    if (id === ADMIN_EMAIL) { username = ADMIN_USER; }
+    else {
+      const users = await getAll('users');
+      u = users.find(x => (x.email || '').toLowerCase() === id);
+      if (!u) return msg(t('badCreds'));
+      username = u.username;
+    }
+  }
+  if (username !== ADMIN_USER && !pass.startsWith('cc')) return msg(t('ccHint'));
   const h = hash(username + ':' + pass);
   if (username === ADMIN_USER) {
-    if (h !== ADMIN_HASH) return msg('Identifiant ou mot de passe incorrect.');
+    if (h !== ADMIN_HASH) return msg(t('badCreds'));
     me = { username, name:'Chokri', classe:'P', role:'admin' };
   } else {
-    const u = await getOne('users', username);
-    if (!u || u.passHash !== h) return msg('Identifiant ou mot de passe incorrect.');
+    if (!u) u = await getOne('users', username);
+    if (!u || u.passHash !== h) return msg(t('badCreds'));
     me = { username, name:u.name, classe:u.classe, role:'etudiant' };
   }
   localStorage.setItem('rp_session', JSON.stringify(me));
@@ -559,7 +694,7 @@ function heartbeat() {
 }
 async function updatePresence() {
   const o = JSON.parse(localStorage.getItem('rp_online') || '{}');
-  const online = Object.values(o).filter(t => Date.now() - t < 45000).length;
+  const online = Object.values(o).filter(ts => Date.now() - ts < 45000).length;
   document.getElementById('onlineNow').textContent = Math.max(online, 1);
   const users = await getAll('users');
   document.getElementById('totalUsers').textContent = users.length;
@@ -597,33 +732,40 @@ function selectLive(v) {
   render();
 }
 
+const pretty = s => s.charAt(0) + s.slice(1).toLowerCase();
+
 async function render() {
   const files = await getAll('files');
   const isAdmin = me.role === 'admin';
 
   /* ---- Sidebar ---- */
-  let side = `<div class="side-main-title">🎓 Classes Préparatoires</div>`;
-  for (const [sk, s] of Object.entries(SUBJECTS)) {
-    side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
-      <span>${s.icon}</span> ${s.label} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
-    if (openSub[sk]) {
-      for (const [ck, c] of Object.entries(CATEGORIES)) {
-        const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
-        const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
-        side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
-          <span>${c.icon}</span> ${c.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+  let side = '';
+  for (const [sec, secLbl] of Object.entries(SECTIONS)) {
+    side += `<div class="side-main-title">${secLbl[lang]}</div>`;
+    for (const [sk, s] of Object.entries(SUBJECTS)) {
+      if (s.section !== sec) continue;
+      side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('${sk}')">
+        <span>${s.icon}</span> ${s.label[lang]} <span class="chev">${openSub[sk] ? '▼' : '►'}</span></div>`;
+      if (openSub[sk]) {
+        for (const [ck, c] of Object.entries(CATEGORIES)) {
+          const n = files.filter(f => f.classe===cur.classe && f.subject===sk && f.category===ck).length;
+          const act = (cur.view==='files' && cur.subject===sk && cur.category===ck) ? 'active' : '';
+          side += `<div class="side-item ${act}" onclick="select('${sk}','${ck}')">
+            <span>${c.icon}</span> ${c.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+        }
       }
+      side += `</div>`;
     }
-    side += `</div>`;
   }
+  side += `<div class="side-main-title">📡 ${t('liveTitle')}</div>`;
   side += `<div class="side-section"><div class="side-title" onclick="toggleSubject('live')">
-    <span>📡</span> SÉANCE LIVE <span class="chev">${openSub.live ? '▼' : '►'}</span></div>`;
+    <span>📡</span> ${t('liveTitle')} <span class="chev">${openSub.live ? '▼' : '►'}</span></div>`;
   if (openSub.live) {
     for (const [vk, v] of Object.entries(LIVE)) {
       const n = vk==='seances' ? files.filter(f => f.classe===cur.classe && f.subject==='live').length : 0;
       const act = cur.view===vk ? 'active' : '';
       side += `<div class="side-item ${act}" onclick="selectLive('${vk}')">
-        <span>${v.icon}</span> ${v.label} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
+        <span>${v.icon}</span> ${v.label[lang]} ${n ? `<span class="n">${n}</span>` : ''}</div>`;
     }
   }
   side += `</div>`;
@@ -644,24 +786,26 @@ async function render() {
   document.getElementById('visioView').style.display = cur.view==='visio' ? 'block' : 'none';
 
   const bT = document.getElementById('bannerTitle'), bS = document.getElementById('bannerSub'), bF = document.getElementById('bannerFormula');
-  bS.textContent = `Classe ${CLASSES[cur.classe]}`;
+  bS.textContent = `${t('classePrefix')} ${CL(cur.classe)}`;
 
   if (cur.view === 'files') {
     const S = SUBJECTS[cur.subject], C = CATEGORIES[cur.category];
-    bT.textContent = `${S.label.charAt(0)}${S.label.slice(1).toLowerCase()} — ${C.label}`;
+    const secName = SECTIONS[S.section][lang].replace('🎓 ','');
+    bT.textContent = `${pretty(S.label[lang])} — ${C.label[lang]}`;
+    bS.textContent = `${secName} · ${t('classePrefix')} ${CL(cur.classe)}`;
     tex(bF, S.formula);
     renderFiles(files, f => f.classe===cur.classe && f.subject===cur.subject && f.category===cur.category,
-                `${C.icon} ${C.label}`, isAdmin, true);
+                `${C.icon} ${C.label[lang]}`, isAdmin, true);
   } else if (cur.view === 'seances') {
-    bT.textContent = 'Séances enregistrées';
+    bT.textContent = t('seancesT');
     tex(bF, LIVE_FORMULA);
     renderFiles(files, f => f.classe===cur.classe && f.subject==='live',
-                `💾 Séances enregistrées`, isAdmin, false);
+                `💾 ${t('seancesT')}`, isAdmin, false);
   } else if (cur.view === 'board') {
-    bT.textContent = 'Tableau blanc';
+    bT.textContent = t('boardT');
     tex(bF, LIVE_FORMULA);
   } else if (cur.view === 'visio') {
-    bT.textContent = 'Visio — Google Meet / Zoom';
+    bT.textContent = t('visioT');
     tex(bF, LIVE_FORMULA);
     renderVisio(isAdmin);
   }
@@ -673,7 +817,7 @@ function renderFiles(files, filter, title, isAdmin, allowAdd) {
   document.getElementById('btnAdd').style.display = (isAdmin && allowAdd) ? 'inline-block' : 'none';
   const box = document.getElementById('fileList');
   if (!list.length) {
-    box.innerHTML = `<div class="empty"><div class="big">📄</div>Aucun document pour le moment.${isAdmin && allowAdd ? '<br>Cliquez sur « + Ajouter des PDF ».' : ''}</div>`;
+    box.innerHTML = `<div class="empty"><div class="big">📄</div>${t('emptyDocs')}${isAdmin && allowAdd ? '<br>' + t('emptyAdmin') : ''}</div>`;
     return;
   }
   box.innerHTML = list.map(f => `
@@ -681,11 +825,11 @@ function renderFiles(files, filter, title, isAdmin, allowAdd) {
       <div class="file-ico">${f.subject==='live' ? '🖼️' : '📄'}</div>
       <div class="file-info">
         <h4>${esc(f.name)}</h4>
-        <small>${(f.size/1024).toFixed(0)} Ko · ajouté le ${f.date}</small>
+        <small>${(f.size/1024).toFixed(0)} Ko · ${t('added')} ${f.date}</small>
       </div>
       <span class="dl-count" id="cnt-${f.id}">⬇ ${f.downloads}</span>
-      <button class="btn-dl" onclick="downloadFile('${f.id}')">Télécharger</button>
-      ${isAdmin ? `<button class="btn-x" onclick="deleteFile('${f.id}')" title="Supprimer">✕</button>` : ''}
+      <button class="btn-dl" onclick="downloadFile('${f.id}')">${t('btnDl')}</button>
+      ${isAdmin ? `<button class="btn-x" onclick="deleteFile('${f.id}')" title="✕">✕</button>` : ''}
     </div>`).join('');
 }
 
@@ -697,13 +841,14 @@ async function renderVisio(isAdmin) {
   document.getElementById('visioEmpty').style.display = live ? 'none' : 'block';
   document.getElementById('visioAdmin').style.display = isAdmin ? 'block' : 'none';
   if (live) {
-    document.getElementById('visioClasse').textContent = CLASSES[cur.classe];
-    const type = s.value.includes('zoom') ? 'Zoom' : (s.value.includes('meet.google') ? 'Google Meet' : 'visioconférence');
-    document.getElementById('visioDesc').textContent = `Une séance ${type} est en cours. Cliquez pour la rejoindre.`;
+    document.getElementById('visioClasse').textContent = CL(cur.classe);
+    document.getElementById('visioDesc').textContent = t('confDelSess');
     document.getElementById('visioJoin').href = s.value;
   }
   if (isAdmin) {
-    document.getElementById('visioAdminClasse').textContent = CLASSES[cur.classe];
+    document.getElementById('visioAdminP').textContent = lang === 'fr'
+      ? `Collez le lien Google Meet ou Zoom de la séance pour la classe ${CL(cur.classe)}. Pour enregistrer la vidéo, utilisez l'enregistrement intégré de Meet/Zoom ; le tableau blanc, lui, s'enregistre ici.`
+      : `Paste the Google Meet or Zoom link of the session for class ${CL(cur.classe)}. To record the video, use Meet/Zoom built-in recording; the whiteboard is saved here.`;
     document.getElementById('visioUrl').value = live ? s.value : '';
   }
 }
@@ -711,15 +856,15 @@ async function saveVisio() {
   if (me.role !== 'admin') return;
   const url = document.getElementById('visioUrl').value.trim();
   if (!/^https:\/\/(meet\.google\.com|([a-z0-9-]+\.)?zoom\.us)\//i.test(url))
-    return alert('Lien invalide : collez un lien Google Meet (meet.google.com) ou Zoom (zoom.us).');
+    return alert(t('badLink'));
   await put('settings', { key:'visio_' + cur.classe, value:url });
-  toast('Séance publiée ✓');
+  toast(t('toastPub'));
   render();
 }
 async function removeVisio() {
   if (me.role !== 'admin') return;
   await del('settings', 'visio_' + cur.classe);
-  toast('Séance terminée');
+  toast(t('toastEnd'));
   render();
 }
 
@@ -744,14 +889,12 @@ function initBoard() {
   };
   cv.addEventListener('pointerdown', e => {
     if (e.pointerType === 'pen') lastPenTime = Date.now();
-    /* Rejet de paume : on ignore le doigt juste après/pendant l'usage du stylet */
     if (e.pointerType === 'touch' && Date.now() - lastPenTime < 3000) return;
     if (activePointer !== null) return;
     activePointer = e.pointerId;
     try { cv.setPointerCapture(e.pointerId); } catch(_) {}
     const p = pos(e);
     ctx.beginPath(); ctx.moveTo(p.x, p.y);
-    /* point simple au toucher */
     ctx.strokeStyle = eraser ? '#ffffff' : penColor;
     ctx.lineWidth = width(e);
     ctx.lineTo(p.x + 0.1, p.y + 0.1); ctx.stroke();
@@ -780,7 +923,7 @@ function toggleEraser() {
   document.getElementById('eraserBtn').classList.toggle('sel', eraser);
 }
 function clearBoard() {
-  if (!confirm('Effacer tout le tableau ?')) return;
+  if (!confirm(t('confDelBoard'))) return;
   const cv = document.getElementById('board');
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,cv.width,cv.height);
 }
@@ -789,7 +932,7 @@ function downloadBoard() {
   a.download = `tableau-${new Date().toISOString().slice(0,10)}.png`;
   a.href = document.getElementById('board').toDataURL('image/png');
   a.click();
-  toast('Image téléchargée ✓');
+  toast(t('toastImg'));
 }
 function saveSeance() {
   if (me.role !== 'admin') return;
@@ -801,7 +944,7 @@ function saveSeance() {
       name, size: blob.size, blob, downloads: 0,
       date: d.toLocaleDateString('fr-FR')
     });
-    toast('Séance enregistrée ✓ (voir « Séances enregistrées »)');
+    toast(t('toastSess'));
     render();
   }, 'image/png');
 }
@@ -810,7 +953,7 @@ function saveSeance() {
 async function addPdfs(fileList) {
   if (me.role !== 'admin') return;
   for (const file of fileList) {
-    if (!file.name.toLowerCase().endsWith('.pdf')) { alert(`« ${file.name} » n'est pas un PDF — ignoré.`); continue; }
+    if (!file.name.toLowerCase().endsWith('.pdf')) { alert(`« ${file.name} » ${t('notPdf')}`); continue; }
     await put('files', {
       id: uid(), classe: cur.classe, subject: cur.subject, category: cur.category,
       name: file.name, size: file.size, blob: file, downloads: 0,
@@ -818,13 +961,13 @@ async function addPdfs(fileList) {
     });
   }
   document.getElementById('pdfInput').value = '';
-  toast('PDF ajouté(s) ✓');
+  toast(t('toastPdf'));
   render();
 }
 
 async function deleteFile(id) {
   if (me.role !== 'admin') return;
-  if (!confirm('Supprimer ce fichier ?')) return;
+  if (!confirm(t('confDelFile'))) return;
   await del('files', id);
   render();
 }
@@ -841,16 +984,16 @@ async function downloadFile(id) {
   await put('files', f);
   const badge = document.getElementById('cnt-' + id);
   if (badge) badge.textContent = `⬇ ${f.downloads}`;
-  toast('Téléchargement lancé ✓');
+  toast(t('toastDl'));
 }
 
 /* ================= Utilitaires ================= */
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(m) {
-  const t = document.getElementById('toast');
-  t.textContent = m; t.style.display = 'block';
-  clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', 2200);
+  const el = document.getElementById('toast');
+  el.textContent = m; el.style.display = 'block';
+  clearTimeout(el._h); el._h = setTimeout(() => el.style.display = 'none', 2200);
 }
 document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 document.getElementById('suEmail').addEventListener('keydown', e => { if (e.key==='Enter') doSignup(); });
