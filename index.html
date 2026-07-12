@@ -181,11 +181,11 @@
   .empty .big { font-size:48px; margin-bottom:10px; }
 
   aside.stats {
-    width:280px; flex-shrink:0; background:#f8f9fa; border-right:1px solid #e2e8f0;
+    width:280px; flex-shrink:0; background:#f8fafb; border-right:1px solid #e2e8f0;
     position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:auto;
-    padding:20px 16px; display:none; order:2;
+    padding:20px 16px; display:block; order:2;
   }
-  aside.stats.show { display:block; }
+  
   .stats h3 { color:var(--bleu); font-size:16px; margin-bottom:14px; }
   .stat-card {
     background:var(--fond); border-radius:12px; padding:12px 14px; margin-bottom:10px;
@@ -284,7 +284,12 @@
   aside.stats::-webkit-scrollbar-track { background:#f1f5f9; }
   aside.stats::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:5px; }
   aside.stats::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
-@media (max-width:1150px) { aside.stats { display:none !important; } }
+  aside.nav::-webkit-scrollbar { width:10px; }
+  aside.nav::-webkit-scrollbar-track { background:rgba(255,255,255,.1); }
+  aside.nav::-webkit-scrollbar-thumb { background:#3b82f6; border-radius:5px; }
+  aside.nav::-webkit-scrollbar-thumb:hover { background:#60a5fa; }
+
+  @media (max-width:1150px) { aside.stats { display:none !important; } }
   @media (max-width:860px) {
     .menu-btn { display:block; }
     aside.nav { position:fixed; left:-90vw; top:0; bottom:0; z-index:40; transition:.25s; height:100vh; padding-top:70px; width:82vw; max-width:320px; }
@@ -738,15 +743,16 @@ function loginAs(userObj) {
   document.getElementById('userName').innerText = currentUser.name;
   document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
   
+  // Afficher les statistiques pour tous
+  document.getElementById('statsPanel').classList.add('show');
+  
   if(currentUser.role === 'admin') {
     document.getElementById('adminBadge').style.display = 'inline-block';
     document.getElementById('btnAdd').style.display = 'inline-block';
-    document.getElementById('statsPanel').classList.add('show');
     document.getElementById('visioAdmin').style.display = 'block';
   } else {
     document.getElementById('adminBadge').style.display = 'none';
     document.getElementById('btnAdd').style.display = 'none';
-    document.getElementById('statsPanel').classList.remove('show');
     document.getElementById('visioAdmin').style.display = 'none';
   }
   
