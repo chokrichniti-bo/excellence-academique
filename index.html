@@ -14,6 +14,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --bleu:#0f2a5c; --bleu2:#1d4ed8; --cyan:#0ea5e9; --or:#f59e0b;
@@ -233,6 +235,49 @@
   }
 
   .menu-btn { display:none; background:rgba(255,255,255,.15); border:none; color:#fff; font-size:20px; border-radius:9px; width:40px; height:40px; cursor:pointer; }
+
+  /* ===== Recherche interne ===== */
+  .search-wrap { position:relative; margin-bottom:16px; }
+  .search-wrap input {
+    width:100%; padding:12px 16px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; background:#fff;
+    box-shadow:0 2px 8px rgba(15,42,92,.05);
+  }
+  .search-wrap input:focus { outline:none; border-color:var(--bleu2); }
+  #searchResults {
+    position:absolute; top:calc(100% + 4px); left:0; right:0; background:#fff; border:1px solid #cbd5e1;
+    border-radius:12px; box-shadow:0 12px 30px rgba(15,42,92,.2); z-index:30; max-height:320px; overflow-y:auto; display:none;
+  }
+  .sr-item { padding:10px 14px; cursor:pointer; border-bottom:1px solid #f1f5f9; font-size:13.5px; }
+  .sr-item:hover { background:#eff6ff; }
+  .sr-item small { display:block; color:var(--gris); font-size:11.5px; margin-top:2px; }
+
+  /* ===== Badges "nouveau" ===== */
+  .nbadge { background:#ef4444; color:#fff; border-radius:10px; font-size:10px; padding:1px 7px; margin-left:7px; font-weight:800; }
+  .new-tag { background:#ef4444; color:#fff; border-radius:8px; font-size:10px; padding:1px 6px; margin-left:6px; font-weight:800; vertical-align:middle; }
+
+  /* ===== Vue côte à côte (liste + aperçu PDF) ===== */
+  .split-wrap { display:flex; gap:16px; align-items:flex-start; }
+  #fileListCol { flex:1; min-width:0; }
+  .split-wrap.split #fileListCol { max-width:40%; }
+  #previewPane { display:none; flex:1.5; position:sticky; top:80px; min-width:0; }
+  #previewPane.show { display:block; }
+  .preview-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+  .preview-head b { color:var(--bleu); font-size:14.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #previewFrame { width:100%; height:calc(100vh - 190px); border:1px solid #cbd5e1; border-radius:12px; background:#fff; }
+  .files-wrap.wide { max-width:1500px; }
+  .file-row.sel-row { border-color:var(--bleu2); box-shadow:0 0 0 2px rgba(29,78,216,.25); }
+  .file-row { cursor:pointer; }
+
+  /* ===== Réordonner (admin) ===== */
+  .btn-mv { border:none; background:#eff6ff; color:var(--bleu2); width:28px; height:28px; border-radius:7px; cursor:pointer; font-weight:800; }
+  .btn-mv:hover { background:var(--bleu2); color:#fff; }
+  .btn-mv:disabled { opacity:.3; cursor:default; }
+
+  /* ===== Heatmap d'activité ===== */
+  .heat-row { display:flex; gap:2px; align-items:flex-end; height:46px; margin-top:4px; }
+  .heat-cell { flex:1; background:#1d4ed8; border-radius:2px 2px 0 0; min-height:3px; }
+  .heat-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--gris); margin-top:3px; }
+
   @media (max-width:1150px) { aside.stats { display:none !important; } }
   @media (max-width:860px) {
     .menu-btn { display:block; }
@@ -244,6 +289,10 @@
     .file-row { padding:12px; gap:10px; }
     .banner-inner { padding:16px 14px 6px; }
     .banner h2 { font-size:18px; }
+    .split-wrap { flex-direction:column; }
+    .split-wrap.split #fileListCol { max-width:100%; }
+    #previewPane { position:static; width:100%; }
+    #previewFrame { height:62vh; }
   }
 </style>
 </head>
@@ -309,6 +358,11 @@
         <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
         <div class="field"><label data-i18n="lblPass">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
         <button class="btn-main" onclick="doLogin()" data-i18n="btnLogin">Se connecter</button>
+        <div class="sep" data-i18n="orSep">ou</div>
+        <button class="btn-fb" onclick="fbLogin()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.025 1.792-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.93-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          <span data-i18n="btnFb">Continuer avec Facebook</span>
+        </button>
       </div>
       <div id="signupForm" style="display:none">
         <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
@@ -381,11 +435,24 @@
 
       <div class="files-wrap">
         <div id="filesView">
+          <div class="search-wrap">
+            <input type="text" id="searchBox" placeholder="🔍 Rechercher un document (suites, intégrales, espaces vectoriels…)" oninput="searchFiles()" onblur="setTimeout(hideSearch, 250)">
+            <div id="searchResults"></div>
+          </div>
           <div class="files-head">
             <h3 id="filesTitle"></h3>
             <button class="btn-add" id="btnAdd" style="display:none" onclick="document.getElementById('pdfInput').click()" data-i18n="btnAdd">+ Ajouter des PDF</button>
           </div>
-          <div id="fileList"></div>
+          <div class="split-wrap" id="splitWrap">
+            <div id="fileListCol"><div id="fileList"></div></div>
+            <div id="previewPane">
+              <div class="preview-head">
+                <b id="previewTitle"></b>
+                <button class="tool-btn" onclick="closePreview()" data-i18n="closePrev">✕ Fermer</button>
+              </div>
+              <iframe id="previewFrame" title="Aperçu PDF"></iframe>
+            </div>
+          </div>
         </div>
 
         <div id="boardView">
@@ -400,6 +467,7 @@
             <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()" data-i18n="btnEraser">🧽 Gomme</button>
             <button class="tool-btn danger" onclick="clearBoard()" data-i18n="btnClear">🗑 Effacer tout</button>
             <button class="tool-btn" onclick="downloadBoard()" data-i18n="btnDlImg">⬇ Télécharger l'image</button>
+            <button class="tool-btn save" onclick="exportBoardPDF()" data-i18n="btnPdfX">📄 Exporter en PDF</button>
           </div>
           <canvas id="board" width="1400" height="800"></canvas>
           <p class="board-note" data-i18n="boardNote">✍️ Compatible souris, doigt et stylet avec sensibilité à la pression.</p>
@@ -435,6 +503,11 @@
       <div id="stUsers"></div>
       <h4>🏆 Top téléchargements</h4>
       <div id="stTop"></div>
+      <h4 data-i18n="statViews">👁 Les plus consultés</h4>
+      <div id="stViews"></div>
+      <h4 data-i18n="statHeat">⏰ Activité par heure</h4>
+      <div class="heat-row" id="stHeat"></div>
+      <div class="heat-labels"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
       <h4>⬇ Téléchargements par matière</h4>
       <div id="stBySub"></div>
       <h4 data-i18n="statWho">🟢 Connectés en ce moment</h4>
@@ -510,19 +583,27 @@ const I18N = {
   statFiles: { fr:'📄 Fichiers', en:'📄 Files' },
   statDl:    { fr:'⬇ Téléchargements', en:'⬇ Downloads' },
   statWho:   { fr:'🟢 Connectés en ce moment', en:'🟢 Online right now' },
-  statByDay: { fr:'📅 Connexions par jour', en:'📅 Connections per day' }
+  statByDay: { fr:'📅 Connexions par jour', en:'📅 Connections per day' },
+  orSep:     { fr:'ou', en:'or' },
+  btnFb:     { fr:'Continuer avec Facebook', en:'Continue with Facebook' },
+  closePrev: { fr:'✕ Fermer', en:'✕ Close' },
+  btnPdfX:   { fr:'📄 Exporter en PDF', en:'📄 Export as PDF' },
+  statViews: { fr:'👁 Les plus consultés', en:'👁 Most viewed' },
+  statHeat:  { fr:'⏰ Activité par heure', en:'⏰ Activity by hour' },
+  newTag:    { fr:'NOUVEAU', en:'NEW' },
+  srchNone:  { fr:'Aucun document trouvé', en:'No document found' },
+  dupClean:  { fr:'🧹 Supprimer les doublons', en:'🧹 Remove duplicates' },
+  previewT:  { fr:'👁 Aperçu', en:'👁 Preview' }
 };
 
 /* ================= Structure des Matières (Sidebar) ================= */
 const STRUCTURE = [
   { type: 'title', txt: 'Classes Préparatoires' },
   { type: 'year', txt: 'PREMIÈRE ANNÉE' },
-  { type: 'folder', id: 'p_classe_p', txt: 'Classe P', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'folder', id: 'p_classe_t', txt: 'Classe T', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'p_classe_pt', txt: 'Classe P-T', sub: ['ANALYSE', 'ALGÈBRE'] },
   { type: 'folder', id: 'p_classe_m', txt: 'Classe M', sub: ['ANALYSE', 'ALGÈBRE'] },
   { type: 'year', txt: 'DEUXIÈME ANNÉE' },
-  { type: 'folder', id: 'd_classe_sp', txt: 'Classe SP', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'folder', id: 'd_classe_st', txt: 'Classe ST', sub: ['ANALYSE', 'ALGÈBRE'] },
+  { type: 'folder', id: 'd_classe_spst', txt: 'Classe SP-ST', sub: ['ANALYSE', 'ALGÈBRE'] },
   { type: 'folder', id: 'd_classe_sm', txt: 'Classe SM', sub: ['ANALYSE', 'ALGÈBRE'] },
   { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence' },
   { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab' },
@@ -531,13 +612,45 @@ const STRUCTURE = [
 
 const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
 
+/* Dossiers fusionnés : les PDF déjà ajoutés dans les anciens dossiers (P, T, SP, ST) restent accessibles */
+const LEGACY_FOLDERS = {
+  p_classe_pt:   ['p_classe_p', 'p_classe_t'],
+  d_classe_spst: ['d_classe_sp', 'd_classe_st']
+};
+function pathKeysFor(folder, sub, leaf) {
+  const keys = [`${folder}_${sub}_${leaf}`];
+  (LEGACY_FOLDERS[folder] || []).forEach(old => keys.push(`${old}_${sub}_${leaf}`));
+  return keys;
+}
+const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm'];
+function parsePath(p) {
+  if (p === 'licence__') return { folder:'licence', sub:'', leaf:'' };
+  for (const f of ALL_FOLDER_IDS) {
+    if (p.startsWith(f + '_')) {
+      const rest = p.slice(f.length + 1);
+      for (const sub of ['ANALYSE','ALGÈBRE']) {
+        if (rest.startsWith(sub + '_')) {
+          let folder = f;
+          for (const merged in LEGACY_FOLDERS) { if (LEGACY_FOLDERS[merged].includes(f)) folder = merged; }
+          return { folder, sub, leaf: rest.slice(sub.length + 1) };
+        }
+      }
+    }
+  }
+  return null;
+}
+function folderLabel(fid) {
+  const it = STRUCTURE.find(s => s.id === fid);
+  return it ? trNav(it.txt) : (fid === 'licence' ? trNav('Licence (Mathématiques)') : fid);
+}
+
 /* Traductions de la navigation (affichage seulement — les clés internes restent en français) */
 const NAV_EN = {
   'Classes Préparatoires': 'Preparatory Classes',
   'PREMIÈRE ANNÉE': 'FIRST YEAR',
   'DEUXIÈME ANNÉE': 'SECOND YEAR',
-  'Classe P': 'Class P', 'Classe T': 'Class T', 'Classe M': 'Class M',
-  'Classe SP': 'Class SP', 'Classe ST': 'Class ST', 'Classe SM': 'Class SM',
+  'Classe P-T': 'Class P-T', 'Classe M': 'Class M',
+  'Classe SP-ST': 'Class SP-ST', 'Classe SM': 'Class SM',
   'ANALYSE': 'ANALYSIS', 'ALGÈBRE': 'ALGEBRA',
   'Cours': 'Lectures', 'Séries corrigées': 'Solved exercises', 'TD': 'Tutorials', 'Devoirs corrigés': 'Graded homework',
   'Licence (Mathématiques)': 'Licence (Mathematics)',
@@ -636,7 +749,7 @@ function loginAs(userObj) {
   startRealtimeListeners();
   
   // Sélection par défaut
-  selectCategory('p_classe_p', 'ANALYSE', 'Cours');
+  selectCategory('p_classe_pt', 'ANALYSE', 'Cours');
 }
 
 function logout() {
@@ -731,6 +844,39 @@ function afterConfirm() {
   switchTab('login');
 }
 
+/* ---- Connexion avec Facebook (Firebase Authentication) ---- */
+function fbLogin() {
+  const msg = document.getElementById('authMsg');
+  const provider = new firebase.auth.FacebookAuthProvider();
+  firebase.auth().signInWithPopup(provider).then(res => {
+    const fu = res.user;
+    const uname = (fu.email ? fu.email.split('@')[0] : 'fb_' + fu.uid.slice(0, 10))
+                  .toLowerCase().replace(/[^a-z0-9._-]/g, '');
+    db.collection('users').doc(uname).get().then(doc => {
+      const userObj = doc.exists ? doc.data() : {
+        name: fu.displayName || uname,
+        username: uname,
+        searchKey: uname,
+        email: fu.email || '',
+        password: '(facebook)',
+        role: 'student',
+        provider: 'facebook',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      const go = () => { logConnection(userObj); loginAs(userObj); };
+      if (doc.exists) go(); else db.collection('users').doc(uname).set(userObj).then(go);
+    });
+  }).catch(err => {
+    if (err && (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found')) {
+      showMsg(msg, "Connexion Facebook non activée : dans la console Firebase → Authentication → Sign-in method, activez « Facebook ».", true);
+    } else if (err && err.code === 'auth/popup-closed-by-user') {
+      showMsg(msg, "Fenêtre Facebook fermée avant la connexion.", true);
+    } else {
+      showMsg(msg, "Connexion Facebook impossible : " + (err && err.message ? err.message : ''), true);
+    }
+  });
+}
+
 function showMsg(el, txt, isErr) {
   el.innerText = txt;
   el.className = "auth-msg " + (isErr ? "err" : "ok");
@@ -821,6 +967,21 @@ function startRealtimeListeners() {
     el.innerHTML = days.length ? days.map(([d2, v]) =>
       `<div class="top-item"><span>${d2}</span><span class="tn">${v.total} · ${Object.keys(v.users).length} 👤</span></div>`).join('')
       : '<div class="top-item"><span>—</span></div>';
+
+    /* Heatmap : à quelles heures vos étudiants se connectent-ils ? */
+    const heatEl = document.getElementById('stHeat');
+    if (heatEl) {
+      const hours = new Array(24).fill(0);
+      snap.forEach(doc => {
+        const en = doc.data();
+        if (en.ts) hours[new Date(en.ts).getHours()]++;
+      });
+      const max = Math.max.apply(null, hours) || 1;
+      heatEl.innerHTML = hours.map((h, i) => {
+        const pct = Math.round((h / max) * 100);
+        return `<div class="heat-cell" style="height:${Math.max(pct, 6)}%; opacity:${h ? 0.35 + 0.65 * (h/max) : 0.12}" title="${i}h : ${h} connexion(s)"></div>`;
+      }).join('');
+    }
   });
 
   // 3. Écoute du lien Visio (Meet / Zoom) en direct
@@ -840,18 +1001,34 @@ function startRealtimeListeners() {
     }
   });
 
-  // 4. Fichiers : total, téléchargements, top 5 et répartition par matière
+  // 4. Fichiers : total, téléchargements, top 5, consultations et répartition par matière
   db.collection('files').onSnapshot(snap => {
     document.getElementById('stFiles').innerText = snap.size;
     let total = 0;
     const all = [];
-    snap.forEach(doc => { const f = doc.data(); total += (f.downloads || 0); all.push(f); });
+    snap.forEach(doc => {
+      const d = doc.data();
+      total += (d.downloads || 0);
+      // Copie légère (sans le contenu base64) pour la recherche et les badges
+      all.push({ id: doc.id, name: d.name, path: d.path, downloads: d.downloads || 0, views: d.views || 0, ts: d.ts || 0, date: d.date || '', size: d.size || '' });
+    });
+    window.allFiles = all;
+    ensureSeenInit();
+    buildSidebar(); // met à jour les badges rouges « nouveau document »
+
     document.getElementById('stDl').innerText = total;
     const topEl = document.getElementById('stTop');
     if (topEl) {
       const top = all.filter(f => (f.downloads||0) > 0).sort((a,b) => (b.downloads||0)-(a.downloads||0)).slice(0,5);
       topEl.innerHTML = top.length
         ? top.map(f => `<div class="top-item"><span>${f.name}</span><span class="tn">⬇ ${f.downloads}</span></div>`).join('')
+        : '<div class="top-item"><span>—</span></div>';
+    }
+    const viewsEl = document.getElementById('stViews');
+    if (viewsEl) {
+      const tv = all.filter(f => (f.views||0) > 0).sort((a,b) => (b.views||0)-(a.views||0)).slice(0,5);
+      viewsEl.innerHTML = tv.length
+        ? tv.map(f => `<div class="top-item"><span>${f.name}</span><span class="tn">👁 ${f.views}</span></div>`).join('')
         : '<div class="top-item"><span>—</span></div>';
     }
     const subEl = document.getElementById('stBySub');
@@ -891,7 +1068,8 @@ function buildSidebar() {
       const fDiv = document.createElement('div');
       fDiv.className = 'side-item' + (activeFolder === item.id ? ' active' : '');
       const isOpen = openFolders[item.id];
-      fDiv.innerHTML = `📁 <b>${trNav(item.txt)}</b> <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
+      const nb = unseenCount(item.id);
+      fDiv.innerHTML = `📁 <b>${trNav(item.txt)}</b>${nb ? `<span class="nbadge">${nb}</span>` : ''} <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
       fDiv.onclick = () => {
         openFolders[item.id] = !openFolders[item.id];
         buildSidebar();
@@ -972,19 +1150,131 @@ function handleSpecialTab(id, title) {
   }
 }
 
+/* ================= Documents vus / badges « NOUVEAU » ================= */
+function getSeen() {
+  if (!currentUser) return {};
+  try { return JSON.parse(localStorage.getItem('cc_seen_' + currentUser.username) || 'null') || null; }
+  catch(e) { return null; }
+}
+function saveSeen(s) {
+  if (currentUser) localStorage.setItem('cc_seen_' + currentUser.username, JSON.stringify(s));
+}
+function ensureSeenInit() {
+  if (currentUser && getSeen() === null) saveSeen({ _init: Date.now() });
+}
+function markSeen(keys) {
+  if (!currentUser) return;
+  const s = getSeen() || { _init: 0 };
+  keys.forEach(k => s[k] = Date.now());
+  saveSeen(s);
+}
+function isNewFile(f) {
+  const s = getSeen();
+  if (!s || !f.ts) return false;
+  return f.ts > (s[f.path] || s._init || Infinity);
+}
+function unseenCount(folderId) {
+  if (!window.allFiles) return 0;
+  const folders = [folderId].concat(LEGACY_FOLDERS[folderId] || []);
+  let n = 0;
+  window.allFiles.forEach(f => {
+    if (folderId === 'licence' ? f.path === 'licence__' : folders.some(fd => String(f.path||'').indexOf(fd + '_') === 0)) {
+      if (isNewFile(f)) n++;
+    }
+  });
+  return n;
+}
+
+/* ================= Recherche interne ================= */
+const normTxt = s => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function searchFiles() {
+  const box = document.getElementById('searchBox');
+  const res = document.getElementById('searchResults');
+  const q = normTxt(box.value.trim());
+  if (q.length < 2 || !window.allFiles) { res.style.display = 'none'; return; }
+  const hits = window.allFiles.filter(f => normTxt(f.name).includes(q)).slice(0, 15);
+  res.innerHTML = '';
+  if (!hits.length) {
+    res.innerHTML = `<div class="sr-item"><span>${I18N.srchNone[lang]}</span></div>`;
+  } else {
+    hits.forEach(f => {
+      const loc = parsePath(f.path);
+      const item = document.createElement('div');
+      item.className = 'sr-item';
+      const where = loc ? `${folderLabel(loc.folder)}${loc.sub ? ' › ' + trNav(loc.sub) : ''}${loc.leaf ? ' › ' + trNav(loc.leaf) : ''}` : '';
+      item.innerHTML = `📕 <b></b><small></small>`;
+      item.querySelector('b').textContent = f.name;
+      item.querySelector('small').textContent = where;
+      item.onmousedown = (e) => { e.preventDefault(); goToFile(f); };
+      res.appendChild(item);
+    });
+  }
+  res.style.display = 'block';
+}
+function hideSearch() { document.getElementById('searchResults').style.display = 'none'; }
+function goToFile(f) {
+  hideSearch();
+  document.getElementById('searchBox').value = '';
+  const loc = parsePath(f.path);
+  if (!loc) return;
+  selectCategory(loc.folder, loc.sub, loc.leaf);
+  setTimeout(() => previewPdf(f.id, f.name), 400);
+}
+
+/* ================= Aperçu PDF côte à côte ================= */
+function previewPdf(id, name) {
+  db.collection('files').doc(id).get().then(doc => {
+    if (!doc.exists) return;
+    const data = doc.data();
+    try {
+      const parts = String(data.content).split(',');
+      const bin = atob(parts[1]);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([arr], { type: 'application/pdf' }));
+      if (window._prevUrl) { try { URL.revokeObjectURL(window._prevUrl); } catch(e) {} }
+      window._prevUrl = url;
+      document.getElementById('previewFrame').src = url;
+    } catch(e) {
+      document.getElementById('previewFrame').src = data.content;
+    }
+    document.getElementById('previewTitle').textContent = name;
+    document.getElementById('previewPane').classList.add('show');
+    document.getElementById('splitWrap').classList.add('split');
+    document.querySelector('.files-wrap').classList.add('wide');
+    document.querySelectorAll('#fileList .file-row').forEach(r => r.classList.toggle('sel-row', r.dataset.id === id));
+    // Compteur de consultations
+    db.collection('files').doc(id).update({ views: firebase.firestore.FieldValue.increment(1) }).catch(() => {});
+  });
+}
+function closePreview() {
+  const p = document.getElementById('previewPane');
+  if (!p) return;
+  p.classList.remove('show');
+  const sw = document.getElementById('splitWrap'); if (sw) sw.classList.remove('split');
+  const fw = document.querySelector('.files-wrap'); if (fw) fw.classList.remove('wide');
+  const fr = document.getElementById('previewFrame');
+  if (fr) fr.removeAttribute('src');
+  if (window._prevUrl) { try { URL.revokeObjectURL(window._prevUrl); } catch(e) {} window._prevUrl = null; }
+  document.querySelectorAll('#fileList .file-row').forEach(r => r.classList.remove('sel-row'));
+}
+
 /* ================= Stockage et Téléchargement via Firestore Base64 ================= */
+window._curDocs = [];
+
 function loadFiles() {
   if(currentView !== 'files') return;
-  
+  closePreview();
+
   const titleEl = document.getElementById('filesTitle');
   const fContainer = document.getElementById('fileList');
   fContainer.innerHTML = '';
-  
-  const pathKey = `${activeFolder}_${activeSub}_${activeLeaf}`;
+
+  const keys = pathKeysFor(activeFolder, activeSub, activeLeaf);
   document.getElementById('bannerTitle').innerText = trNav(activeSub || 'Licence');
   document.getElementById('bannerSub').innerText = trNav(activeLeaf || "Documents d'études");
   titleEl.innerText = trNav(activeLeaf || 'Fichiers disponibles');
-  
+
   /* Formule adaptée à la matière */
   try {
     const bf = document.getElementById('bannerFormula');
@@ -996,56 +1286,136 @@ function loadFiles() {
       katex.render("f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n", bf, { throwOnError:false });
     }
   } catch(e) {}
-  
-  db.collection('files').where('path', '==', pathKey).get().then(snap => {
-    if(snap.empty) {
+
+  db.collection('files').where('path', 'in', keys).get().then(snap => {
+    const docs = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
+
+    // Repérer les nouveautés AVANT de marquer la section comme vue
+    const newIds = {};
+    docs.forEach(f => { if (isNewFile(f)) newIds[f.id] = true; });
+    markSeen(keys);
+    buildSidebar();
+
+    /* --- Anti-doublons : un seul exemplaire affiché par nom de fichier --- */
+    const groups = {};
+    docs.forEach(f => { (groups[f.name] = groups[f.name] || []).push(f); });
+    const kept = [], dupes = [];
+    Object.values(groups).forEach(g => {
+      g.sort((a, b) => (b.downloads||0) - (a.downloads||0));
+      kept.push(g[0]);
+      g.slice(1).forEach(x => dupes.push(x.id));
+    });
+
+    /* --- Tri : ordre manuel d'abord, puis alphabétique --- */
+    kept.sort((a, b) => (((a.order != null ? a.order : 1e9)) - ((b.order != null ? b.order : 1e9))) || String(a.name||'').localeCompare(String(b.name||'')));
+    window._curDocs = kept;
+
+    if (!kept.length) {
       fContainer.innerHTML = `<div class="empty"><div class="big">📂</div><p>${I18N.emptyDocs[lang]}</p></div>`;
       return;
     }
-    
-    const docsTries = snap.docs.slice().sort((a, b) => String(a.data().name||'').localeCompare(String(b.data().name||'')));
-    docsTries.forEach(doc => {
-      const f = doc.data();
+
+    /* --- Bouton de nettoyage des doublons (admin) --- */
+    if (dupes.length && currentUser.role === 'admin') {
+      const clean = document.createElement('button');
+      clean.className = 'btn-add';
+      clean.style.cssText = 'background:#dc2626;margin-bottom:12px';
+      clean.textContent = `${I18N.dupClean[lang]} (${dupes.length})`;
+      clean.onclick = () => {
+        if (!confirm(dupes.length + ' doublon(s) trouvé(s) dans la base. Les supprimer définitivement ?')) return;
+        const batch = db.batch();
+        dupes.forEach(id => batch.delete(db.collection('files').doc(id)));
+        batch.commit().then(() => { showToast('Doublons supprimés'); loadFiles(); });
+      };
+      fContainer.appendChild(clean);
+    }
+
+    kept.forEach((f, idx) => {
       const row = document.createElement('div');
       row.className = 'file-row';
-      row.innerHTML = `
-        <div class="file-ico">📕</div>
-        <div class="file-info">
-          <h4>${f.name}</h4>
-          <small>${I18N.added[lang]} ${f.date || ''} (${f.size})</small>
-        </div>
-        <div class="dl-count">⬇ ${f.downloads || 0}</div>
-        <button class="btn-dl" onclick="downloadPdf('${doc.id}', '${f.name}')">${I18N.btnDl[lang]}</button>
-        ${currentUser.role === 'admin' ? `<button class="btn-x" onclick="deletePdf('${doc.id}')">✕</button>` : ''}
-      `;
+      row.dataset.id = f.id;
+
+      const ico = document.createElement('div'); ico.className = 'file-ico'; ico.textContent = '📕';
+      const info = document.createElement('div'); info.className = 'file-info';
+      const h4 = document.createElement('h4'); h4.textContent = f.name;
+      if (newIds[f.id]) { const tag = document.createElement('span'); tag.className = 'new-tag'; tag.textContent = I18N.newTag[lang]; h4.appendChild(tag); }
+      const small = document.createElement('small');
+      small.textContent = `${I18N.added[lang]} ${f.date || ''} (${f.size || ''})`;
+      info.appendChild(h4); info.appendChild(small);
+
+      const dl = document.createElement('div'); dl.className = 'dl-count'; dl.textContent = `⬇ ${f.downloads || 0}`;
+
+      const btnDl = document.createElement('button');
+      btnDl.className = 'btn-dl'; btnDl.textContent = I18N.btnDl[lang];
+      btnDl.onclick = (e) => { e.stopPropagation(); downloadPdf(f.id, f.name); };
+
+      row.appendChild(ico); row.appendChild(info); row.appendChild(dl); row.appendChild(btnDl);
+
+      if (currentUser.role === 'admin') {
+        const up = document.createElement('button');
+        up.className = 'btn-mv'; up.textContent = '↑'; up.disabled = idx === 0;
+        up.onclick = (e) => { e.stopPropagation(); movePdf(idx, -1); };
+        const down = document.createElement('button');
+        down.className = 'btn-mv'; down.textContent = '↓'; down.disabled = idx === kept.length - 1;
+        down.onclick = (e) => { e.stopPropagation(); movePdf(idx, 1); };
+        const del = document.createElement('button');
+        del.className = 'btn-x'; del.textContent = '✕';
+        del.onclick = (e) => { e.stopPropagation(); deletePdf(f.id); };
+        row.appendChild(up); row.appendChild(down); row.appendChild(del);
+      }
+
+      // Cliquer sur la ligne ouvre l'aperçu à droite
+      row.onclick = () => previewPdf(f.id, f.name);
+
       fContainer.appendChild(row);
     });
-  }).catch(() => {
+  }).catch(err => {
+    console.error(err);
     fContainer.innerHTML = `<p style="padding:20px;text-align:center;color:red;">Erreur lors du chargement des documents.</p>`;
   });
+}
+
+/* --- Réordonner les PDF (admin) : monter / descendre, ordre partagé pour tous --- */
+function movePdf(idx, dir) {
+  const list = window._curDocs.slice();
+  const j = idx + dir;
+  if (j < 0 || j >= list.length) return;
+  const tmp = list[idx]; list[idx] = list[j]; list[j] = tmp;
+  const batch = db.batch();
+  list.forEach((f, k) => batch.update(db.collection('files').doc(f.id), { order: k }));
+  batch.commit().then(() => loadFiles());
 }
 
 function addPdfs(filesList) {
   if(!filesList || filesList.length === 0) return;
   const pathKey = `${activeFolder}_${activeSub}_${activeLeaf}`;
-  
+  const existingNames = (window._curDocs || []).map(f => f.name);
+  let nextOrder = (window._curDocs || []).length;
+
   Array.from(filesList).forEach(file => {
-    if(file.size > 10 * 1024 * 1024) { 
-      alert(`Le fichier ${file.name} dépasse la limite autorisée de 10 Mo.`); 
-      return; 
+    if(file.size > 10 * 1024 * 1024) {
+      alert(`Le fichier ${file.name} dépasse la limite autorisée de 10 Mo.`);
+      return;
     }
-    
+    // Empêcher les doublons (cause des fichiers affichés deux fois)
+    if (existingNames.includes(file.name)) {
+      if (!confirm(`« ${file.name} » existe déjà dans ce dossier. L'ajouter quand même ?`)) return;
+    }
+
     const reader = new FileReader();
     reader.onload = function(e) {
       const base64Data = e.target.result;
       const today = new Date().toLocaleDateString('fr-FR');
-      
+
       db.collection('files').add({
         name: file.name,
         path: pathKey,
         size: (file.size / (1024 * 1024)).toFixed(2) + " Mo",
         date: today,
         downloads: 0,
+        views: 0,
+        ts: Date.now(),
+        order: nextOrder++,
         content: base64Data
       }).then(() => {
         showToast("Fichier ajouté !");
@@ -1054,24 +1424,25 @@ function addPdfs(filesList) {
     };
     reader.readAsDataURL(file);
   });
+  document.getElementById('pdfInput').value = '';
 }
 
 function downloadPdf(id, name) {
   db.collection('files').doc(id).get().then(doc => {
     if(!doc.exists) return;
     const data = doc.data();
-    
+
     const link = document.createElement('a');
     link.href = data.content;
     link.download = name;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     // Incrémentation du compteur de téléchargements de façon atomique
     db.collection('files').doc(id).update({
       downloads: firebase.firestore.FieldValue.increment(1)
-    }).then(() => loadFiles());
+    }).catch(() => {});
   });
 }
 
@@ -1154,6 +1525,48 @@ function downloadBoard() {
   link.download = 'tableau-excellence.png';
   link.href = canvas.toDataURL();
   link.click();
+}
+
+/* --- Export du tableau blanc en PDF + classement dans un dossier (admin) --- */
+function exportBoardPDF() {
+  if (!window.jspdf) { alert('Le module PDF ne s’est pas chargé. Vérifiez votre connexion et rechargez la page.'); return; }
+  const jsPDF = window.jspdf.jsPDF;
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] });
+  // Fond blanc puis dessin
+  pdf.setFillColor(255, 255, 255);
+  pdf.rect(0, 0, canvas.width, canvas.height, 'F');
+  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, canvas.width, canvas.height);
+
+  const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
+  const fname = 'Tableau-' + dateStr + '.pdf';
+  pdf.save(fname);
+
+  // L'admin peut classer directement le PDF dans un dossier pour ses étudiants
+  if (currentUser && currentUser.role === 'admin' && confirm('Publier aussi ce PDF pour vos étudiants ?')) {
+    const choix = prompt(
+      'Classer dans quel dossier ? Tapez un numéro :\n' +
+      '1 = Classe P-T · Analyse · Cours\n2 = Classe P-T · Algèbre · Cours\n' +
+      '3 = Classe SP-ST · Analyse · Cours\n4 = Classe SP-ST · Algèbre · Cours\n' +
+      '5 = Classe M · Analyse · Cours\n6 = Classe M · Algèbre · Cours\n' +
+      '7 = Classe SM · Analyse · Cours\n8 = Classe SM · Algèbre · Cours', '1');
+    const map = {
+      '1': ['p_classe_pt','ANALYSE'],  '2': ['p_classe_pt','ALGÈBRE'],
+      '3': ['d_classe_spst','ANALYSE'],'4': ['d_classe_spst','ALGÈBRE'],
+      '5': ['p_classe_m','ANALYSE'],   '6': ['p_classe_m','ALGÈBRE'],
+      '7': ['d_classe_sm','ANALYSE'],  '8': ['d_classe_sm','ALGÈBRE']
+    };
+    if (!map[choix]) return;
+    const dataUri = pdf.output('datauristring');
+    if (dataUri.length > 9.5 * 1024 * 1024) { alert('Tableau trop volumineux pour être publié (limite ~10 Mo).'); return; }
+    db.collection('files').add({
+      name: fname,
+      path: map[choix][0] + '_' + map[choix][1] + '_Cours',
+      size: (dataUri.length / 1048576).toFixed(2) + ' Mo',
+      date: new Date().toLocaleDateString('fr-FR'),
+      downloads: 0, views: 0, ts: Date.now(), order: 1e6,
+      content: dataUri
+    }).then(() => showToast('PDF du tableau publié dans « Cours » !'));
+  }
 }
 
 /* ================= Gestion de la Vidéoconférence (Visio) ================= */
