@@ -122,7 +122,7 @@
 
   aside.nav {
     width:270px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:14px 0 30px;
-    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:hidden;
   }
   .side-main-title {
     padding:12px 20px 10px; font-size:14px; font-weight:800; color:#fff; letter-spacing:.4px;
@@ -181,15 +181,16 @@
   .empty .big { font-size:48px; margin-bottom:10px; }
 
   aside.stats {
-    width:250px; flex-shrink:0; background:#fff; border-left:1px solid #e2e8f0;
-    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto;
-    padding:20px 16px; display:none;
+    width:280px !important; flex-shrink:0; background:#f9fafb !important; border-left:2px solid #e2e8f0 !important;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:scroll !important; overflow-x:auto !important;
+    padding:20px 16px; display:block !important; visibility:visible !important; opacity:1 !important;
   }
-  aside.stats.show { display:block; }
-  .stats h3 { color:var(--bleu); font-size:16px; margin-bottom:14px; }
+  aside.stats.show { display:block !important; visibility:visible !important; opacity:1 !important; }
+  .stats h3 { color:var(--bleu); font-size:16px; margin-bottom:14px; font-weight:800; padding-bottom:10px; border-bottom:2px solid #e2e8f0; }
   .stat-card {
-    background:var(--fond); border-radius:12px; padding:12px 14px; margin-bottom:10px;
-    display:flex; align-items:center; justify-content:space-between; font-size:13.5px; font-weight:600; color:var(--texte);
+    background:white; border-radius:12px; padding:12px 14px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:space-between; font-size:13.5px; font-weight:700; color:var(--texte);
+    border:1px solid #e2e8f0; box-shadow:0 2px 6px rgba(15,42,92,.08);
   }
   .stat-card b { font-size:19px; color:var(--bleu2); }
   .stats h4 { color:var(--gris); font-size:12.5px; letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px; }
@@ -278,7 +279,17 @@
   .heat-cell { flex:1; background:#1d4ed8; border-radius:2px 2px 0 0; min-height:3px; }
   .heat-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--gris); margin-top:3px; }
 
-  @media (max-width:1150px) { aside.stats { display:none !important; } }
+
+  aside.stats::-webkit-scrollbar { width:12px; height:12px; }
+  aside.stats::-webkit-scrollbar-track { background:#f0f1f3; }
+  aside.stats::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:6px; }
+  aside.stats::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+  aside.nav::-webkit-scrollbar { width:8px; }
+  aside.nav::-webkit-scrollbar-track { background:rgba(255,255,255,.05); }
+  aside.nav::-webkit-scrollbar-thumb { background:rgba(255,255,255,.3); border-radius:4px; }
+  aside.nav::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,.5); }
+
+
   @media (max-width:860px) {
     .menu-btn { display:block; }
     aside.nav { position:fixed; left:-90vw; top:0; bottom:0; z-index:40; transition:.25s; height:100vh; padding-top:70px; width:82vw; max-width:320px; }
@@ -732,15 +743,16 @@ function loginAs(userObj) {
   document.getElementById('userName').innerText = currentUser.name;
   document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
   
+  const sp = document.getElementById('statsPanel');
+  if(sp) { sp.style.display = 'block'; sp.classList.add('show'); }
+  
   if(currentUser.role === 'admin') {
     document.getElementById('adminBadge').style.display = 'inline-block';
     document.getElementById('btnAdd').style.display = 'inline-block';
-    document.getElementById('statsPanel').classList.add('show');
     document.getElementById('visioAdmin').style.display = 'block';
   } else {
     document.getElementById('adminBadge').style.display = 'none';
     document.getElementById('btnAdd').style.display = 'none';
-    document.getElementById('statsPanel').classList.remove('show');
     document.getElementById('visioAdmin').style.display = 'none';
   }
   
