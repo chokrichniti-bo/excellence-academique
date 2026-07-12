@@ -122,7 +122,7 @@
 
   aside.nav {
     width:270px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:14px 0 30px;
-    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; order:1;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:auto;
   }
   .side-main-title {
     padding:12px 20px 10px; font-size:14px; font-weight:800; color:#fff; letter-spacing:.4px;
@@ -147,7 +147,7 @@
   .side-item .fdel:hover { color:#ef4444; }
   .side-riemann { margin:18px 14px 0; opacity:.5; }
 
-  .content { flex:1; padding:0 0 40px; min-width:0; order:3; }
+  .content { flex:1; padding:0 0 40px; min-width:0; }
   .banner { position:relative; background:linear-gradient(120deg,#1d4ed8,#0ea5e9); color:#fff; overflow:hidden; }
   .banner-inner { padding:24px 30px 8px; position:relative; z-index:2; }
   .banner h2 { font-size:23px; }
@@ -181,11 +181,10 @@
   .empty .big { font-size:48px; margin-bottom:10px; }
 
   aside.stats {
-    width:280px; flex-shrink:0; background:#f8fafb; border-right:1px solid #e2e8f0;
+    width:300px; flex-shrink:0; background:#f8fafb; border-left:2px solid #e2e8f0;
     position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:auto;
-    padding:20px 16px; display:block; order:2;
+    padding:20px 16px; display:block !important;
   }
-  
   .stats h3 { color:var(--bleu); font-size:16px; margin-bottom:14px; }
   .stat-card {
     background:var(--fond); border-radius:12px; padding:12px 14px; margin-bottom:10px;
@@ -278,16 +277,15 @@
   .heat-cell { flex:1; background:#1d4ed8; border-radius:2px 2px 0 0; min-height:3px; }
   .heat-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--gris); margin-top:3px; }
 
-  
-  /* ===== Barres de défilement personnalisées ===== */
+
   aside.stats::-webkit-scrollbar { width:10px; height:10px; }
-  aside.stats::-webkit-scrollbar-track { background:#f1f5f9; }
+  aside.stats::-webkit-scrollbar-track { background:#f0f1f3; border-radius:5px; }
   aside.stats::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:5px; }
   aside.stats::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
-  aside.nav::-webkit-scrollbar { width:10px; }
-  aside.nav::-webkit-scrollbar-track { background:rgba(255,255,255,.1); }
-  aside.nav::-webkit-scrollbar-thumb { background:#3b82f6; border-radius:5px; }
-  aside.nav::-webkit-scrollbar-thumb:hover { background:#60a5fa; }
+  aside.nav::-webkit-scrollbar { width:8px; }
+  aside.nav::-webkit-scrollbar-track { background:rgba(255,255,255,.05); }
+  aside.nav::-webkit-scrollbar-thumb { background:rgba(255,255,255,.3); border-radius:4px; }
+  aside.nav::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,.5); }
 
   @media (max-width:1150px) { aside.stats { display:none !important; } }
   @media (max-width:860px) {
@@ -743,9 +741,7 @@ function loginAs(userObj) {
   document.getElementById('userName').innerText = currentUser.name;
   document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
   
-  // Afficher les statistiques pour tous
-  document.getElementById('statsPanel').classList.add('show');
-  
+  document.getElementById('statsPanel').style.display = 'block';
   if(currentUser.role === 'admin') {
     document.getElementById('adminBadge').style.display = 'inline-block';
     document.getElementById('btnAdd').style.display = 'inline-block';
