@@ -122,7 +122,7 @@
 
   aside.nav {
     width:270px; flex-shrink:0; background:#0f2a5c; color:#dbeafe; padding:14px 0 30px;
-    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:hidden;
+    position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; overflow-x:auto;
   }
   .side-main-title {
     padding:12px 20px 10px; font-size:14px; font-weight:800; color:#fff; letter-spacing:.4px;
@@ -687,7 +687,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Rendu formules mathématiques d'accueil
   katex.render("L = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x", document.getElementById('heroFormula'));
   katex.render("\\lim_{n \\to +\\infty}\\ \\sum_{p=n+1}^{2n} \\sin\\!\\left(\\frac{1}{p}\\right) = \\ln 2", document.getElementById('bannerFormula'), { throwOnError:false });
-  
+
   applyLang();
   buildSidebar();
   checkSession();
@@ -722,7 +722,7 @@ function switchTab(t) {
   document.getElementById('confirmPanel').style.display = 'none';
 }
 
-/* ================= Authentification Unique Modifiée ================= */
+/* ================= Authentification ================= */
 function checkSession() {
   const saved = localStorage.getItem('cc_user_session');
   if(saved) {
@@ -736,30 +736,29 @@ function checkSession() {
 function loginAs(userObj) {
   currentUser = userObj;
   localStorage.setItem('cc_user_session', JSON.stringify(userObj));
-  
+
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
-  
+
   document.getElementById('userName').innerText = currentUser.name;
   document.getElementById('avatar').innerText = currentUser.name.charAt(0).toUpperCase();
-  
-  const sp = document.getElementById('statsPanel');
-  if(sp) { sp.style.display = 'block'; sp.classList.add('show'); }
-  
+
   if(currentUser.role === 'admin') {
     document.getElementById('adminBadge').style.display = 'inline-block';
     document.getElementById('btnAdd').style.display = 'inline-block';
+    document.getElementById('statsPanel').classList.add('show');
     document.getElementById('visioAdmin').style.display = 'block';
   } else {
     document.getElementById('adminBadge').style.display = 'none';
     document.getElementById('btnAdd').style.display = 'none';
+    document.getElementById('statsPanel').classList.remove('show');
     document.getElementById('visioAdmin').style.display = 'none';
   }
-  
+
   // Enclenchement de la présence temps réel et écoutes Firebase
   setUserPresence(currentUser.username, true);
   startRealtimeListeners();
-  
+
   // Sélection par défaut
   selectCategory('p_classe_pt', 'ANALYSE', 'Cours');
 }
@@ -784,12 +783,12 @@ function doLogin() {
   const userOrEmail = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value.trim();
   const msg = document.getElementById('authMsg');
-  
+
   if(!userOrEmail || !pass) { showMsg(msg, "Champs requis", true); return; }
-  
+
   /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
   if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
-    if (adminHash('chokri:' + pass) === '4189603294dc5552') {
+    if (pass === 'chniti19') {  // Admin password: chniti19
       logConnection({ username:'chokri', name:'Chokri' });
       loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
     } else {
@@ -797,7 +796,7 @@ function doLogin() {
     }
     return;
   }
-  
+
   db.collection('users').where('searchKey', '==', userOrEmail).get().then(snap => {
     if(snap.empty) {
       db.collection('users').where('email', '==', userOrEmail).get().then(snap2 => {
@@ -824,16 +823,16 @@ function doSignup() {
   const user = document.getElementById('suUser').value.trim().toLowerCase().replace(/[^a-z0-9._-]/g, '');
   const email = document.getElementById('suEmail').value.trim().toLowerCase();
   const msg = document.getElementById('authMsg');
-  
+
   if(!name || !user || !email) { showMsg(msg, "Veuillez remplir tous les champs", true); return; }
-  
+
   db.collection('users').doc(user).get().then(doc => {
     if(doc.exists) { showMsg(msg, "Cet identifiant est déjà pris", true); return; }
-    
+
     // Génération automatique du mot de passe démarrant par "cc"
     const rand = Math.floor(1000 + Math.random() * 9000);
     const generatedPassword = "cc" + rand;
-    
+
     const newUser = {
       name: name,
       username: user,
@@ -843,7 +842,7 @@ function doSignup() {
       role: 'student',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    
+
     db.collection('users').doc(user).set(newUser).then(() => {
       document.getElementById('genPass').innerText = generatedPassword;
       document.getElementById('signupForm').style.display = 'none';
@@ -1000,7 +999,7 @@ function startRealtimeListeners() {
   db.collection('visio').doc('current').onSnapshot(doc => {
     const liveCard = document.getElementById('visioLive');
     const emptyCard = document.getElementById('visioEmpty');
-    
+
     if(doc.exists && doc.data().url) {
       const data = doc.data();
       document.getElementById('visioDesc').innerText = "Une séance interactive vient d'être lancée par le professeur.";
@@ -1059,7 +1058,7 @@ function startRealtimeListeners() {
 function buildSidebar() {
   const nav = document.getElementById('sidebar');
   nav.innerHTML = '';
-  
+
   STRUCTURE.forEach(item => {
     if(item.type === 'title') {
       const div = document.createElement('div');
@@ -1087,7 +1086,7 @@ function buildSidebar() {
         buildSidebar();
       };
       nav.appendChild(fDiv);
-      
+
       if(isOpen) {
         item.sub.forEach(subName => {
           const sDiv = document.createElement('div');
@@ -1102,7 +1101,7 @@ function buildSidebar() {
             loadFiles();
           };
           nav.appendChild(sDiv);
-          
+
           if(activeFolder === item.id && activeSub === subName) {
             SUB_CATEGORIES.forEach(leaf => {
               const lDiv = document.createElement('div');
@@ -1134,11 +1133,11 @@ function selectCategory(fId, sub, leaf) {
   openFolders[fId] = true;
   currentView = 'files';
   closeMobileMenu();
-  
+
   document.getElementById('filesView').style.display = 'block';
   document.getElementById('boardView').style.display = 'none';
   document.getElementById('visioView').style.display = 'none';
-  
+
   buildSidebar();
   loadFiles();
 }
@@ -1146,17 +1145,17 @@ function selectCategory(fId, sub, leaf) {
 function handleSpecialTab(id, title) {
   currentView = id === 'board_tab' ? 'board' : id === 'visio_tab' ? 'visio' : 'files';
   closeMobileMenu();
-  
+
   document.getElementById('filesView').style.display = currentView === 'files' ? 'block' : 'none';
   document.getElementById('boardView').style.display = currentView === 'board' ? 'block' : 'none';
   document.getElementById('visioView').style.display = currentView === 'visio' ? 'block' : 'none';
-  
+
   document.getElementById('bannerTitle').innerText = title;
   document.getElementById('bannerSub').innerText = trNav('Espace collaboratif en temps réel');
   try {
     katex.render("f'(x_0)=\\lim_{h \\to 0}\\frac{f(x_0+h)-f(x_0)}{h}", document.getElementById('bannerFormula'), { throwOnError:false });
   } catch(e) {}
-  
+
   if(id === 'licence') {
     selectCategory('licence', '', '');
   }
@@ -1476,13 +1475,13 @@ function setupDrawingBoard() {
   ctx = canvas.getContext('2d');
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  
+
   // Événements Souris
   canvas.addEventListener('mousedown', startDraw);
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', endDraw);
   canvas.addEventListener('mouseleave', endDraw);
-  
+
   // Événements Tactiles (Téléphones & Stylets)
   canvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); });
   canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
@@ -1504,10 +1503,10 @@ function draw(e) {
   const rect = canvas.getBoundingClientRect();
   const x = (e.clientX - rect.left) * (canvas.width / rect.width);
   const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-  
+
   ctx.lineWidth = document.getElementById('penSize').value;
   ctx.strokeStyle = isEraser ? '#ffffff' : currentPenColor;
-  
+
   ctx.lineTo(x, y);
   ctx.stroke();
 }
@@ -1580,34 +1579,3 @@ function exportBoardPDF() {
       content: dataUri
     }).then(() => showToast('PDF du tableau publié dans « Cours » !'));
   }
-}
-
-/* ================= Gestion de la Vidéoconférence (Visio) ================= */
-function saveVisio() {
-  const url = document.getElementById('visioUrl').value.trim();
-  if(!url) return;
-  db.collection('visio').doc('current').set({
-    url: url,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    showToast("Lien de cours en direct publié !");
-    document.getElementById('visioUrl').value = '';
-  });
-}
-
-function removeVisio() {
-  db.collection('visio').doc('current').delete().then(() => {
-    showToast("Séance en direct terminée.");
-  });
-}
-
-/* ================= Notifications Toasts ================= */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 3000);
-}
-</script>
-</body>
-</html>
