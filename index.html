@@ -11,11 +11,226 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f2a5c'/><text x='32' y='45' font-size='38' text-anchor='middle' fill='%23f59e0b' font-family='Georgia'>Σ</text></svg>">
 <title>L'excellence académique</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
 <style>
   :root {
     --bleu:#0f2a5c; --bleu2:#1d4ed8; --cyan:#0ea5e9; --or:#f59e0b;
@@ -305,6 +520,14 @@
     #previewPane { position:static; width:100%; }
     #previewFrame { height:62vh; }
   }
+
+  .sidebar-resizer {
+    width:6px; background:#1d4ed8; cursor:col-resize; flex-shrink:0;
+    transition:.2s; opacity:.3; user-select:none;
+  }
+  .sidebar-resizer:hover { opacity:1; background:#0ea5e9; }
+  .sidebar-resizer.dragging { opacity:1; background:#fde68a; }
+
 </style>
 </head>
 <body>
@@ -416,6 +639,7 @@
 
   <div class="layout">
     <aside class="nav" id="sidebar"></aside>
+    <div class="sidebar-resizer" id="sidebarResizer"></div>
 
     <div class="content">
       <div class="banner">
@@ -788,7 +1012,7 @@ function doLogin() {
 
   /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
   if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
-    if (pass === 'chniti19') {  // Admin password: chniti19
+    if (pass === 'chniti19') {
       logConnection({ username:'chokri', name:'Chokri' });
       loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
     } else {
@@ -1579,3 +1803,77 @@ function exportBoardPDF() {
       content: dataUri
     }).then(() => showToast('PDF du tableau publié dans « Cours » !'));
   }
+}
+
+/* ================= Gestion de la Vidéoconférence (Visio) ================= */
+function saveVisio() {
+  const url = document.getElementById('visioUrl').value.trim();
+  if(!url) return;
+  db.collection('visio').doc('current').set({
+    url: url,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    showToast("Lien de cours en direct publié !");
+    document.getElementById('visioUrl').value = '';
+  });
+}
+
+function removeVisio() {
+  db.collection('visio').doc('current').delete().then(() => {
+    showToast("Séance en direct terminée.");
+  });
+}
+
+/* ================= Notifications Toasts ================= */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+</body>
+</html>
