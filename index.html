@@ -831,21 +831,33 @@ const I18N = {
   previewT:  { fr:'👁 Aperçu', en:'👁 Preview' }
 };
 
-/* ================= Structure des Matières (Sidebar) ================= */
+/* ================= Structure des Matières (Sidebar) avec Permissions ================= */
 const STRUCTURE = [
-  { type: 'title', txt: 'Classes Préparatoires' },
-  { type: 'year', txt: 'PREMIÈRE ANNÉE' },
-  { type: 'folder', id: 'p_classe_pt', txt: 'Classe P-T', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'folder', id: 'p_classe_m', txt: 'Classe M', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'year', txt: 'DEUXIÈME ANNÉE' },
-  { type: 'folder', id: 'd_classe_spst', txt: 'Classe SP-ST', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'folder', id: 'd_classe_sm', txt: 'Classe SM', sub: ['ANALYSE', 'ALGÈBRE'] },
-  { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence' },
-  { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab' },
-  { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab' }
+  { type: 'title', txt: 'Classes Préparatoires', groups: ['prepa', 'admin'] },
+  { type: 'year', txt: 'PREMIÈRE ANNÉE', groups: ['prepa', 'admin'] },
+  { type: 'folder', id: 'p_classe_pt', txt: 'Classe P-T', sub: ['ANALYSE', 'ALGÈBRE'], groups: ['prepa', 'admin'] },
+  { type: 'folder', id: 'p_classe_m', txt: 'Classe M', sub: ['ANALYSE', 'ALGÈBRE'], groups: ['prepa', 'admin'] },
+  { type: 'year', txt: 'DEUXIÈME ANNÉE', groups: ['prepa', 'admin'] },
+  { type: 'folder', id: 'd_classe_spst', txt: 'Classe SP-ST', sub: ['ANALYSE', 'ALGÈBRE'], groups: ['prepa', 'admin'] },
+  { type: 'folder', id: 'd_classe_sm', txt: 'Classe SM', sub: ['ANALYSE', 'ALGÈBRE'], groups: ['prepa', 'admin'] },
+  { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence', groups: ['prepa', 'admin'] },
+  { type: 'folder', id: 'divers_main', txt: 'Divers cours', sub: ['ODE', 'Measure theory', 'Integration', 'Calculus', 'Numerical analysis', 'Differential equations', 'Linear Algebra'], groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab', groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab', groups: ['prepa', 'saudi', 'admin'] }
 ];
 
 const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
+const DIVERS_CATEGORIES = ['Cours', 'Exercices corrigés', 'Homework'];
+
+/* Traductions des sous-catégories saoudiennes */
+const SAUDI_TRANSLATIONS = {
+  'ODE': { en: 'ODE', fr: 'ODE' },
+  'Measure theory': { en: 'Measure theory', fr: 'Théorie de la Mesure' },
+  'Integration': { en: 'Integration', fr: 'Intégration' },
+  'Calculus': { en: 'Calculus', fr: 'Calcul' },
+  'Numerical analysis': { en: 'Numerical analysis', fr: 'Analyse Numérique' },
+  'Differential equations': { en: 'Differential equations', fr: 'Équations Différentielles' },
+};
 
 /* Dossiers fusionnés : les PDF déjà ajoutés dans les anciens dossiers (P, T, SP, ST) restent accessibles */
 const LEGACY_FOLDERS = {
@@ -857,18 +869,28 @@ function pathKeysFor(folder, sub, leaf) {
   (LEGACY_FOLDERS[folder] || []).forEach(old => keys.push(`${old}_${sub}_${leaf}`));
   return keys;
 }
-const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm'];
+const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm','divers_main'];
 function parsePath(p) {
   if (p === 'licence__') return { folder:'licence', sub:'', leaf:'' };
   for (const f of ALL_FOLDER_IDS) {
     if (p.startsWith(f + '_')) {
       const rest = p.slice(f.length + 1);
-      for (const sub of ['ANALYSE','ALGÈBRE']) {
+      for (const sub of ['ANALYSE','ALGÈBRE','GÉOMÉTRIE','ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra','Cours','Exercices corrigés','Homework']) {
         if (rest.startsWith(sub + '_')) {
           let folder = f;
           for (const merged in LEGACY_FOLDERS) { if (LEGACY_FOLDERS[merged].includes(f)) folder = merged; }
           return { folder, sub, leaf: rest.slice(sub.length + 1) };
         }
+      }
+    }
+  }
+  // ✅ Support pour divers_main (pas de underscore)
+  if (p === 'divers_main__') return { folder: 'divers_main', sub: '', leaf: '' };
+  if (p.startsWith('divers_main_')) {
+    const rest = p.slice(12);
+    for (const sub of ['ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra']) {
+      if (rest.startsWith(sub + '_')) {
+        return { folder: 'divers_main', sub, leaf: rest.slice(sub.length + 1) };
       }
     }
   }
@@ -894,7 +916,19 @@ const NAV_EN = {
   'Licence': 'Licence',
   "Documents d'études": 'Study documents',
   'Fichiers disponibles': 'Available files',
-  'Espace collaboratif en temps réel': 'Real-time collaborative space'
+  'Espace collaboratif en temps réel': 'Real-time collaborative space',
+  '🇸🇦 Étudiants Saoudiens': '🇸🇦 Saudi Students',
+  'PROGRAMME 1ÈRE ANNÉE': 'FIRST YEAR PROGRAM',
+  'PROGRAMME 2E ANNÉE': 'SECOND YEAR PROGRAM',
+  '📚 Divers cours': '📚 Various courses',
+  'ODE': 'ODE',
+  'Measure theory': 'Théorie de la Mesure',
+  'Integration': 'Intégration',
+  'Calculus': 'Calcul',
+  'Numerical analysis': 'Analyse Numérique',
+  'Differential equations': 'Équations Différentielles',
+  'Linear Algebra': 'Algèbre Linéaire',
+  'Advanced Linear Algebra': 'Algèbre Linéaire Avancée'
 };
 const trNav = s => (lang === 'en' ? (NAV_EN[s] || s) : s);
 
@@ -1057,6 +1091,11 @@ function doSignup() {
     const rand = Math.floor(1000 + Math.random() * 9000);
     const generatedPassword = "cc" + rand;
 
+    // ✅ Demander à quel groupe appartient l'étudiant
+    const groupChoice = prompt('À quel groupe appartient cet étudiant ?\n1 = Prépa (Tunisie)\n2 = Saoudiens', '1');
+    const groupMap = { '1': 'prepa', '2': 'saudi' };
+    const studentGroup = groupMap[groupChoice] || 'prepa';
+
     const newUser = {
       name: name,
       username: user,
@@ -1064,6 +1103,7 @@ function doSignup() {
       email: email,
       password: generatedPassword,
       role: 'student',
+      group: studentGroup,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -1095,6 +1135,7 @@ function fbLogin() {
         email: fu.email || '',
         password: '(facebook)',
         role: 'student',
+        group: 'prepa',
         provider: 'facebook',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
@@ -1283,7 +1324,13 @@ function buildSidebar() {
   const nav = document.getElementById('sidebar');
   nav.innerHTML = '';
 
+  // ✅ Déterminer le groupe de l'utilisateur (par défaut: prepa)
+  const userGroup = currentUser ? (currentUser.group || 'prepa') : 'prepa';
+
   STRUCTURE.forEach(item => {
+    // ✅ Vérifier les permissions: afficher seulement si le groupe est autorisé
+    if (item.groups && !item.groups.includes(userGroup)) return;
+
     if(item.type === 'title') {
       const div = document.createElement('div');
       div.className = 'side-main-title' + (item.id ? ' click' : '');
@@ -1312,7 +1359,9 @@ function buildSidebar() {
       nav.appendChild(fDiv);
 
       if(isOpen) {
-        item.sub.forEach(subName => {
+        // ✅ Utiliser les sous-catégories spécifiques du dossier s'ils existent
+        const folderSubs = item.sub || [];
+        folderSubs.forEach(subName => {
           const sDiv = document.createElement('div');
           sDiv.className = 'side-item d1' + (activeFolder === item.id && activeSub === subName ? ' active' : '');
           sDiv.innerText = trNav(subName);
@@ -1320,14 +1369,18 @@ function buildSidebar() {
             e.stopPropagation();
             activeFolder = item.id;
             activeSub = subName;
-            activeLeaf = SUB_CATEGORIES[0];
+            // ✅ Pour les dossiers saoudiens, pas de "feuilles" supplémentaires
+            activeLeaf = (item.id.includes('saudi')) ? subName : SUB_CATEGORIES[0];
             buildSidebar();
             loadFiles();
           };
           nav.appendChild(sDiv);
 
-          if(activeFolder === item.id && activeSub === subName) {
-            SUB_CATEGORIES.forEach(leaf => {
+          // ✅ Afficher les feuilles SEULEMENT pour les dossiers non-saoudiens
+          if(activeFolder === item.id && activeSub === subName && !item.id.includes('saudi')) {
+            // ✅ Utiliser DIVERS_CATEGORIES pour les dossiers "divers"
+            const leafCategories = item.id.includes('divers_main') ? DIVERS_CATEGORIES : SUB_CATEGORIES;
+            leafCategories.forEach(leaf => {
               const lDiv = document.createElement('div');
               lDiv.className = 'side-item d2' + (activeLeaf === leaf ? ' active' : '');
               lDiv.innerText = "📄 " + trNav(leaf);
@@ -1361,6 +1414,17 @@ function selectCategory(fId, sub, leaf) {
   document.getElementById('filesView').style.display = 'block';
   document.getElementById('boardView').style.display = 'none';
   document.getElementById('visioView').style.display = 'none';
+
+  // ✅ SYNC: Synchroniser l'affichage du bouton "Ajouter des PDF" avec la catégorie sélectionnée
+  const btnAdd = document.getElementById('btnAdd');
+  if (currentUser && currentUser.role === 'admin') {
+    btnAdd.style.display = 'inline-block';
+  } else {
+    btnAdd.style.display = 'none';
+  }
+
+  // ✅ SYNC: Fermer l'aperçu précédent avant de charger la nouvelle catégorie
+  closePreview();
 
   buildSidebar();
   loadFiles();
@@ -1501,6 +1565,12 @@ function loadFiles() {
   if(currentView !== 'files') return;
   closePreview();
 
+  // ✅ SYNC: S'assurer que le bouton "Ajouter PDF" est visible si admin
+  const btnAdd = document.getElementById('btnAdd');
+  if (currentUser && currentUser.role === 'admin') {
+    btnAdd.style.display = 'inline-block';
+  }
+
   const titleEl = document.getElementById('filesTitle');
   const fContainer = document.getElementById('fileList');
   fContainer.innerHTML = '';
@@ -1510,16 +1580,22 @@ function loadFiles() {
   document.getElementById('bannerSub').innerText = trNav(activeLeaf || "Documents d'études");
   titleEl.innerText = trNav(activeLeaf || 'Fichiers disponibles');
 
-  /* Formule adaptée à la matière */
+  /* ✅ Formule adaptée à chaque cours */
   try {
     const bf = document.getElementById('bannerFormula');
-    if (activeSub === 'ANALYSE') {
-      katex.render("\\lim_{n \\to +\\infty}\\ \\sum_{p=n+1}^{2n} \\sin\\!\\left(\\frac{1}{p}\\right) = \\ln 2", bf, { throwOnError:false });
-    } else if (activeSub === 'ALGÈBRE') {
-      katex.render("\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})", bf, { throwOnError:false });
-    } else {
-      katex.render("f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n", bf, { throwOnError:false });
-    }
+    const formulaMap = {
+      'ANALYSE': "\\lim_{n \\to +\\infty}\\ \\sum_{p=n+1}^{2n} \\sin\\!\\left(\\frac{1}{p}\\right) = \\ln 2",
+      'ALGÈBRE': "\\det(AB)=\\det(A)\\,\\det(B),\\quad A,B\\in\\mathcal{M}_n(\\mathbb{K})",
+      'ODE': "y' + p(x)y = q(x)",
+      'Measure theory': "\\int_A f \\, d\\mu",
+      'Integration': "\\int_a^b f(x)\\,dx = F(b) - F(a)",
+      'Calculus': "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}",
+      'Numerical analysis': "x_{n+1} = x_n - \\frac{f(x_n)}{f'(x_n)}",
+      'Differential equations': "\\frac{dy}{dx} + P(x)y = Q(x)",
+      'Linear Algebra': "A\\mathbf{x} = \\mathbf{b}"
+    };
+    const formula = formulaMap[activeSub] || "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n";
+    katex.render(formula, bf, { throwOnError:false });
   } catch(e) {}
 
   Promise.all(keys.map(k => db.collection('files').where('path', '==', k).get())).then(snaps => {
