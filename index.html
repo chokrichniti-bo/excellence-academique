@@ -269,7 +269,20 @@
   .auth-hero h1 { font-size:26px; letter-spacing:.5px; }
   .auth-hero .sub-brand { color:var(--or); font-size:13px; font-weight:700; letter-spacing:2px; margin-top:2px; text-transform:uppercase; }
   .auth-hero p { color:#bfdbfe; font-size:13.5px; margin-top:6px; }
-  .auth-hero .formula { color:#fde68a; font-size:15px; margin-top:10px; min-height:24px; }
+  .cat-marquee {
+    overflow:hidden; width:100%; margin-top:12px;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .cat-track { display:flex; gap:10px; width:max-content; animation:catScroll 16s linear infinite; }
+  .cat-marquee:hover .cat-track { animation-play-state:paused; }
+  .cat-badge {
+    flex:0 0 auto; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28);
+    color:#fde68a; font-size:12px; font-weight:700; padding:6px 14px; border-radius:999px;
+    white-space:nowrap; letter-spacing:.3px;
+  }
+  @keyframes catScroll { from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .auth-hero .formula { color:#fde68a; font-size:15px; margin-top:10px; min-height:44px; line-height:1.4; display:flex; align-items:center; justify-content:center; }
   .auth-hero .formula .katex { color:#fde68a; }
   .auth-hero svg { display:block; width:100%; margin-top:10px; }
   .lang-btn {
@@ -412,6 +425,15 @@
   .top-item { font-size:12.5px; padding:7px 4px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; gap:8px; }
   .top-item span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .top-item .tn { color:var(--bleu2); font-weight:800; white-space:nowrap; }
+  #stUsersDetails { margin:16px 0 8px; }
+  #stUsersDetails summary {
+    color:var(--gris); font-size:12.5px; letter-spacing:1px; text-transform:uppercase; font-weight:700;
+    cursor:pointer; padding:8px 4px; list-style:none; display:flex; align-items:center; justify-content:space-between;
+  }
+  #stUsersDetails summary::-webkit-details-marker { display:none; }
+  #stUsersDetails summary::after { content:'▾'; font-size:14px; transition:transform .2s; }
+  #stUsersDetails[open] summary::after { transform:rotate(180deg); }
+  #stUsersDetails > div { max-height:260px; overflow-y:auto; }
 
   #boardView { display:none; }
   .board-tools {
@@ -569,6 +591,24 @@
       <h1>L'excellence académique</h1>
       <div class="sub-brand">C.C</div>
       <p data-i18n="tagline">Cours · Séries corrigées · TD · Devoirs corrigés</p>
+      <div class="cat-marquee">
+        <div class="cat-track">
+          <span class="cat-badge">🎓 Baccalauréat</span>
+          <span class="cat-badge">📘 Prépa</span>
+          <span class="cat-badge">🎓 Licence</span>
+          <span class="cat-badge">📐 Analyse</span>
+          <span class="cat-badge">🧮 Algèbre</span>
+          <span class="cat-badge">✍️ Tableau blanc</span>
+          <span class="cat-badge">🎥 Séance live</span>
+          <span class="cat-badge" aria-hidden="true">🎓 Baccalauréat</span>
+          <span class="cat-badge" aria-hidden="true">📘 Prépa</span>
+          <span class="cat-badge" aria-hidden="true">🎓 Licence</span>
+          <span class="cat-badge" aria-hidden="true">📐 Analyse</span>
+          <span class="cat-badge" aria-hidden="true">🧮 Algèbre</span>
+          <span class="cat-badge" aria-hidden="true">✍️ Tableau blanc</span>
+          <span class="cat-badge" aria-hidden="true">🎥 Séance live</span>
+        </div>
+      </div>
       <div class="formula" id="heroFormula"></div>
       <svg viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
         <g fill="#60a5fa" opacity=".8" stroke="#0f2a5c" stroke-width=".5">
@@ -592,11 +632,6 @@
         <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
         <div class="field"><label data-i18n="lblPass">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
         <button class="btn-main" onclick="doLogin()" data-i18n="btnLogin">Se connecter</button>
-        <div class="sep" data-i18n="orSep">ou</div>
-        <button class="btn-fb" onclick="fbLogin()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.025 1.792-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.971H15.83c-1.491 0-1.956.93-1.956 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-          <span data-i18n="btnFb">Continuer avec Facebook</span>
-        </button>
       </div>
       <div id="signupForm" style="display:none">
         <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
@@ -734,8 +769,10 @@
       <div class="stat-card"><span data-i18n="statOnline">🟢 En ligne</span><b id="stOnline">1</b></div>
       <div class="stat-card"><span data-i18n="statFiles">📄 Fichiers</span><b id="stFiles">0</b></div>
       <div class="stat-card"><span data-i18n="statDl">⬇ Téléchargements</span><b id="stDl">0</b></div>
-      <h4>👥 Liste des inscrits</h4>
-      <div id="stUsers"></div>
+      <details id="stUsersDetails">
+        <summary>👥 Liste des inscrits (<span id="stUsersCount">0</span>)</summary>
+        <div id="stUsers"></div>
+      </details>
       <h4>🏆 Top téléchargements</h4>
       <div id="stTop"></div>
       <h4 data-i18n="statViews">👁 Les plus consultés</h4>
@@ -842,12 +879,15 @@ const STRUCTURE = [
   { type: 'folder', id: 'd_classe_sm', txt: 'Classe SM', sub: ['ANALYSE', 'ALGÈBRE'], groups: ['prepa', 'admin'] },
   { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence', groups: ['prepa', 'admin'] },
   { type: 'folder', id: 'divers_main', txt: 'Divers cours', sub: ['ODE', 'Measure theory', 'Integration', 'Calculus', 'Numerical analysis', 'Differential equations', 'Linear Algebra'], groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'title', txt: '🎓 Baccalauréat', groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'folder', id: 'bac_main', txt: 'Baccalauréat', sub: ['Bac Économie et Gestion', "Bac Sciences de l'Informatique", 'Bac Sciences Techniques', 'Bac Sciences Expérimentales', 'Bac Mathématiques'], groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab', groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab', groups: ['prepa', 'saudi', 'admin'] }
 ];
 
 const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
 const DIVERS_CATEGORIES = ['Cours', 'Exercices corrigés', 'Homework'];
+const BAC_CATEGORIES = ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'];
 
 /* Traductions des sous-catégories saoudiennes */
 const SAUDI_TRANSLATIONS = {
@@ -857,6 +897,7 @@ const SAUDI_TRANSLATIONS = {
   'Calculus': { en: 'Calculus', fr: 'Calcul' },
   'Numerical analysis': { en: 'Numerical analysis', fr: 'Analyse Numérique' },
   'Differential equations': { en: 'Differential equations', fr: 'Équations Différentielles' },
+  'Linear Algebra': { en: 'Linear Algebra', fr: 'Algèbre Linéaire' },
 };
 
 /* Dossiers fusionnés : les PDF déjà ajoutés dans les anciens dossiers (P, T, SP, ST) restent accessibles */
@@ -869,13 +910,13 @@ function pathKeysFor(folder, sub, leaf) {
   (LEGACY_FOLDERS[folder] || []).forEach(old => keys.push(`${old}_${sub}_${leaf}`));
   return keys;
 }
-const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm','divers_main'];
+const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm','divers_main','bac_main'];
 function parsePath(p) {
   if (p === 'licence__') return { folder:'licence', sub:'', leaf:'' };
   for (const f of ALL_FOLDER_IDS) {
     if (p.startsWith(f + '_')) {
       const rest = p.slice(f.length + 1);
-      for (const sub of ['ANALYSE','ALGÈBRE','GÉOMÉTRIE','ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra','Cours','Exercices corrigés','Homework']) {
+      for (const sub of ['ANALYSE','ALGÈBRE','GÉOMÉTRIE','ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra','Cours','Exercices corrigés','Homework','Bac Économie et Gestion',"Bac Sciences de l'Informatique",'Bac Sciences Techniques','Bac Sciences Expérimentales','Bac Mathématiques']) {
         if (rest.startsWith(sub + '_')) {
           let folder = f;
           for (const merged in LEGACY_FOLDERS) { if (LEGACY_FOLDERS[merged].includes(f)) folder = merged; }
@@ -920,17 +961,12 @@ const NAV_EN = {
   '🇸🇦 Étudiants Saoudiens': '🇸🇦 Saudi Students',
   'PROGRAMME 1ÈRE ANNÉE': 'FIRST YEAR PROGRAM',
   'PROGRAMME 2E ANNÉE': 'SECOND YEAR PROGRAM',
-  '📚 Divers cours': '📚 Various courses',
-  'ODE': 'ODE',
-  'Measure theory': 'Théorie de la Mesure',
-  'Integration': 'Intégration',
-  'Calculus': 'Calcul',
-  'Numerical analysis': 'Analyse Numérique',
-  'Differential equations': 'Équations Différentielles',
-  'Linear Algebra': 'Algèbre Linéaire',
-  'Advanced Linear Algebra': 'Algèbre Linéaire Avancée'
+  '📚 Divers cours': '📚 Various courses'
 };
-const trNav = s => (lang === 'en' ? (NAV_EN[s] || s) : s);
+const trNav = s => {
+  if (SAUDI_TRANSLATIONS[s]) return SAUDI_TRANSLATIONS[s][lang] || SAUDI_TRANSLATIONS[s].fr;
+  return lang === 'en' ? (NAV_EN[s] || s) : s;
+};
 
 /* ================= Variables Globales d'État ================= */
 let currentUser = null;
@@ -939,11 +975,12 @@ let activeSub = null;
 let activeLeaf = null;
 let currentView = 'files'; // 'files', 'board', 'visio'
 let openFolders = {};
+let openSubs = {};
 
 /* ================= Initialisation au Chargement ================= */
 window.addEventListener('DOMContentLoaded', () => {
   // Rendu formules mathématiques d'accueil
-  katex.render("L = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x", document.getElementById('heroFormula'));
+  katex.render("n! \\sim (2\\pi n)^{1/2}\\left(\\frac{n}{e}\\right)^{n}", document.getElementById('heroFormula'));
   katex.render("\\lim_{n \\to +\\infty}\\ \\sum_{p=n+1}^{2n} \\sin\\!\\left(\\frac{1}{p}\\right) = \\ln 2", document.getElementById('bannerFormula'), { throwOnError:false });
 
   applyLang();
@@ -1188,6 +1225,8 @@ function startRealtimeListeners() {
   db.collection('users').onSnapshot(snap => {
     document.getElementById('totalUsers').innerText = snap.size;
     document.getElementById('stReg').innerText = snap.size;
+    const cnt = document.getElementById('stUsersCount');
+    if (cnt) cnt.innerText = snap.size;
     const ul = document.getElementById('stUsers');
     if (ul) {
       ul.innerHTML = '';
@@ -1202,6 +1241,11 @@ function startRealtimeListeners() {
       });
       if (!snap.size) ul.innerHTML = '<div class="top-item"><span>—</span></div>';
     }
+  }, err => {
+    // ✅ Si les règles Firestore bloquent la lecture (permission-denied), on le voit ici au lieu d'un "0" silencieux
+    console.error('Lecture de la collection "users" impossible :', err);
+    document.getElementById('totalUsers').innerText = '?';
+    document.getElementById('stReg').innerText = '?';
   });
 
   // 2. Présence en direct (seuls les signaux de moins de 3 minutes comptent)
@@ -1362,30 +1406,36 @@ function buildSidebar() {
         // ✅ Utiliser les sous-catégories spécifiques du dossier s'ils existent
         const folderSubs = item.sub || [];
         folderSubs.forEach(subName => {
+          const subKey = item.id + '|' + subName;
           const sDiv = document.createElement('div');
           sDiv.className = 'side-item d1' + (activeFolder === item.id && activeSub === subName ? ' active' : '');
           sDiv.innerText = trNav(subName);
           sDiv.onclick = (e) => {
             e.stopPropagation();
+            // ✅ Un deuxième clic sur la même sous-catégorie referme sa liste
+            const wasOpen = openSubs[subKey];
+            openSubs[subKey] = !wasOpen;
             activeFolder = item.id;
             activeSub = subName;
             // ✅ Pour les dossiers saoudiens, pas de "feuilles" supplémentaires
-            activeLeaf = (item.id.includes('saudi')) ? subName : SUB_CATEGORIES[0];
+            activeLeaf = (item.id.includes('saudi')) ? subName : (item.id.includes('bac_main') ? BAC_CATEGORIES[0] : SUB_CATEGORIES[0]);
             buildSidebar();
             loadFiles();
           };
           nav.appendChild(sDiv);
 
-          // ✅ Afficher les feuilles SEULEMENT pour les dossiers non-saoudiens
-          if(activeFolder === item.id && activeSub === subName && !item.id.includes('saudi')) {
-            // ✅ Utiliser DIVERS_CATEGORIES pour les dossiers "divers"
-            const leafCategories = item.id.includes('divers_main') ? DIVERS_CATEGORIES : SUB_CATEGORIES;
+          // ✅ Afficher les feuilles SEULEMENT si cette sous-catégorie est ouverte, et pour les dossiers non-saoudiens
+          if(openSubs[subKey] && !item.id.includes('saudi')) {
+            // ✅ Utiliser DIVERS_CATEGORIES pour les dossiers "divers", BAC_CATEGORIES pour le dossier "Bac"
+            const leafCategories = item.id.includes('divers_main') ? DIVERS_CATEGORIES : (item.id.includes('bac_main') ? BAC_CATEGORIES : SUB_CATEGORIES);
             leafCategories.forEach(leaf => {
               const lDiv = document.createElement('div');
-              lDiv.className = 'side-item d2' + (activeLeaf === leaf ? ' active' : '');
+              lDiv.className = 'side-item d2' + (activeFolder === item.id && activeSub === subName && activeLeaf === leaf ? ' active' : '');
               lDiv.innerText = "📄 " + trNav(leaf);
               lDiv.onclick = (e) => {
                 e.stopPropagation();
+                activeFolder = item.id;
+                activeSub = subName;
                 activeLeaf = leaf;
                 buildSidebar();
                 loadFiles();
@@ -1408,6 +1458,7 @@ function selectCategory(fId, sub, leaf) {
   activeSub = sub;
   activeLeaf = leaf;
   openFolders[fId] = true;
+  if (sub) openSubs[fId + '|' + sub] = true;
   currentView = 'files';
   closeMobileMenu();
 
@@ -1592,7 +1643,12 @@ function loadFiles() {
       'Calculus': "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}",
       'Numerical analysis': "x_{n+1} = x_n - \\frac{f(x_n)}{f'(x_n)}",
       'Differential equations': "\\frac{dy}{dx} + P(x)y = Q(x)",
-      'Linear Algebra': "A\\mathbf{x} = \\mathbf{b}"
+      'Linear Algebra': "A\\mathbf{x} = \\mathbf{b}",
+      'Bac Économie et Gestion': "C_n = C_0(1+t)^n",
+      "Bac Sciences de l'Informatique": "\\mathcal{O}(n \\log n)",
+      'Bac Sciences Techniques': "\\vec{F} = m\\,\\vec{a}",
+      'Bac Sciences Expérimentales': "v = v_0 + a\\,t",
+      'Bac Mathématiques': "e^{i\\theta} = \\cos\\theta + i\\sin\\theta"
     };
     const formula = formulaMap[activeSub] || "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n";
     katex.render(formula, bf, { throwOnError:false });
