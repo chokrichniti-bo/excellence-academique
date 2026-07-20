@@ -11,11 +11,226 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f2a5c'/><text x='32' y='45' font-size='38' text-anchor='middle' fill='%23f59e0b' font-family='Georgia'>Σ</text></svg>">
 <title>L'excellence académique</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
+  (function() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false;
+
+    // Charger la largeur sauvegardée
+    const savedWidth = localStorage.getItem('sidebar_width');
+    if (savedWidth && resizer && sidebar) {
+      sidebar.style.width = parseInt(savedWidth) + 'px';
+    }
+
+    if (resizer) {
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !sidebar) return;
+      const rect = sidebar.getBoundingClientRect();
+      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
+      sidebar.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        if (resizer) resizer.classList.remove('dragging');
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+        if (sidebar) {
+          const w = sidebar.offsetWidth;
+          localStorage.setItem('sidebar_width', w);
+        }
+      }
+    });
+  })();
+
+</script>
 <style>
   :root {
     --bleu:#0f2a5c; --bleu2:#1d4ed8; --cyan:#0ea5e9; --or:#f59e0b;
@@ -414,7 +629,7 @@
     </div>
     <div class="auth-body">
       <div id="loginForm">
-        <div class="field"><label data-i18n="lblUser">Adresse e-mail</label><input type="email" id="loginUser" placeholder="exemple@gmail.com" autocomplete="username"></div>
+        <div class="field"><label data-i18n="lblUser">Identifiant ou e-mail</label><input type="text" id="loginUser" placeholder="Votre identifiant ou e-mail" autocomplete="username"></div>
         <div class="field"><label data-i18n="lblPass">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
         <button class="btn-main" onclick="doLogin()" data-i18n="btnLogin">Se connecter</button>
       </div>
@@ -446,7 +661,7 @@
     </div>
     <div class="presence">
       <span><span class="dot">●</span> <span id="onlineNow">1</span> <span data-i18n="onlineTxt">en ligne maintenant</span></span>
-      <small id="regTotalWrap">👥 <span id="totalUsers">0</span> <span data-i18n="regTxt">étudiant(s) inscrit(s)</span></small>
+      <small>👥 <span id="totalUsers">0</span> <span data-i18n="regTxt">étudiant(s) inscrit(s)</span></small>
     </div>
     <button class="btn-lang2" id="langBtn" onclick="toggleLang()">EN</button>
     <div class="user-chip">
@@ -583,7 +798,7 @@
    CONFIGURATION FIREBASE — insérée (projet : excellence-academique-69a1d)
    ============================================================ */
 const firebaseConfig = {
-  apiKey: "AIzaSyDMaPq0rwE3uM7W9tebui76hqt-W-s2dyY",
+  apiKey: "AIzaSyDMmPq0rwE3uM7W9lebui76hqt-W-s2dyY",
   authDomain: "excellence-academique-69a1d.firebaseapp.com",
   projectId: "excellence-academique-69a1d",
   storageBucket: "excellence-academique-69a1d.firebasestorage.app",
@@ -602,7 +817,7 @@ const I18N = {
   tagline:   { fr:'Cours · Séries corrigées · TD · Devoirs corrigés', en:'Lectures · Solved exercises · Tutorials · Graded homework' },
   tabLogin:  { fr:'Connexion', en:'Sign in' },
   tabSignup: { fr:'Créer un compte', en:'Create account' },
-  lblUser:   { fr:'Adresse e-mail', en:'Email address' },
+  lblUser:   { fr:'Identifiant ou e-mail', en:'Username or email' },
   lblPass:   { fr:'Mot de passe', en:'Password' },
   btnLogin:  { fr:'Se connecter', en:'Sign in' },
   lblName:   { fr:'Nom complet', en:'Full name' },
@@ -665,11 +880,7 @@ const STRUCTURE = [
   { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence', groups: ['prepa', 'admin'] },
   { type: 'folder', id: 'divers_main', txt: 'Divers cours', sub: ['ODE', 'Measure theory', 'Integration', 'Calculus', 'Numerical analysis', 'Differential equations', 'Linear Algebra'], groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '🎓 Baccalauréat', groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_eco',  txt: 'Bac Économie et Gestion',            sub: ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'], leafless: true, groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_info', txt: "Bac Sciences de l'Informatique",     sub: ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'], leafless: true, groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_tech', txt: 'Bac Sciences Techniques',           sub: ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'], leafless: true, groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_exp',  txt: 'Bac Sciences Expérimentales',       sub: ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'], leafless: true, groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_math', txt: 'Bac Mathématiques',                 sub: ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'], leafless: true, groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'folder', id: 'bac_main', txt: 'Baccalauréat', sub: ['Bac Économie et Gestion', "Bac Sciences de l'Informatique", 'Bac Sciences Techniques', 'Bac Sciences Expérimentales', 'Bac Mathématiques'], groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab', groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab', groups: ['prepa', 'saudi', 'admin'] }
 ];
@@ -699,13 +910,13 @@ function pathKeysFor(folder, sub, leaf) {
   (LEGACY_FOLDERS[folder] || []).forEach(old => keys.push(`${old}_${sub}_${leaf}`));
   return keys;
 }
-const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm','divers_main','bac_eco','bac_info','bac_tech','bac_exp','bac_math'];
+const ALL_FOLDER_IDS = ['p_classe_pt','p_classe_p','p_classe_t','p_classe_m','d_classe_spst','d_classe_sp','d_classe_st','d_classe_sm','divers_main','bac_main'];
 function parsePath(p) {
   if (p === 'licence__') return { folder:'licence', sub:'', leaf:'' };
   for (const f of ALL_FOLDER_IDS) {
     if (p.startsWith(f + '_')) {
       const rest = p.slice(f.length + 1);
-      for (const sub of ['ANALYSE','ALGÈBRE','GÉOMÉTRIE','ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra','Cours','Exercices corrigés','Homework','Résumé de cours','Problème corrigé']) {
+      for (const sub of ['ANALYSE','ALGÈBRE','GÉOMÉTRIE','ODE','Measure theory','Integration','Calculus','Numerical analysis','Differential equations','Linear Algebra','Cours','Exercices corrigés','Homework','Bac Économie et Gestion',"Bac Sciences de l'Informatique",'Bac Sciences Techniques','Bac Sciences Expérimentales','Bac Mathématiques']) {
         if (rest.startsWith(sub + '_')) {
           let folder = f;
           for (const merged in LEGACY_FOLDERS) { if (LEGACY_FOLDERS[merged].includes(f)) folder = merged; }
@@ -774,7 +985,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   applyLang();
   buildSidebar();
-  watchAuthState();
+  checkSession();
   setupDrawingBoard();
 });
 
@@ -807,32 +1018,19 @@ function switchTab(t) {
 }
 
 /* ================= Authentification ================= */
-function watchAuthState() {
-  firebase.auth().onAuthStateChanged(fbUser => {
-    if (fbUser) {
-      db.collection('users').doc(fbUser.uid).get().then(doc => {
-        if (!doc.exists) {
-          // Compte connecté mais sans profil Firestore associé (cas anormal) : on déconnecte proprement
-          firebase.auth().signOut();
-          return;
-        }
-        const profile = doc.data();
-        loginAs(Object.assign({ uid: fbUser.uid, email: fbUser.email }, profile));
-      }).catch(() => {
-        document.getElementById('authScreen').style.display = 'flex';
-        document.getElementById('appScreen').style.display = 'none';
-      });
-    } else {
-      currentUser = null;
-      document.getElementById('authScreen').style.display = 'flex';
-      document.getElementById('appScreen').style.display = 'none';
-    }
-  });
+function checkSession() {
+  const saved = localStorage.getItem('cc_user_session');
+  if(saved) {
+    loginAs(JSON.parse(saved));
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+  }
 }
 
 function loginAs(userObj) {
   currentUser = userObj;
-  if (window._freshLogin) { logConnection(userObj); window._freshLogin = false; }
+  localStorage.setItem('cc_user_session', JSON.stringify(userObj));
 
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
@@ -845,19 +1043,15 @@ function loginAs(userObj) {
     document.getElementById('btnAdd').style.display = 'inline-block';
     document.getElementById('statsPanel').classList.add('show');
     document.getElementById('visioAdmin').style.display = 'block';
-    document.getElementById('regTotalWrap').style.display = '';
   } else {
     document.getElementById('adminBadge').style.display = 'none';
     document.getElementById('btnAdd').style.display = 'none';
     document.getElementById('statsPanel').classList.remove('show');
     document.getElementById('visioAdmin').style.display = 'none';
-    // ✅ Le nombre total d'inscrits (avec noms/emails) n'est visible que par l'admin,
-    // pour protéger les données personnelles des autres étudiants.
-    document.getElementById('regTotalWrap').style.display = 'none';
   }
 
   // Enclenchement de la présence temps réel et écoutes Firebase
-  setUserPresence(currentUser.uid, true);
+  setUserPresence(currentUser.username, true);
   startRealtimeListeners();
 
   // Sélection par défaut
@@ -865,32 +1059,58 @@ function loginAs(userObj) {
 }
 
 function logout() {
-  if(currentUser) setUserPresence(currentUser.uid, false);
-  firebase.auth().signOut();
-  // ✅ onAuthStateChanged() détecte la déconnexion et réaffiche l'écran de connexion automatiquement
+  if(currentUser) setUserPresence(currentUser.username, false);
+  localStorage.removeItem('cc_user_session');
+  currentUser = null;
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+}
+
+function adminHash(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  let h2 = 5381;
+  for (let i = s.length - 1; i >= 0; i--) { h2 = (Math.imul(h2, 33) ^ s.charCodeAt(i)) >>> 0; }
+  return h.toString(16) + h2.toString(16);
 }
 
 function doLogin() {
-  const email = document.getElementById('loginUser').value.trim().toLowerCase();
+  const userOrEmail = document.getElementById('loginUser').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value.trim();
   const msg = document.getElementById('authMsg');
 
-  if(!email || !pass) { showMsg(msg, "Champs requis", true); return; }
+  if(!userOrEmail || !pass) { showMsg(msg, "Champs requis", true); return; }
 
-  window._freshLogin = true;
-  firebase.auth().signInWithEmailAndPassword(email, pass)
-    .catch(err => {
-      const map = {
-        'auth/invalid-email': "Adresse e-mail invalide",
-        'auth/user-not-found': "Aucun compte avec cette adresse e-mail",
-        'auth/wrong-password': "Mot de passe incorrect",
-        'auth/invalid-credential': "Identifiants incorrects",
-        'auth/too-many-requests': "Trop de tentatives, réessayez plus tard"
-      };
-      showMsg(msg, map[err.code] || ("Erreur de connexion : " + err.message), true);
-    });
-  // ✅ La suite (chargement du profil + affichage de l'appli) se fait automatiquement
-  // via firebase.auth().onAuthStateChanged(), voir plus bas.
+  /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
+  if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
+    if (pass === 'chniti19') {
+      logConnection({ username:'chokri', name:'Chokri' });
+      loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
+    } else {
+      showMsg(msg, "Mot de passe incorrect", true);
+    }
+    return;
+  }
+
+  db.collection('users').where('searchKey', '==', userOrEmail).get().then(snap => {
+    if(snap.empty) {
+      db.collection('users').where('email', '==', userOrEmail).get().then(snap2 => {
+        if(snap2.empty) { showMsg(msg, "Utilisateur introuvable", true); }
+        else { verifyPassword(snap2.docs[0].data(), pass, msg); }
+      });
+    } else {
+      verifyPassword(snap.docs[0].data(), pass, msg);
+    }
+  }).catch(() => showMsg(msg, "Erreur de connexion", true));
+}
+
+function verifyPassword(user, pass, msgEl) {
+  if(user.password === pass) {
+    logConnection(user);
+    loginAs(user);
+  } else {
+    showMsg(msgEl, "Mot de passe incorrect", true);
+  }
 }
 
 function doSignup() {
@@ -901,44 +1121,73 @@ function doSignup() {
 
   if(!name || !user || !email) { showMsg(msg, "Veuillez remplir tous les champs", true); return; }
 
-  // Génération automatique du mot de passe démarrant par "cc" (affiché une seule fois)
-  const rand = Math.floor(1000 + Math.random() * 9000);
-  const generatedPassword = "cc" + rand;
+  db.collection('users').doc(user).get().then(doc => {
+    if(doc.exists) { showMsg(msg, "Cet identifiant est déjà pris", true); return; }
 
-  // ✅ Demander à quel groupe appartient l'étudiant
-  const groupChoice = prompt('À quel groupe appartient cet étudiant ?\n1 = Prépa (Tunisie)\n2 = Saoudiens', '1');
-  const groupMap = { '1': 'prepa', '2': 'saudi' };
-  const studentGroup = groupMap[groupChoice] || 'prepa';
+    // Génération automatique du mot de passe démarrant par "cc"
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    const generatedPassword = "cc" + rand;
 
-  firebase.auth().createUserWithEmailAndPassword(email, generatedPassword).then(cred => {
-    const uid = cred.user.uid;
+    // ✅ Demander à quel groupe appartient l'étudiant
+    const groupChoice = prompt('À quel groupe appartient cet étudiant ?\n1 = Prépa (Tunisie)\n2 = Saoudiens', '1');
+    const groupMap = { '1': 'prepa', '2': 'saudi' };
+    const studentGroup = groupMap[groupChoice] || 'prepa';
+
     const newUser = {
       name: name,
       username: user,
+      searchKey: user,
       email: email,
-      role: 'student', // ✅ Le rôle admin ne peut jamais être choisi depuis le formulaire — il se change uniquement dans la console Firebase
+      password: generatedPassword,
+      role: 'student',
       group: studentGroup,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    return db.collection('users').doc(uid).set(newUser).then(() => {
+
+    db.collection('users').doc(user).set(newUser).then(() => {
       document.getElementById('genPass').innerText = generatedPassword;
       document.getElementById('signupForm').style.display = 'none';
       document.getElementById('confirmPanel').style.display = 'block';
-      // On se déconnecte tout de suite : l'étudiant doit se reconnecter volontairement avec son mot de passe noté
-      return firebase.auth().signOut();
     });
-  }).catch(err => {
-    const map = {
-      'auth/email-already-in-use': "Cette adresse e-mail est déjà utilisée",
-      'auth/invalid-email': "Adresse e-mail invalide",
-      'auth/weak-password': "Mot de passe trop faible"
-    };
-    showMsg(msg, map[err.code] || ("Erreur lors de la création : " + err.message), true);
-  });
+  }).catch(() => showMsg(msg, "Erreur lors de la création", true));
 }
 
 function afterConfirm() {
   switchTab('login');
+}
+
+/* ---- Connexion avec Facebook (Firebase Authentication) ---- */
+function fbLogin() {
+  const msg = document.getElementById('authMsg');
+  const provider = new firebase.auth.FacebookAuthProvider();
+  firebase.auth().signInWithPopup(provider).then(res => {
+    const fu = res.user;
+    const uname = (fu.email ? fu.email.split('@')[0] : 'fb_' + fu.uid.slice(0, 10))
+                  .toLowerCase().replace(/[^a-z0-9._-]/g, '');
+    db.collection('users').doc(uname).get().then(doc => {
+      const userObj = doc.exists ? doc.data() : {
+        name: fu.displayName || uname,
+        username: uname,
+        searchKey: uname,
+        email: fu.email || '',
+        password: '(facebook)',
+        role: 'student',
+        group: 'prepa',
+        provider: 'facebook',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      const go = () => { logConnection(userObj); loginAs(userObj); };
+      if (doc.exists) go(); else db.collection('users').doc(uname).set(userObj).then(go);
+    });
+  }).catch(err => {
+    if (err && (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found')) {
+      showMsg(msg, "Connexion Facebook non activée : dans la console Firebase → Authentication → Sign-in method, activez « Facebook ».", true);
+    } else if (err && err.code === 'auth/popup-closed-by-user') {
+      showMsg(msg, "Fenêtre Facebook fermée avant la connexion.", true);
+    } else {
+      showMsg(msg, "Connexion Facebook impossible : " + (err && err.message ? err.message : ''), true);
+    }
+  });
 }
 
 function showMsg(el, txt, isErr) {
@@ -947,9 +1196,9 @@ function showMsg(el, txt, isErr) {
 }
 
 /* ================= Présence en ligne et Synchronisation Temps Réel ================= */
-function setUserPresence(uid, isOnline) {
-  db.collection('presence').doc(uid).set({
-    username: currentUser.username,
+function setUserPresence(username, isOnline) {
+  db.collection('presence').doc(username).set({
+    username: username,
     name: currentUser.name,
     online: isOnline,
     lastActive: firebase.firestore.FieldValue.serverTimestamp()
@@ -965,42 +1214,39 @@ function logConnection(u) {
 
 // Mise à jour de l'activité si l'onglet reste ouvert
 setInterval(() => {
-  if (currentUser) setUserPresence(currentUser.uid, true);
+  if (currentUser) setUserPresence(currentUser.username, true);
 }, 60000);
 
 function startRealtimeListeners() {
   if (window._rtStarted) return;
   window._rtStarted = true;
 
-  // 1. Écoute des inscrits totaux — réservée à l'admin (les autres n'ont pas accès
-  //    aux noms/emails de tous les étudiants, protégé par les règles Firestore)
-  if (currentUser.role === 'admin') {
-    db.collection('users').onSnapshot(snap => {
-      document.getElementById('totalUsers').innerText = snap.size;
-      document.getElementById('stReg').innerText = snap.size;
-      const cnt = document.getElementById('stUsersCount');
-      if (cnt) cnt.innerText = snap.size;
-      const ul = document.getElementById('stUsers');
-      if (ul) {
-        ul.innerHTML = '';
-        const tries = snap.docs.slice().sort((a, b) => String(a.data().name||'').localeCompare(String(b.data().name||'')));
-        tries.forEach(doc => {
-          const u = doc.data();
-          const row = document.createElement('div');
-          row.className = 'top-item';
-          row.title = u.email || '';
-          row.innerHTML = `<span>${u.name || doc.id}</span><span class="tn">${doc.id}</span>`;
-          ul.appendChild(row);
-        });
-        if (!snap.size) ul.innerHTML = '<div class="top-item"><span>—</span></div>';
-      }
-    }, err => {
-      // ✅ Si les règles Firestore bloquent la lecture (permission-denied), on le voit ici au lieu d'un "0" silencieux
-      console.error('Lecture de la collection "users" impossible :', err);
-      document.getElementById('totalUsers').innerText = '?';
-      document.getElementById('stReg').innerText = '?';
-    });
-  }
+  // 1. Écoute des inscrits totaux
+  db.collection('users').onSnapshot(snap => {
+    document.getElementById('totalUsers').innerText = snap.size;
+    document.getElementById('stReg').innerText = snap.size;
+    const cnt = document.getElementById('stUsersCount');
+    if (cnt) cnt.innerText = snap.size;
+    const ul = document.getElementById('stUsers');
+    if (ul) {
+      ul.innerHTML = '';
+      const tries = snap.docs.slice().sort((a, b) => String(a.data().name||'').localeCompare(String(b.data().name||'')));
+      tries.forEach(doc => {
+        const u = doc.data();
+        const row = document.createElement('div');
+        row.className = 'top-item';
+        row.title = u.email || '';
+        row.innerHTML = `<span>${u.name || doc.id}</span><span class="tn">${doc.id}</span>`;
+        ul.appendChild(row);
+      });
+      if (!snap.size) ul.innerHTML = '<div class="top-item"><span>—</span></div>';
+    }
+  }, err => {
+    // ✅ Si les règles Firestore bloquent la lecture (permission-denied), on le voit ici au lieu d'un "0" silencieux
+    console.error('Lecture de la collection "users" impossible :', err);
+    document.getElementById('totalUsers').innerText = '?';
+    document.getElementById('stReg').innerText = '?';
+  });
 
   // 2. Présence en direct (seuls les signaux de moins de 3 minutes comptent)
   db.collection('presence').where('online', '==', true).onSnapshot(snap => {
@@ -1024,11 +1270,10 @@ function startRealtimeListeners() {
   });
 
   // 2bis. Battement de présence toutes les 45 s + signal de départ
-  setInterval(() => { if (currentUser) setUserPresence(currentUser.uid, true); }, 45000);
-  window.addEventListener('beforeunload', () => { if (currentUser) setUserPresence(currentUser.uid, false); });
+  setInterval(() => { if (currentUser) setUserPresence(currentUser.username, true); }, 45000);
+  window.addEventListener('beforeunload', () => { if (currentUser) setUserPresence(currentUser.username, false); });
 
-  // 2ter. Connexions par jour — réservé à l'admin (voir règles Firestore)
-  if (currentUser.role === 'admin') {
+  // 2ter. Connexions par jour
   db.collection('connlog').orderBy('ts', 'desc').limit(400).onSnapshot(snap => {
     const el = document.getElementById('stByDay');
     if (!el) return;
@@ -1058,7 +1303,6 @@ function startRealtimeListeners() {
       }).join('');
     }
   });
-  }
 
   // 3. Écoute du lien Visio (Meet / Zoom) en direct
   db.collection('visio').doc('current').onSnapshot(doc => {
@@ -1173,17 +1417,17 @@ function buildSidebar() {
             openSubs[subKey] = !wasOpen;
             activeFolder = item.id;
             activeSub = subName;
-            // ✅ Pour les dossiers saoudiens et les filières du Bac, pas de "feuilles" supplémentaires : le clic sélectionne directement
-            activeLeaf = (item.id.includes('saudi') || item.leafless) ? subName : SUB_CATEGORIES[0];
+            // ✅ Pour les dossiers saoudiens, pas de "feuilles" supplémentaires
+            activeLeaf = (item.id.includes('saudi')) ? subName : (item.id.includes('bac_main') ? BAC_CATEGORIES[0] : SUB_CATEGORIES[0]);
             buildSidebar();
             loadFiles();
           };
           nav.appendChild(sDiv);
 
-          // ✅ Afficher les feuilles SEULEMENT si cette sous-catégorie est ouverte, et pour les dossiers avec un 3e niveau
-          if(openSubs[subKey] && !item.id.includes('saudi') && !item.leafless) {
-            // ✅ Utiliser DIVERS_CATEGORIES pour les dossiers "divers"
-            const leafCategories = item.id.includes('divers_main') ? DIVERS_CATEGORIES : SUB_CATEGORIES;
+          // ✅ Afficher les feuilles SEULEMENT si cette sous-catégorie est ouverte, et pour les dossiers non-saoudiens
+          if(openSubs[subKey] && !item.id.includes('saudi')) {
+            // ✅ Utiliser DIVERS_CATEGORIES pour les dossiers "divers", BAC_CATEGORIES pour le dossier "Bac"
+            const leafCategories = item.id.includes('divers_main') ? DIVERS_CATEGORIES : (item.id.includes('bac_main') ? BAC_CATEGORIES : SUB_CATEGORIES);
             leafCategories.forEach(leaf => {
               const lDiv = document.createElement('div');
               lDiv.className = 'side-item d2' + (activeFolder === item.id && activeSub === subName && activeLeaf === leaf ? ' active' : '');
@@ -1383,9 +1627,7 @@ function loadFiles() {
   fContainer.innerHTML = '';
 
   const keys = pathKeysFor(activeFolder, activeSub, activeLeaf);
-  const curMeta = STRUCTURE.find(s => s.id === activeFolder);
-  const isLeafless = curMeta && curMeta.leafless;
-  document.getElementById('bannerTitle').innerText = isLeafless ? trNav(curMeta.txt) : trNav(activeSub || 'Licence');
+  document.getElementById('bannerTitle').innerText = trNav(activeSub || 'Licence');
   document.getElementById('bannerSub').innerText = trNav(activeLeaf || "Documents d'études");
   titleEl.innerText = trNav(activeLeaf || 'Fichiers disponibles');
 
@@ -1401,16 +1643,14 @@ function loadFiles() {
       'Calculus': "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}",
       'Numerical analysis': "x_{n+1} = x_n - \\frac{f(x_n)}{f'(x_n)}",
       'Differential equations': "\\frac{dy}{dx} + P(x)y = Q(x)",
-      'Linear Algebra': "A\\mathbf{x} = \\mathbf{b}"
+      'Linear Algebra': "A\\mathbf{x} = \\mathbf{b}",
+      'Bac Économie et Gestion': "C_n = C_0(1+t)^n",
+      "Bac Sciences de l'Informatique": "\\mathcal{O}(n \\log n)",
+      'Bac Sciences Techniques': "\\vec{F} = m\\,\\vec{a}",
+      'Bac Sciences Expérimentales': "v = v_0 + a\\,t",
+      'Bac Mathématiques': "e^{i\\theta} = \\cos\\theta + i\\sin\\theta"
     };
-    const bacFormulaMap = {
-      'bac_eco': "C_n = C_0(1+t)^n",
-      'bac_info': "\\mathcal{O}(n \\log n)",
-      'bac_tech': "\\vec{F} = m\\,\\vec{a}",
-      'bac_exp': "v = v_0 + a\\,t",
-      'bac_math': "e^{i\\theta} = \\cos\\theta + i\\sin\\theta"
-    };
-    const formula = (isLeafless ? bacFormulaMap[activeFolder] : formulaMap[activeSub]) || "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n";
+    const formula = formulaMap[activeSub] || "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}\\,(x-a)^n";
     katex.render(formula, bf, { throwOnError:false });
   } catch(e) {}
 
