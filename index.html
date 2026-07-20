@@ -11,226 +11,11 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f2a5c'/><text x='32' y='45' font-size='38' text-anchor='middle' fill='%23f59e0b' font-family='Georgia'>Σ</text></svg>">
 <title>L'excellence académique</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js">
-  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
-  (function() {
-    const resizer = document.getElementById('sidebarResizer');
-    const sidebar = document.getElementById('sidebar');
-    let isResizing = false;
-
-    // Charger la largeur sauvegardée
-    const savedWidth = localStorage.getItem('sidebar_width');
-    if (savedWidth && resizer && sidebar) {
-      sidebar.style.width = parseInt(savedWidth) + 'px';
-    }
-
-    if (resizer) {
-      resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing || !sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
-      sidebar.style.width = newWidth + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        if (resizer) resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
-        if (sidebar) {
-          const w = sidebar.offsetWidth;
-          localStorage.setItem('sidebar_width', w);
-        }
-      }
-    });
-  })();
-
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
-  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
-  (function() {
-    const resizer = document.getElementById('sidebarResizer');
-    const sidebar = document.getElementById('sidebar');
-    let isResizing = false;
-
-    // Charger la largeur sauvegardée
-    const savedWidth = localStorage.getItem('sidebar_width');
-    if (savedWidth && resizer && sidebar) {
-      sidebar.style.width = parseInt(savedWidth) + 'px';
-    }
-
-    if (resizer) {
-      resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing || !sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
-      sidebar.style.width = newWidth + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        if (resizer) resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
-        if (sidebar) {
-          const w = sidebar.offsetWidth;
-          localStorage.setItem('sidebar_width', w);
-        }
-      }
-    });
-  })();
-
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
-  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
-  (function() {
-    const resizer = document.getElementById('sidebarResizer');
-    const sidebar = document.getElementById('sidebar');
-    let isResizing = false;
-
-    // Charger la largeur sauvegardée
-    const savedWidth = localStorage.getItem('sidebar_width');
-    if (savedWidth && resizer && sidebar) {
-      sidebar.style.width = parseInt(savedWidth) + 'px';
-    }
-
-    if (resizer) {
-      resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing || !sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
-      sidebar.style.width = newWidth + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        if (resizer) resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
-        if (sidebar) {
-          const w = sidebar.offsetWidth;
-          localStorage.setItem('sidebar_width', w);
-        }
-      }
-    });
-  })();
-
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">
-  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
-  (function() {
-    const resizer = document.getElementById('sidebarResizer');
-    const sidebar = document.getElementById('sidebar');
-    let isResizing = false;
-
-    // Charger la largeur sauvegardée
-    const savedWidth = localStorage.getItem('sidebar_width');
-    if (savedWidth && resizer && sidebar) {
-      sidebar.style.width = parseInt(savedWidth) + 'px';
-    }
-
-    if (resizer) {
-      resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing || !sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
-      sidebar.style.width = newWidth + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        if (resizer) resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
-        if (sidebar) {
-          const w = sidebar.offsetWidth;
-          localStorage.setItem('sidebar_width', w);
-        }
-      }
-    });
-  })();
-
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-  // ========== REDIMENSIONNEMENT DE LA SIDEBAR ==========
-  (function() {
-    const resizer = document.getElementById('sidebarResizer');
-    const sidebar = document.getElementById('sidebar');
-    let isResizing = false;
-
-    // Charger la largeur sauvegardée
-    const savedWidth = localStorage.getItem('sidebar_width');
-    if (savedWidth && resizer && sidebar) {
-      sidebar.style.width = parseInt(savedWidth) + 'px';
-    }
-
-    if (resizer) {
-      resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing || !sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      const newWidth = Math.max(180, Math.min(600, e.clientX - rect.left));
-      sidebar.style.width = newWidth + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        if (resizer) resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
-        if (sidebar) {
-          const w = sidebar.offsetWidth;
-          localStorage.setItem('sidebar_width', w);
-        }
-      }
-    });
-  })();
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --bleu:#0f2a5c; --bleu2:#1d4ed8; --cyan:#0ea5e9; --or:#f59e0b;
@@ -588,7 +373,7 @@
   <div class="auth-card">
     <div class="auth-hero">
       <button class="lang-btn" id="langBtnAuth" onclick="toggleLang()">EN</button>
-      <h1>L'excellence académique</h1>
+      <h1 data-i18n="siteTitle">L'excellence académique</h1>
       <div class="sub-brand">C.C</div>
       <p data-i18n="tagline">Cours · Séries corrigées · TD · Devoirs corrigés</p>
       <div class="cat-marquee">
@@ -657,7 +442,7 @@
     <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
     <div class="brand">
       <div class="sigma">Σ</div>
-      <h1>L'excellence académique<small id="brandSub">C.C</small></h1>
+      <h1><span data-i18n="siteTitle">L'excellence académique</span><small id="brandSub">C.C</small></h1>
     </div>
     <div class="presence">
       <span><span class="dot">●</span> <span id="onlineNow">1</span> <span data-i18n="onlineTxt">en ligne maintenant</span></span>
@@ -808,12 +593,33 @@ const firebaseConfig = {
 };
 
 // Initialisation de Firebase en mode compatibilité
+// ✅ Si le SDK Firebase n'a pas pu se charger (coupure réseau, bloqueur de
+// pub/traceurs, pare-feu bloquant gstatic.com…), on évite un plantage brutal
+// qui empêcherait TOUT le reste du site de fonctionner, et on affiche un
+// message clair à la place.
+if (typeof firebase === 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.innerHTML =
+      '<div style="max-width:520px;margin:80px auto;padding:24px;font-family:sans-serif;' +
+      'text-align:center;color:#0f2a5c">' +
+      '<h2>⚠️ Chargement impossible</h2>' +
+      '<p>Le service nécessaire au fonctionnement du site (Firebase) n\'a pas pu se charger.</p>' +
+      '<p>Vérifiez votre connexion internet, désactivez un éventuel bloqueur de publicités/traceurs, ' +
+      'puis rechargez la page.</p>' +
+      '<button onclick="location.reload()" style="margin-top:10px;padding:10px 20px;border:none;' +
+      'border-radius:8px;background:#1d4ed8;color:#fff;font-weight:600;cursor:pointer">Recharger</button>' +
+      '</div>';
+  });
+  throw new Error('Firebase SDK non chargé — arrêt du script pour éviter un plantage silencieux.');
+}
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 /* ================= Langue (FR / EN) ================= */
 let lang = localStorage.getItem('rp_lang') || 'fr';
 const I18N = {
+  siteTitle: { fr:"L'excellence académique", en:'Academic Excellence' },
   tagline:   { fr:'Cours · Séries corrigées · TD · Devoirs corrigés', en:'Lectures · Solved exercises · Tutorials · Graded homework' },
   tabLogin:  { fr:'Connexion', en:'Sign in' },
   tabSignup: { fr:'Créer un compte', en:'Create account' },
@@ -880,7 +686,7 @@ const STRUCTURE = [
   { type: 'title', txt: 'Licence (Mathématiques)', id: 'licence', groups: ['prepa', 'admin'] },
   { type: 'folder', id: 'divers_main', txt: 'Divers cours', sub: ['ODE', 'Measure theory', 'Integration', 'Calculus', 'Numerical analysis', 'Differential equations', 'Linear Algebra'], groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '🎓 Baccalauréat', groups: ['prepa', 'saudi', 'admin'] },
-  { type: 'folder', id: 'bac_main', txt: 'Baccalauréat', sub: ['Bac Économie et Gestion', "Bac Sciences de l'Informatique", 'Bac Sciences Techniques', 'Bac Sciences Expérimentales', 'Bac Mathématiques'], groups: ['prepa', 'saudi', 'admin'] },
+  { type: 'folder', id: 'bac_main', txt: 'Filières du Bac', sub: ['Bac Économie et Gestion', "Bac Sciences de l'Informatique", 'Bac Sciences Techniques', 'Bac Sciences Expérimentales', 'Bac Mathématiques'], groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '✍️ TABLEAU BLANC', id: 'board_tab', groups: ['prepa', 'saudi', 'admin'] },
   { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab', groups: ['prepa', 'saudi', 'admin'] }
 ];
@@ -961,7 +767,17 @@ const NAV_EN = {
   '🇸🇦 Étudiants Saoudiens': '🇸🇦 Saudi Students',
   'PROGRAMME 1ÈRE ANNÉE': 'FIRST YEAR PROGRAM',
   'PROGRAMME 2E ANNÉE': 'SECOND YEAR PROGRAM',
-  '📚 Divers cours': '📚 Various courses'
+  'Divers cours': 'Various courses',
+  '🎓 Baccalauréat': '🎓 Baccalaureate',
+  'Filières du Bac': 'Bac tracks',
+  'Bac Économie et Gestion': 'Bac Economics & Management',
+  "Bac Sciences de l'Informatique": 'Bac Computer Science',
+  'Bac Sciences Techniques': 'Bac Technical Sciences',
+  'Bac Sciences Expérimentales': 'Bac Experimental Sciences',
+  'Bac Mathématiques': 'Bac Mathematics',
+  'Résumé de cours': 'Course summary',
+  'Exercices corrigés': 'Solved exercises',
+  'Problème corrigé': 'Solved problem'
 };
 const trNav = s => {
   if (SAUDI_TRANSLATIONS[s]) return SAUDI_TRANSLATIONS[s][lang] || SAUDI_TRANSLATIONS[s].fr;
@@ -1000,6 +816,7 @@ function applyLang() {
   });
   document.getElementById('langBtnAuth').innerText = lang === 'fr' ? 'EN' : 'FR';
   document.getElementById('langBtn').innerText = lang === 'fr' ? 'EN' : 'FR';
+  document.title = I18N.siteTitle[lang];
 }
 
 function toggleLang() {
@@ -1062,6 +879,7 @@ function logout() {
   if(currentUser) setUserPresence(currentUser.username, false);
   localStorage.removeItem('cc_user_session');
   currentUser = null;
+  if (firebase.auth().currentUser) firebase.auth().signOut().catch(() => {});
   document.getElementById('appScreen').style.display = 'none';
   document.getElementById('authScreen').style.display = 'flex';
 }
@@ -1081,14 +899,20 @@ function doLogin() {
 
   if(!userOrEmail || !pass) { showMsg(msg, "Champs requis", true); return; }
 
-  /* ---- Compte administrateur : reconnu par le code, absent de la base ---- */
+  /* ---- Compte administrateur : vérifié via Firebase Authentication            ---- */
+  /* ✅ Plus de mot de passe en clair dans le code : la vérification se fait      */
+  /* côté serveur Firebase, ce qui permet aux règles Firestore de vraiment       */
+  /* bloquer l'ajout/la modification/la suppression pour tout le monde sauf lui. */
   if (userOrEmail === 'chokri' || userOrEmail === 'chokri.chniti@gmail.com') {
-    if (pass === 'chniti19') {
-      logConnection({ username:'chokri', name:'Chokri' });
-      loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
-    } else {
-      showMsg(msg, "Mot de passe incorrect", true);
-    }
+    firebase.auth().signInWithEmailAndPassword('chokri.chniti@gmail.com', pass)
+      .then(() => {
+        logConnection({ username:'chokri', name:'Chokri' });
+        loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
+      })
+      .catch(err => {
+        console.error('Erreur de connexion admin Firebase :', err.code, err.message);
+        showMsg(msg, `Échec (${err.code || 'erreur inconnue'}) : ${err.message || 'voir la console (F12)'}`, true);
+      });
     return;
   }
 
@@ -1761,8 +1585,11 @@ function addPdfs(filesList) {
   let nextOrder = (window._curDocs || []).length;
 
   Array.from(filesList).forEach(file => {
-    if(file.size > 10 * 1024 * 1024) {
-      alert(`Le fichier ${file.name} dépasse la limite autorisée de 10 Mo.`);
+    // ⚠️ Firestore limite chaque document à 1 Mo (1 048 576 octets), et l'encodage
+    // en base64 augmente la taille du fichier d'environ 33 %. On limite donc le
+    // fichier source à ~700 Ko pour rester sous cette limite en toute sécurité.
+    if(file.size > 700 * 1024) {
+      alert(`Le fichier ${file.name} dépasse la limite autorisée de 700 Ko (limite technique de la base de données). Compressez-le ou divisez-le en plusieurs fichiers plus légers.`);
       return;
     }
     // Empêcher les doublons (cause des fichiers affichés deux fois)
@@ -1788,7 +1615,14 @@ function addPdfs(filesList) {
       }).then(() => {
         showToast("Fichier ajouté !");
         loadFiles();
+      }).catch(err => {
+        // ✅ Ne plus échouer silencieusement : l'utilisateur voit désormais l'erreur réelle
+        console.error('Échec de l\'ajout du fichier :', err);
+        alert(`Échec de l'ajout de « ${file.name} » : ${err.message || err}`);
       });
+    };
+    reader.onerror = function() {
+      alert(`Impossible de lire le fichier ${file.name}.`);
     };
     reader.readAsDataURL(file);
   });
@@ -1925,7 +1759,8 @@ function exportBoardPDF() {
     };
     if (!map[choix]) return;
     const dataUri = pdf.output('datauristring');
-    if (dataUri.length > 9.5 * 1024 * 1024) { alert('Tableau trop volumineux pour être publié (limite ~10 Mo).'); return; }
+    // ⚠️ Un document Firestore ne peut pas dépasser 1 Mo (1 048 576 octets) au total
+    if (dataUri.length > 1000 * 1024) { alert('Tableau trop volumineux pour être publié (limite technique ~1 Mo). Simplifiez le dessin ou réduisez sa taille.'); return; }
     db.collection('files').add({
       name: fname,
       path: map[choix][0] + '_' + map[choix][1] + '_Cours',
@@ -1933,7 +1768,11 @@ function exportBoardPDF() {
       date: new Date().toLocaleDateString('fr-FR'),
       downloads: 0, views: 0, ts: Date.now(), order: 1e6,
       content: dataUri
-    }).then(() => showToast('PDF du tableau publié dans « Cours » !'));
+    }).then(() => showToast('PDF du tableau publié dans « Cours » !'))
+      .catch(err => {
+        console.error('Échec de la publication du tableau :', err);
+        alert(`Échec de la publication : ${err.message || err}`);
+      });
   }
 }
 
