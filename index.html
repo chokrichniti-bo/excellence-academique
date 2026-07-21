@@ -335,6 +335,74 @@
   .sidebar-resizer:hover { opacity:1; background:#0ea5e9; }
   .sidebar-resizer.dragging { opacity:1; background:#fde68a; }
 
+  /* ===== Hiérarchie Visuelle (Titre Parent / Dossier Enfant) ===== */
+  .side-main-title.parent-title {
+    background: rgba(15, 42, 92, 0.5);
+    border-bottom: 2px solid rgba(29, 78, 216, 0.3);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .side-item.child-folder {
+    padding-left: 36px;
+    background: rgba(29, 78, 216, 0.08);
+    border-left: 3px solid var(--or);
+    margin-top: 2px;
+  }
+  .side-item.child-folder b {
+    color: var(--bleu2);
+    font-weight: 800;
+  }
+
+  /* ===== Section Régions/Villes ===== */
+  #stByRegion {
+    display: grid;
+    gap: 8px;
+  }
+  .region-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 10px;
+    border-left: 4px solid var(--bleu2);
+    font-size: 13.5px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .region-item:hover {
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+    transform: translateX(4px);
+  }
+  .region-item .city-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bleu);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .region-item .user-count {
+    background: var(--bleu2);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .region-item.empty-region {
+    background: #f1f5f9;
+    border-left-color: #94a3b8;
+    color: #64748b;
+  }
+  .region-item.empty-region .city-name {
+    color: #64748b;
+  }
+
 </style>
 </head>
 <body>
@@ -422,6 +490,20 @@
         <div class="field"><label data-i18n="lblName">Nom complet</label><input type="text" id="suName" placeholder="Prénom Nom" maxlength="50"></div>
         <div class="field"><label data-i18n="lblPseudo">Identifiant unique (pseudo)</label><input type="text" id="suUser" placeholder="ex : ahmed.karray" maxlength="30" autocomplete="off"></div>
         <div class="field"><label data-i18n="lblEmail">Adresse e-mail (Gmail ou autre)</label><input type="email" id="suEmail" placeholder="exemple@gmail.com" autocomplete="email"></div>
+        <div class="field">
+          <label>Région/Ville</label>
+          <select id="suRegion" required style="width:100%; padding:12px 14px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;" onchange="updateCities()">
+            <option value="">Sélectionnez votre région</option>
+            <option value="Tunisie">Tunisie</option>
+            <option value="Arabie Saoudite">Arabie Saoudite</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ville (optionnel)</label>
+          <select id="suCity" required style="width:100%; padding:12px 14px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;">
+            <option value="">Sélectionnez votre ville</option>
+          </select>
+        </div>
         <button class="btn-main" onclick="doSignup()" data-i18n="btnSignup">Créer mon compte</button>
       </div>
       <div id="confirmPanel" style="display:none; text-align:center">
@@ -571,6 +653,8 @@
       <div id="stWho"></div>
       <h4 data-i18n="statByDay">📅 Connexions par jour</h4>
       <div id="stByDay"></div>
+      <h4 style="color:var(--bleu); font-size:14px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">🌍 <span style="font-weight:800;">Utilisateurs par région</span></h4>
+      <div id="stByRegion"></div>
     </aside>
   </div>
 </div>
@@ -670,6 +754,7 @@ const I18N = {
   statHeat:  { fr:'⏰ Activité par heure', en:'⏰ Activity by hour' },
   newTag:    { fr:'NOUVEAU', en:'NEW' },
   srchNone:  { fr:'Aucun document trouvé', en:'No document found' },
+  notSpecified: { fr:'Non spécifiée', en:'Not specified' },
   dupClean:  { fr:'🧹 Supprimer les doublons', en:'🧹 Remove duplicates' },
   previewT:  { fr:'👁 Aperçu', en:'👁 Preview' }
 };
@@ -691,9 +776,14 @@ const STRUCTURE = [
   { type: 'title', txt: '🎥 SÉANCE LIVE', id: 'visio_tab', groups: ['prepa', 'saudi', 'admin'] }
 ];
 
+const REGIONS = {
+  'Tunisie': ['Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Sfax', 'Sousse', 'Kairouan', 'Kasserine', 'Sidi Bouzid', 'Gafsa', 'Tozeur', 'Kébili', 'Gabès', 'Médenine', 'Tataouine', 'Jendouba', 'Le Kef', 'Siliana'],
+  'Arabie Saoudite': ['Riyad', 'Jeddah', 'Dammam', 'Médine', 'Makkah', 'Taïf', 'Al-Khobar', 'Abha', 'Tabuk', 'Buraidah', 'Jizan', 'Hail', 'Yanbu', 'Al-Qassim', 'Asir']
+};
+
 const SUB_CATEGORIES = ['Cours', 'Séries corrigées', 'TD', 'Devoirs corrigés'];
 const DIVERS_CATEGORIES = ['Cours', 'Exercices corrigés', 'Homework'];
-const BAC_CATEGORIES = ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé'];
+const BAC_CATEGORIES = ['Résumé de cours', 'Exercices corrigés', 'Problème corrigé', 'Ancien sujet corrigé'];
 
 /* Traductions des sous-catégories saoudiennes */
 const SAUDI_TRANSLATIONS = {
@@ -777,7 +867,8 @@ const NAV_EN = {
   'Bac Mathématiques': 'Bac Mathematics',
   'Résumé de cours': 'Course summary',
   'Exercices corrigés': 'Solved exercises',
-  'Problème corrigé': 'Solved problem'
+  'Problème corrigé': 'Solved problem',
+  'Ancien sujet corrigé': 'Past exam solution'
 };
 const trNav = s => {
   if (SAUDI_TRANSLATIONS[s]) return SAUDI_TRANSLATIONS[s][lang] || SAUDI_TRANSLATIONS[s].fr;
@@ -907,7 +998,7 @@ function doLogin() {
     firebase.auth().signInWithEmailAndPassword('chokri.chniti@gmail.com', pass)
       .then(() => {
         logConnection({ username:'chokri', name:'Chokri' });
-        loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', role:'admin' });
+        loginAs({ name:'Chokri', username:'chokri', searchKey:'chokri', email:'chokri.chniti@gmail.com', region:'Tunisie', city:'Nabeul', role:'admin' });
       })
       .catch(err => {
         console.error('Erreur de connexion admin Firebase :', err.code, err.message);
@@ -931,9 +1022,38 @@ function doLogin() {
 function verifyPassword(user, pass, msgEl) {
   if(user.password === pass) {
     logConnection(user);
-    loginAs(user);
+    // S'assurer que tous les champs sont inclus
+    const fullUser = {
+      name: user.name,
+      username: user.username,
+      searchKey: user.searchKey,
+      email: user.email,
+      region: user.region || '',
+      city: user.city || '',
+      role: user.role,
+      group: user.group
+    };
+    loginAs(fullUser);
   } else {
     showMsg(msgEl, "Mot de passe incorrect", true);
+  }
+}
+
+
+function updateCities() {
+  const regionSelect = document.getElementById('suRegion');
+  const citySelect = document.getElementById('suCity');
+  const region = regionSelect.value;
+  
+  citySelect.innerHTML = '<option value="">Sélectionnez votre ville</option>';
+  
+  if (region && REGIONS[region]) {
+    REGIONS[region].forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      citySelect.appendChild(option);
+    });
   }
 }
 
@@ -941,9 +1061,12 @@ function doSignup() {
   const name = document.getElementById('suName').value.trim();
   const user = document.getElementById('suUser').value.trim().toLowerCase().replace(/[^a-z0-9._-]/g, '');
   const email = document.getElementById('suEmail').value.trim().toLowerCase();
+  const region = document.getElementById('suRegion').value.trim();
+  const city = document.getElementById('suCity').value.trim();
   const msg = document.getElementById('authMsg');
 
   if(!name || !user || !email) { showMsg(msg, "Veuillez remplir tous les champs", true); return; }
+  if(!region || !city) { showMsg(msg, "Veuillez sélectionner votre région et votre ville", true); return; }
 
   db.collection('users').doc(user).get().then(doc => {
     if(doc.exists) { showMsg(msg, "Cet identifiant est déjà pris", true); return; }
@@ -962,6 +1085,8 @@ function doSignup() {
       username: user,
       searchKey: user,
       email: email,
+      region: region || '',
+      city: city || '',
       password: generatedPassword,
       role: 'student',
       group: studentGroup,
@@ -994,6 +1119,8 @@ function fbLogin() {
         username: uname,
         searchKey: uname,
         email: fu.email || '',
+        region: '',
+        city: '',
         password: '(facebook)',
         role: 'student',
         group: 'prepa',
@@ -1024,6 +1151,8 @@ function setUserPresence(username, isOnline) {
   db.collection('presence').doc(username).set({
     username: username,
     name: currentUser.name,
+    region: currentUser.region || '',
+    city: currentUser.city || '',
     online: isOnline,
     lastActive: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true });
@@ -1093,6 +1222,47 @@ function startRealtimeListeners() {
     });
   });
 
+
+  // 2ter.bis Utilisateurs connectés par région/ville
+  db.collection('presence').where('online', '==', true).onSnapshot(snap => {
+    const regionEl = document.getElementById('stByRegion');
+    if (!regionEl) return;
+    const now = Date.now();
+    const byRegion = {};
+    
+    snap.forEach(doc => {
+      const p = doc.data();
+      const tms = (p.lastActive && p.lastActive.toMillis) ? p.lastActive.toMillis() : now;
+      if (now - tms < 180000) {
+        const region = p.region || 'Non spécifiée';
+        const city = p.city || '';
+        const displayName = city ? (region + ' • ' + city) : region;
+        if (!byRegion[displayName]) byRegion[displayName] = [];
+        byRegion[displayName].push(p);
+      }
+    });
+    
+    regionEl.innerHTML = '';
+    const regions = Object.entries(byRegion).sort((a, b) => b[1].length - a[1].length);
+    if (regions.length) {
+      regions.forEach(([locationName, users]) => {
+        const row = document.createElement('div');
+        const isUnspecified = locationName === 'Non spécifiée';
+        row.className = 'region-item ' + (isUnspecified ? 'empty-region' : '');
+        
+        const locationIcon = isUnspecified ? '🌐' : '📍';
+        row.innerHTML = '<span class="city-name"><span>' + locationIcon + '</span><span>' + locationName + '</span></span><span class="user-count">' + users.length + ' 👤</span>';
+        
+        regionEl.appendChild(row);
+      });
+    } else {
+      const emptyRow = document.createElement('div');
+      emptyRow.className = 'region-item empty-region';
+      emptyRow.innerHTML = '<span class="city-name"><span>—</span><span>Aucun utilisateur</span></span>';
+      regionEl.appendChild(emptyRow);
+    }
+  });
+
   // 2bis. Battement de présence toutes les 45 s + signal de départ
   setInterval(() => { if (currentUser) setUserPresence(currentUser.username, true); }, 45000);
   window.addEventListener('beforeunload', () => { if (currentUser) setUserPresence(currentUser.username, false); });
@@ -1127,6 +1297,47 @@ function startRealtimeListeners() {
       }).join('');
     }
   });
+
+  // Comptage des étudiants inscrits par ville
+  db.collection('users').onSnapshot(snap => {
+    const cityEl = document.getElementById('stStudentsByCity');
+    if (!cityEl) return;
+    const byCity = {};
+    
+    snap.forEach(doc => {
+      const u = doc.data();
+      const city = u.city || '';
+      const region = u.region || '';
+      
+      if (city) {
+        const displayName = region + ' • ' + city;
+        if (!byCity[displayName]) byCity[displayName] = [];
+        byCity[displayName].push(u);
+      } else if (region) {
+        const displayName = region + ' (sans ville)';
+        if (!byCity[displayName]) byCity[displayName] = [];
+        byCity[displayName].push(u);
+      }
+    });
+    
+    cityEl.innerHTML = '';
+    const cities = Object.entries(byCity).sort((a, b) => b[1].length - a[1].length);
+    
+    if (cities.length) {
+      cities.forEach(([cityName, users]) => {
+        const row = document.createElement('div');
+        row.className = 'region-item';
+        row.innerHTML = '<span class="city-name"><span>🏙️</span><span>' + cityName + '</span></span><span class="user-count">' + users.length + ' 📚</span>';
+        cityEl.appendChild(row);
+      });
+    } else {
+      const emptyRow = document.createElement('div');
+      emptyRow.className = 'region-item empty-region';
+      emptyRow.innerHTML = '<span class="city-name"><span>—</span><span>Aucun étudiant inscrit</span></span>';
+      cityEl.appendChild(emptyRow);
+    }
+  });
+
 
   // 3. Écoute du lien Visio (Meet / Zoom) en direct
   db.collection('visio').doc('current').onSnapshot(doc => {
@@ -1201,7 +1412,7 @@ function buildSidebar() {
 
     if(item.type === 'title') {
       const div = document.createElement('div');
-      div.className = 'side-main-title' + (item.id ? ' click' : '');
+      div.className = 'side-main-title' + (item.id ? ' click' : '') + (item.txt.includes('Baccalauréat') ? ' parent-title' : '');
       div.innerText = trNav(item.txt);
       if(item.id) {
         div.onclick = () => handleSpecialTab(item.id, trNav(item.txt));
@@ -1216,7 +1427,8 @@ function buildSidebar() {
     }
     else if(item.type === 'folder') {
       const fDiv = document.createElement('div');
-      fDiv.className = 'side-item' + (activeFolder === item.id ? ' active' : '');
+      const isChildOfBac = item.txt.includes('Filières du Bac');
+      fDiv.className = 'side-item' + (activeFolder === item.id ? ' active' : '') + (isChildOfBac ? ' child-folder' : '');
       const isOpen = openFolders[item.id];
       const nb = unseenCount(item.id);
       fDiv.innerHTML = `📁 <b>${trNav(item.txt)}</b>${nb ? `<span class="nbadge">${nb}</span>` : ''} <span class="chev">${isOpen ? '▼' : '▶'}</span>`;
